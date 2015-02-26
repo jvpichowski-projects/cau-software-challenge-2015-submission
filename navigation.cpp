@@ -208,7 +208,7 @@ int iterativeDeepening(Board board, int player, int depth, int firstguess, Move 
 #endif
 #ifdef DYN_MTDF
     if(board.movecount >= DYN_MTDF_BORDER){
-        startDeep = 1;
+        d = 1;
     }
 #endif
     for(; d <= depth && board.movecount + d <= 60; d++)

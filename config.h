@@ -27,7 +27,7 @@
 
 //#define mtdf
 #define DYN_MTDF
-#define DYN_MTDF_BORDER 45
+#define DYN_MTDF_BORDER 40
 //#define tt
 //#define collision_stats
 //#define null_window
