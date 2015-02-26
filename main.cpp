@@ -99,6 +99,10 @@ void onMoveReq()
 //    Tools::printField(_board->oppos);
 //    std::cout << "movecount: " << _board->movecount << " pointsdiff: " << _board->pointsdiff << std::endl;
     
+    if(!BoardTools::isValidMove(Globals::_board, move, ID_WE)){
+        move = BoardTools::generateGoodMove(Globals::_board, ID_WE);
+    }
+    
     Ocean::Send(move);
     BoardTools::apply(&Globals::_board, ID_WE, move);
     sentMove = true;

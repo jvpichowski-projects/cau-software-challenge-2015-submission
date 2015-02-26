@@ -8,7 +8,7 @@
 #ifndef MAIN_H
 #define	MAIN_H
 
-#define build "Build 15.17.02 20:45 master"
+#define build "Build SC 001"
 
 #include <unistd.h>
 #include <limits>
