@@ -11,8 +11,8 @@ namespace TT{
     u_int64_t collision_count;
     
     Entry* EntryMap = new Entry[ENTRY_MAP_SIZE];
-    
-    u_int64_t hash(Board board){
+
+    u_int64_t getHash(Board board){
         u_int64_t hash = 0;
         int length = 0;
         int *used = Tools::fastBitScan(board.used, &length);
@@ -33,31 +33,48 @@ namespace TT{
         
         return hash ^ prns[180+board.movecount] ^ prns[/*307+64*/371+board.pointsdiff] ^ prns[434+board.turn];
     }
-    
-    void storeEntry(u_int64_t hash, int depth, int type,  int value, Move bestMove){
-        
+    void storeEntry(Board board, int depth, int type,  int value, Move bestMove){ 
+        u_int64_t hash = getHash(board);
         Entry lastEntry = EntryMap[hash % ENTRY_MAP_SIZE];
+#ifdef secure_tt
+        if(lastEntry.board != Board() && lastEntry.depth >= depth){
+            return;
+        }
+#else
         if(lastEntry.hash != 0 && lastEntry.depth >= depth){
             return;
         }
+#endif
         
         Entry entry = Entry();
         
         entry.best = bestMove;
         entry.score = value;
         entry.depth = depth;
-        entry.hash = hash;   
         entry.type = type;
+        
+#ifdef secure_tt
+        entry.board = board; 
+#else
+        entry.hash = hash;  
+#endif
         
         EntryMap[hash % ENTRY_MAP_SIZE] = entry;
     }
     
-    bool getEntry(u_int64_t hash, int depth, int *type,  int *value, Move *bestMove){
+    bool getEntry(Board board, int depth, int *type,  int *value, Move *bestMove){
+        u_int64_t hash = getHash(board);
         Entry entry = EntryMap[hash % ENTRY_MAP_SIZE];
         ++lookup_count;
+#ifdef secure_tt
+        if(entry.board != board || entry.depth < depth){
+            return false;
+        }
+#else
         if(entry.hash != hash || entry.depth < depth){
             return false;
         }
+#endif
         ++positiv_lookup_count;
         
         *type = entry.type;

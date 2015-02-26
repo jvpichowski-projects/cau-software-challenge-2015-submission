@@ -9,6 +9,7 @@
 #define	TYPES_H
 
 #include <stdlib.h>
+#include "config.h"
 
 typedef u_int8_t byte;
 
@@ -26,17 +27,6 @@ struct Move {
     u_int8_t to;
 };
 
-namespace TT{
-    struct Entry{
-        u_int64_t hash;
-        Move best;
-        int score;
-        byte type;
-        byte depth;
-        Entry() : depth(-1), hash(0ULL) {} //66 not reachable
-    };
-}
-
 struct Board {
     
     Board() : used(0), turn(0), pointsdiff(0), movecount(0),
@@ -52,12 +42,42 @@ struct Board {
     //60
     unsigned long long oppos:60;
     //7 (1 bit sign 6 bits number) -64 to +63
-    signed pointsdiff:7;
+    signed short pointsdiff:7;
     //6
     unsigned movecount:6;
     //4bits unused
     
+    bool operator==(const Board& rhs) const
+    {
+       return (used == rhs.used)
+               && (mypos == rhs.mypos)
+               && (oppos == rhs.oppos)
+               && (movecount == rhs.movecount)
+               && (pointsdiff == rhs.pointsdiff)
+               && (turn == rhs.turn);
+    }
+    bool operator!=(const Board& rhs) const
+    {
+      return !operator==(rhs);
+    }
 };
+
+#ifdef tt
+namespace TT{
+    struct Entry{
+#ifdef secure_tt
+        Board board;
+#else
+        u_int64_t hash;
+#endif
+        Move best;
+        int score;
+        byte type;
+        byte depth;
+        Entry() : depth(0) {} //66 not reachable
+    };
+}
+#endif
 
 
 #endif	/* TYPES_H */

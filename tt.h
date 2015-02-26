@@ -23,10 +23,10 @@ namespace TT{
     extern u_int64_t positiv_lookup_count;
     extern u_int64_t collision_count;
     
-    void storeEntry(u_int64_t hash, int depth, int type, int value, Move bestMove);
-    bool getEntry(u_int64_t hash, int depth, int *type, int *value, Move *bestMove);
+    void storeEntry(Board board, int depth, int type,  int value, Move bestMove);
+    bool getEntry(Board board, int depth, int *type, int *value, Move *bestMove);
     
-    u_int64_t hash(Board board);
+    u_int64_t getHash(Board board);
     
     //pseudo random numbers
     static const u_int64_t prns[480] = {

@@ -58,7 +58,7 @@ int alphaBetaTT(Board board, int depth, int alpha, int beta, int player, Move *r
     int ttType;
     int ttValue;
     Move ttMove;
-    if(TT::getEntry(TT::hash(board), depth, &ttType, &ttValue, &ttMove)){
+    if(TT::getEntry(board, depth, &ttType, &ttValue, &ttMove)){
         if(BoardTools::isValidMove(board, ttMove, player)){
             if(ttType == EXACT_VALUE){
                 if(resultMove){
@@ -158,11 +158,11 @@ int alphaBetaTT(Board board, int depth, int alpha, int beta, int player, Move *r
     }
 #ifdef tt
     if(best <= alpha){
-        TT::storeEntry(TT::hash(board), depth, LOWERBOUND, best, moves[i]);
+        TT::storeEntry(board, depth, LOWERBOUND, best, moves[i]);
     }else if(best >= beta){
-        TT::storeEntry(TT::hash(board), depth, UPPERBOUND, best, moves[i]);
+        TT::storeEntry(board, depth, UPPERBOUND, best, moves[i]);
     }else{
-        TT::storeEntry(TT::hash(board), depth, EXACT_VALUE, best, moves[i]);
+        TT::storeEntry(board, depth, EXACT_VALUE, best, moves[i]);
     }
 #endif
     delete[] moves;
@@ -170,7 +170,7 @@ int alphaBetaTT(Board board, int depth, int alpha, int beta, int player, Move *r
     return best;
 }
 
-#if defined(mtdf) || defined(DYN_MTDF)
+#if defined(mtdf) || defined(dyn_mtdf)
 int MTDf(int f, int depth , int player, Board board, Move *resultMove, bool *timeIsUp){
     int bound[2] = {-1000, 1000}; // lower, upper
     int beta;
@@ -206,7 +206,7 @@ int iterativeDeepening(Board board, int player, int depth, int firstguess, Move 
         d = startDeep;
     }
 #endif
-#ifdef DYN_MTDF
+#ifdef dyn_mtdf
     if(board.movecount >= DYN_MTDF_BORDER){
         d = 1;
     }
@@ -215,7 +215,7 @@ int iterativeDeepening(Board board, int player, int depth, int firstguess, Move 
     {
 #ifdef mtdf
         firstguess = MTDf(firstguess, d, player, board, &move, &timeIsUp);
-#elif defined(DYN_MTDF)
+#elif defined(dyn_mtdf)
         if(board.movecount >= DYN_MTDF_BORDER){
             firstguess = MTDf(firstguess, d, player, board, &move, &timeIsUp);
         }else{
