@@ -14,8 +14,6 @@
 //62500000
 #define ENTRY_MAP_SIZE 33554432
 
-//TODO add dynamic start_deep: 75% of last_deep
-#define START_DEEP 1
 #define MAX_QUIESCENCE_SEARCH_DEEP 4
 #define MAX_QUIESCENCE_SEARCH_DEEP_SETMOVES 6
 
@@ -28,6 +26,8 @@
 #define START_DEEP 3
 
 //#define mtdf
+#define DYN_MTDF
+#define DYN_MTDF_BORDER 45
 //#define tt
 //#define collision_stats
 //#define null_window

@@ -31,6 +31,7 @@
 #include "navigation.h"
 #include "tt.h"
 #include <iostream>
+#include <sys/stat.h>
 
 int ttCutOff;
 int evalCount;
@@ -157,7 +158,7 @@ int alphaBetaTT(Board board, int depth, int alpha, int beta, int player, Move *r
     return best;
 }
 
-#ifdef mtdf
+#if defined(mtdf) || defined(DYN_MTDF)
 int MTDf(int f, int depth , int player, Board board, Move *resultMove, bool *timeIsUp){
     int bound[2] = {-1000, 1000}; // lower, upper
     int beta;
@@ -193,10 +194,21 @@ int iterativeDeepening(Board board, int player, int depth, int firstguess, Move 
         d = startDeep;
     }
 #endif
+#ifdef DYN_MTDF
+    if(board.movecount >= DYN_MTDF_BORDER){
+        startDeep = 1;
+    }
+#endif
     for(; d <= depth && board.movecount + d <= 60; d++)
     {
 #ifdef mtdf
         firstguess = MTDf(firstguess, d, player, board, &move, &timeIsUp);
+#elif defined(DYN_MTDF)
+        if(board.movecount >= DYN_MTDF_BORDER){
+            firstguess = MTDf(firstguess, d, player, board, &move, &timeIsUp);
+        }else{
+            alphaBetaTT(board, d, -1000, 1000, ID_WE, &move, &timeIsUp);
+        }
 #else
         alphaBetaTT(board, d, -1000, 1000, ID_WE, &move, &timeIsUp);
 #endif
