@@ -122,7 +122,19 @@ int alphaBetaTT(Board board, int depth, int alpha, int beta, int player, Move *r
     {
         nextBoard = board;
         BoardTools::apply(&nextBoard, player, moves[i]);
-        value = -alphaBetaTT(nextBoard, depth-1,-beta,-alpha,!player, 0, timeIsUp);
+        
+#ifdef null_window
+        if(!resultMove){ // if not first move do null window search
+            value = -alphaBetaTT(nextBoard, depth-1, -alpha-1, -alpha, !player, 0, timeIsUp);      /* search with a null window */
+            if(alpha < value && value < beta){ //fail high, do research
+                value = -alphaBetaTT(nextBoard, depth-1,-beta,-alpha, !player, 0, timeIsUp);
+            }
+        }else{
+#endif
+            value = -alphaBetaTT(nextBoard, depth-1,-beta,-alpha, !player, 0, timeIsUp);
+#ifdef null_window
+        }
+#endif
         
         if(value > best){
             best = value;
