@@ -103,6 +103,14 @@ void onMoveReq()
         move = BoardTools::generateGoodMove(Globals::_board, ID_WE);
     }
     
+    struct timespec nowTime;
+    clock_gettime(Globals::clockTime, &nowTime);
+    
+    while((((nowTime.tv_sec * 1000000000 + nowTime.tv_nsec) - (Globals::moveReqTime.tv_sec * 1000000000 + Globals::moveReqTime.tv_nsec)) / 1000000) < (TIME_FOR_CALC))
+    {
+        clock_gettime(Globals::clockTime, &nowTime);
+    }
+    
     Ocean::Send(move);
     BoardTools::apply(&Globals::_board, ID_WE, move);
     sentMove = true;
