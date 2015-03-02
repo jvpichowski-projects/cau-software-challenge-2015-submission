@@ -8,7 +8,7 @@
 #ifndef MAIN_H
 #define	MAIN_H
 
-#define build "Build SC 002"
+#define build "Build SC 003"
 
 #include <unistd.h>
 #include <limits>
