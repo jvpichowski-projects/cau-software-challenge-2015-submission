@@ -10,6 +10,7 @@
 
 #include <stdlib.h>
 #include "config.h"
+#include "constants.h"
 
 typedef u_int8_t byte;
 
@@ -25,6 +26,12 @@ typedef u_int8_t byte;
 struct Move {
     u_int8_t from;
     u_int8_t to;
+};
+
+struct ValuedMove {
+    Move move;
+    int value;
+    ValuedMove(): value(MIN_AB_VALUE-10){}
 };
 
 struct Board {

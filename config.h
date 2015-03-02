@@ -8,6 +8,8 @@
 #ifndef CONFIGURATION_H
 #define	CONFIGURATION_H
 
+//#define DEBUG_MOVE_ORDERING
+
 //#define mtdf
 #define dyn_mtdf
 #define tt
