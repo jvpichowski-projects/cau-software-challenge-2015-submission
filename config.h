@@ -10,8 +10,8 @@
 
 //#define DEBUG_MOVE_ORDERING
 
-//#define ordered_setmoves
-#define ordered_runmoves
+#define ordered_setmoves
+//#define ordered_runmoves
 //#define collision_stats
 //#define null_window
 

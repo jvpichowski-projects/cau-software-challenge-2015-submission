@@ -341,7 +341,7 @@ namespace Tools
      */
     int* getPos(int pos){
         if(pos < 7){
-            int *result[2] = {pos, 0};
+            int *result = new int[2]{pos, 0};
             return result;
         }else if(pos < 15){
             int *result = new int[2]{pos-7, 1};
