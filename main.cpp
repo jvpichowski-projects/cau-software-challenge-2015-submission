@@ -211,6 +211,11 @@ int main(int argc, char** argv)
         Ocean::GetFood();
     }
     
+    std::cout << std::endl << "Bilance: " << std::endl;
+    std::cout << "CutOff: " << Globals::Log::globalCutOff << std::endl;
+    std::cout << "Evals:  " << Globals::Log::globalEvalCount << std::endl;
+    std::cout << "Nodes:  " << Globals::Log::globalNodesTravled << std::endl << std::endl;
+    
     printf("\n\n\n========================================\nRAM-Auslastung:\n========================================\n\n\n");
     
     system("free -m");
@@ -222,19 +227,6 @@ int main(int argc, char** argv)
     sleep(1);
     
     Ocean::Close();
-    
-#ifdef tt
-    
-    std::cout << std::endl;
-    std::cout << "TT Stats" << std::endl;
-    std::cout << "--------------------------------------------------------------" << std::endl;
-    std::cout << "lookup_count " << TT::lookup_count << std::endl;
-    std::cout << "positve_lookup_count " << TT::positiv_lookup_count << std::endl;
-    std::cout << "min collision_count " << TT::collision_count << std::endl;
-    std::cout << "--------------------------------------------------------------" << std::endl;
-    std::cout << std::endl;
-    
-#endif /* tt */
     
 #ifdef move_order_stats
     printMoveOrderStats();

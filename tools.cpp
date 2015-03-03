@@ -27,46 +27,6 @@ int ms1bTable[]= {
 
 namespace Tools
 {
-    
-    /**
-    * bitScanReverse
-    * @author Eugene Nalimov
-    * @param bb bitboard to scan
-    * @return index (0..63) of most significant one bit
-    */
-    int bitScanReverse(u_int64_t bb)
-    {
-        int result = 0;
-        if (bb > 0xFFFFFFFF)
-        {
-            bb >>= 32;
-            result = 32;
-        }
-        if (bb > 0xFFFF)
-        {
-            bb >>= 16;
-            result += 16;
-        }
-        if (bb > 0xFF)
-        {
-            bb >>= 8;
-            result += 8;
-        }
-        return result + ms1bTable[bb];
-    }
-    
-    
-    u_int64_t set(u_int64_t field, int pos){
-        return field | 1LL << pos;
-    }
-
-    u_int64_t clear(u_int64_t field, int pos){
-        return field & ~(1LL<<pos);
-    }
-
-    bool isSet(u_int64_t field, int pos){
-        return ((field >> pos) & 1LL ) == 1;
-    }
 
     void printField(u_int64_t field){
          cout << "Field:" << endl;
@@ -78,71 +38,12 @@ namespace Tools
                 cout << endl << " ";
             }
             cout << " ";
-            cout << isSet(field, i);
+            cout << ((field >> i) & 1ULL);
         }
          cout << endl;
     }
-//    void printBoard(Board *board){
-//         cout << "Board:" << endl;
-//         cout << " ";
-//        for(int i = 0; i <= 63; i++){
-//            if(i == 7 || i == 22 || i == 37 ||  i == 52 ){
-//                cout << endl;
-//            }else if(i == 15 || i == 30 ||  i == 45 ||  i == 60){
-//                cout << endl << " ";
-//            }
-//            cout << " ";
-//            if(isSet(board->mPositions[ID_WE], i)){
-//                cout << "W";
-//            }else if(isSet(board->mPositions[!ID_WE], i)){
-//                cout << "O";
-//            }else if(isSet(board->mUsed, i)){
-//                cout << "#";
-//            }else if(isSet(Globals::ones, i)){
-//                cout << 1;
-//            }else if(isSet(Globals::twos, i)){
-//                cout << 2;
-//            }else if(isSet(Globals::threes, i)){
-//                cout << 3;
-//            }
-//            
-//        }
-//         cout << endl;
-//    }
 
 //--------------------------------------------------------------------------move
-    
-    u_int64_t moveField(u_int64_t field, int dir, int pos){
-        return ( field | 1LL << (pos+dir) ) & ~(1LL<<pos);
-    }
-
-    int movePos(int pos, int dir){
-        return pos+dir;
-    }
-
-    u_int64_t left(u_int64_t field, int pos){
-        return ( field | 1LL << (pos-1) ) & ~(1LL<<pos);
-    }
-
-    u_int64_t right(u_int64_t field, int pos){
-        return ( field | 1LL << (pos+1) ) & ~(1LL<<pos);
-    }
-
-    u_int64_t topLeft(u_int64_t field, int pos){
-        return ( field | 1LL << (pos-8) ) & ~(1LL<<pos);
-    }
-
-    u_int64_t topRight(u_int64_t field, int pos){
-        return ( field | 1LL << (pos-7) ) & ~(1<<pos);
-    }
-
-    u_int64_t bottomLeft(u_int64_t field, int pos){
-        return ( field | 1LL << (pos+7) ) & ~(1LL<<pos);
-    }
-
-    u_int64_t bottomRight(u_int64_t field, int pos){
-        return ( field | 1LL << (pos+8) ) & ~(1LL<<pos);
-    }
 
     u_int64_t initEmptyFields(){        
         return (1LL << 63) | (1LL << 62) | (1LL << 61) | (1LL << 60);
@@ -440,7 +341,7 @@ namespace Tools
      */
     int* getPos(int pos){
         if(pos < 7){
-            int *result = new int[2]{pos, 0};
+            int *result[2] = {pos, 0};
             return result;
         }else if(pos < 15){
             int *result = new int[2]{pos-7, 1};
@@ -471,11 +372,5 @@ namespace Tools
 
     bool isInvalid(int pos){
         return pos >= 60;//FIT & (1LL << pos);
-    }
-
-//------------------------------------------------------------------------player
-
-    int opponent(int id){
-        return (id + 1) % 2;
     }
 }

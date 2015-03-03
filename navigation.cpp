@@ -35,6 +35,9 @@
 int evalCount;
 int cutOff;
 int nodesTraveled;
+int totalEvalCount;
+int totalCutOff;
+int totalNodesTravled;
 
 
 //int layer;
@@ -117,6 +120,10 @@ int startDeep = 1;
 
 int iterativeDeepening(Board board, int player, int depth, int firstguess, Move *resultMove)
 {
+    totalNodesTravled = 0;
+    totalCutOff = 0;
+    totalEvalCount = 0;
+    
     bool timeIsUp = false;
         
     Move move;
@@ -136,6 +143,9 @@ int iterativeDeepening(Board board, int player, int depth, int firstguess, Move 
         firstguess = alphaBetaTT(board, d, -1000, 1000, ID_WE, &move, &timeIsUp);
         
         std::cout << "Deep: " << d << " Nodes traveled: " << nodesTraveled << " Evals: " << evalCount << " CutOff: " << cutOff << " Value: " << firstguess << std::endl;
+        totalNodesTravled += nodesTraveled;
+        totalCutOff += cutOff;
+        totalEvalCount += evalCount;
         nodesTraveled = 0;
         evalCount = 0;
         cutOff = 0;
@@ -149,5 +159,10 @@ int iterativeDeepening(Board board, int player, int depth, int firstguess, Move 
 #ifdef DYN_START_DEEP
     startDeep = (d * 80) / 100;
 #endif
+    std::cout << "ID-Bilance Deep: " << d-1 << " Nodes traveled: " << totalNodesTravled << " Evals: " << totalEvalCount << " CutOff: " << totalCutOff << " Value: " << firstguess << std::endl;
+    Globals::Log::globalCutOff += totalCutOff;
+    Globals::Log::globalEvalCount += totalEvalCount;
+    Globals::Log::globalNodesTravled += totalNodesTravled;
+    
     return firstguess;
 }

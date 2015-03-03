@@ -31,6 +31,10 @@ namespace Globals{
     
     namespace Log{
         
+        extern int globalEvalCount;
+        extern int globalCutOff;
+        extern int globalNodesTravled;
+        
 #ifdef move_order_stats
 #define MAX_NUMBER_OF_MOVES 64
         
