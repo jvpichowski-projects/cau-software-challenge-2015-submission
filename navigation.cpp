@@ -135,7 +135,7 @@ int iterativeDeepening(Board board, int player, int depth, int firstguess, Move 
 
         firstguess = alphaBetaTT(board, d, -1000, 1000, ID_WE, &move, &timeIsUp);
         
-        std::cout << "Deep: " << d << " Nodes traveled: " << nodesTraveled << " Evals: " << evalCount << " CutOff: " << cutOff << "Value: " << firstguess << std::endl;
+        std::cout << "Deep: " << d << " Nodes traveled: " << nodesTraveled << " Evals: " << evalCount << " CutOff: " << cutOff << " Value: " << firstguess << std::endl;
         nodesTraveled = 0;
         evalCount = 0;
         cutOff = 0;
