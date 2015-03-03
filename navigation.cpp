@@ -214,7 +214,7 @@ int iterativeDeepening(Board board, int player, int depth, int firstguess, Move 
     for(; d <= depth && board.movecount + d <= 60; d++)
     {
 #ifdef mtdf
-        firstguess = MTDf(firstguess, d, player, board, &move, &timeIsUp);
+        firstguess = MTDf(firstguess, d, player, board, &move, &timeIsUp);//change firstguess to 100
 #elif defined(dyn_mtdf)
         if(board.movecount >= DYN_MTDF_BORDER){
             firstguess = MTDf(firstguess, d, player, board, &move, &timeIsUp);

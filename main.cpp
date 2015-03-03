@@ -75,7 +75,7 @@ void onMoveReq()
 //    std::cout << "movecount: " << _board->movecount << " pointsdiff: " << _board->pointsdiff << std::endl;
     
     
-    std::cout << "IT: " << iterativeDeepening(Globals::_board, ID_WE, 60, 0, &move) << std::endl;
+    std::cout << "IT: " << iterativeDeepening(Globals::_board, ID_WE, 60, 0, &move) << std::endl;//change first guess to 100?
     std::cout << "MT: " << (u_int64_t)move.from << "->" << (u_int64_t)move.to << std::endl;
 //    if(move.from == move.to && move.from != INVALID_POS){
 //        std::cout << "======================================================" << std::endl;
