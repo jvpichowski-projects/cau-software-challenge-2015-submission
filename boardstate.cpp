@@ -200,6 +200,11 @@ namespace BoardTools{
 
             delete[] moveFields;
             
+#ifdef DEBUG_MOVE_ORDERING
+        for(int i = 0; i < *length; i++){
+            std::cout << "VM: " << moves[i].value << std::endl;
+        }
+#endif
             return moves;
         }
         //else return setMove
