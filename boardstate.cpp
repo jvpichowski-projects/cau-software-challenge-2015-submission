@@ -80,40 +80,6 @@ namespace BoardTools{
 //        return state.movecount ^ state.mypos ^ state.oppos ^ state.pointsdiff ^ state.used;
 //    }
     
-#ifdef move_ordering
-    struct MoveContainer{
-        
-        MoveContainer *prev;
-        Move move;
-        int value;
-        MoveContainer *after;
-        
-    };
-    
-    void insertMove(MoveContainer *moveList, Board state, Move move, int playerId){
-        //go to start of movelist
-        while(moveList->prev != 0){
-            moveList = moveList->prev;
-        }
-        MoveContainer moveConn = MoveContainer();
-        moveConn.after = 0;
-        moveConn.prev = 0;
-        moveConn.move = move;
-        apply(&state, playerId, move);
-        moveConn.value = Evaluator::sortEvaluate(playerId, state);
-        unapply(&state, playerId, move);
-        do{
-            if(moveList->value < moveConn.value){
-                moveConn.after = moveList;
-                moveConn.prev = moveList->prev;
-                moveList->prev = &moveConn;
-                moveConn.prev->after = &moveConn;
-                return;
-            }
-            moveList = moveList->after;
-        }while(moveList->after != 0);
-    }
-#endif
     
     Move* generateOderedSetMoves(Board state, int playerId, int *length){
          //else return setMove to firs free field
@@ -188,23 +154,7 @@ namespace BoardTools{
                 + Tools::popCount(moveFields[1])
                 + Tools::popCount(moveFields[2])
                 + Tools::popCount(moveFields[3]) + 1;
-#ifndef move_ordering
             Move* moves = new Move[*length];
-#endif
-#ifdef move_ordering
-            //first move is nullmove
-            Move m = Move();
-            m.from = INVALID_POS;
-            m.to = INVALID_POS;
-            
-            MoveContainer moveList = MoveContainer();
-            moveList.after = 0;
-            moveList.prev = 0;
-            moveList.move = m;
-            apply(&state, playerId, m);
-            moveList.value = Evaluator::sortEvaluate(playerId, state);
-            unapply(&state, playerId, m);
-#endif
             //std::cout << "Length: " << *length << std::endl;
 
             int c = -1;
@@ -221,12 +171,7 @@ namespace BoardTools{
                     Move m = Move();
                     m.from = penguinPos[i];
                     m.to = threesPos[k];
-#ifdef move_ordering
-                    insertMove(&moveList, state, m, playerId);
-#endif
-#ifndef move_ordering
                     moves[++c] = m;
-#endif
                 }
 
                 int twosSize = 0;
@@ -235,12 +180,7 @@ namespace BoardTools{
                     Move m = Move();
                     m.from = penguinPos[i];
                     m.to = twosPos[k];
-#ifdef move_ordering
-                    insertMove(&moveList, state, m, playerId);
-#endif
-#ifndef move_ordering
                     moves[++c] = m;
-#endif
                 }
 
                 int onesSize = 0;
@@ -249,35 +189,15 @@ namespace BoardTools{
                     Move m = Move();
                     m.from = penguinPos[i];
                     m.to = onesPos[k];
-#ifdef move_ordering
-                    insertMove(&moveList, state, m, playerId);
-#endif
-#ifndef move_ordering
                     moves[++c] = m;
-#endif
                 }
             }
-#ifndef move_ordering
             Move m = Move();
             m.from = INVALID_POS;
             m.to = INVALID_POS;
             moves[++c] = m;
-#endif
 
             delete[] moveFields;
-
-#ifdef move_ordering            
-            MoveContainer *resettedList = &moveList;
-            
-            while(resettedList->prev != 0){
-                resettedList = resettedList->prev;
-            }
-            Move* moves = new Move[*length];
-            for(int i = 0; i < *length; ++i){
-                moves[i] = resettedList->move;
-                resettedList = resettedList->after;
-            }
-#endif
             
             return moves;
         }

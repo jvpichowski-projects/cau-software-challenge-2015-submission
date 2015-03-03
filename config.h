@@ -13,7 +13,6 @@
 #define ordered_setmoves
 //#define collision_stats
 //#define null_window
-//#define move_ordering
 
 //#define move_order_stats
 
