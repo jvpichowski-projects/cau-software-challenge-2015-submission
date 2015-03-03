@@ -156,7 +156,11 @@ namespace BoardTools{
                     Move m = Move();
                     m.from = penguinPos[i];
                     m.to = threesPos[k];
+#ifdef ordered_runmoves
+                    insertMove(moves, m, state, playerId, *length);
+#else
                     moves[++c] = m;
+#endif
                 }
 
                 int twosSize = 0;
@@ -165,7 +169,11 @@ namespace BoardTools{
                     Move m = Move();
                     m.from = penguinPos[i];
                     m.to = twosPos[k];
+#ifdef ordered_runmoves
+                    insertMove(moves, m, state, playerId, *length);
+#else
                     moves[++c] = m;
+#endif
                 }
 
                 int onesSize = 0;
@@ -174,13 +182,21 @@ namespace BoardTools{
                     Move m = Move();
                     m.from = penguinPos[i];
                     m.to = onesPos[k];
+#ifdef ordered_runmoves
+                    insertMove(moves, m, state, playerId, *length);
+#else
                     moves[++c] = m;
+#endif
                 }
             }
             Move m = Move();
             m.from = INVALID_POS;
             m.to = INVALID_POS;
-            moves[++c] = m;
+#ifdef ordered_runmoves
+                    insertMove(moves, m, state, playerId, *length);
+#else
+                    moves[++c] = m;
+#endif
 
             delete[] moveFields;
             
