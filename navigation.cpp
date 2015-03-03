@@ -29,15 +29,12 @@
  */
 
 #include "navigation.h"
-#include "tt.h"
 #include <iostream>
 #include <sys/stat.h>
 
-int ttCutOff;
 int evalCount;
 int cutOff;
 int nodesTraveled;
-int mtdfResearch;
 
 
 //int layer;
@@ -47,47 +44,8 @@ int mtdfResearch;
 int alphaBetaTT(Board board, int depth, int alpha, int beta, int player, Move *resultMove, bool *timeIsUp)
 {
     ++nodesTraveled;
-//    for(int i = 0; i < layer; ++i){
-//        std::cout << "   ";
-//    }
-//    std::cout << board.pointsdiff << ((ID_WE == player) ? "W" : "P") << "" << std::endl;
-    
     
     int value;
-#ifdef tt
-    int ttType;
-    int ttValue;
-    Move ttMove;
-    if(TT::getEntry(board, depth, &ttType, &ttValue, &ttMove)){
-        if(BoardTools::isValidMove(board, ttMove, player)){
-            if(ttType == EXACT_VALUE){
-                if(resultMove){
-                    *resultMove = ttMove;
-                }
-                ++ttCutOff;
-                return ttValue;
-            }
-            if(ttType == LOWERBOUND && ttValue > alpha){
-                alpha = ttValue;
-            }else if(ttType == UPPERBOUND && ttValue < beta){
-                beta = ttValue;
-            }
-            if(alpha >= beta){
-                if(resultMove){
-                    *resultMove = ttMove;
-                }
-                ++ttCutOff;
-                return ttValue;
-            }
-        }
-#ifdef collision_stats
-        else{
-            ++TT::collision_count;
-        }
-#endif
-    }
-#endif
-    
     
     if(depth == 0 || board.movecount >= 60)
     {
@@ -102,17 +60,8 @@ int alphaBetaTT(Board board, int depth, int alpha, int beta, int player, Move *r
             *timeIsUp = true;
         }
         
-//        if(value <= alpha){
-//            TT::storeEntry(TT::hash(*board), depth, LOWERBOUND, value, Move());
-//        }else if(value >= beta){
-//            TT::storeEntry(TT::hash(*board), depth, UPPERBOUND, value, Move());
-//        }else{
-//            TT::storeEntry(TT::hash(*board), depth, EXACT_VALUE, value, Move());
-//        }
-        
         return value;
     }
-//    ++layer;
     int moveCount;
     Move *moves = BoardTools::generatePossibleMoves(board, player, &moveCount);
     int best = MIN_AB_VALUE-1;
@@ -156,34 +105,9 @@ int alphaBetaTT(Board board, int depth, int alpha, int beta, int player, Move *r
             break;
         }
     }
-#ifdef tt
-    if(best <= alpha){
-        TT::storeEntry(board, depth, LOWERBOUND, best, moves[i]);
-    }else if(best >= beta){
-        TT::storeEntry(board, depth, UPPERBOUND, best, moves[i]);
-    }else{
-        TT::storeEntry(board, depth, EXACT_VALUE, best, moves[i]);
-    }
-#endif
     delete[] moves;
-//    --layer;
     return best;
 }
-
-#if defined(mtdf) || defined(dyn_mtdf)
-int MTDf(int f, int depth , int player, Board board, Move *resultMove, bool *timeIsUp){
-    int bound[2] = {-1000, 1000}; // lower, upper
-    int beta;
-    --mtdfResearch;
-    do {
-       beta = f + (f == bound[0]);
-       f = alphaBetaTT(board, depth, beta-1, beta, player, resultMove, timeIsUp);
-       bound[f < beta] = f;
-       ++mtdfResearch;       
-    } while (bound[0] < bound[1] && !*timeIsUp);
-    return f;
-}
-#endif
 
 #ifdef FIXED_START_DEEP
 int startDeep = START_DEEP;
@@ -206,30 +130,15 @@ int iterativeDeepening(Board board, int player, int depth, int firstguess, Move 
         d = startDeep;
     }
 #endif
-#ifdef dyn_mtdf
-    if(board.movecount >= DYN_MTDF_BORDER){
-        d = 1;
-    }
-#endif
     for(; d <= depth && board.movecount + d <= 60; d++)
     {
-#ifdef mtdf
-        firstguess = MTDf(firstguess, d, player, board, &move, &timeIsUp);//change firstguess to 100
-#elif defined(dyn_mtdf)
-        if(board.movecount >= DYN_MTDF_BORDER){
-            firstguess = MTDf(firstguess, d, player, board, &move, &timeIsUp);
-        }else{
-            alphaBetaTT(board, d, -1000, 1000, ID_WE, &move, &timeIsUp);
-        }
-#else
-        alphaBetaTT(board, d, -1000, 1000, ID_WE, &move, &timeIsUp);
-#endif
-        std::cout << "Deep: " << d << " Nodes traveled: " << nodesTraveled << " Evals: " << evalCount << " CutOff: " << cutOff << " TTCutOff: " << ttCutOff << " MTDf Research: " << mtdfResearch << std::endl;
+
+        firstguess = alphaBetaTT(board, d, -1000, 1000, ID_WE, &move, &timeIsUp);
+        
+        std::cout << "Deep: " << d << " Nodes traveled: " << nodesTraveled << " Evals: " << evalCount << " CutOff: " << cutOff << "Value: " << firstguess << std::endl;
         nodesTraveled = 0;
         evalCount = 0;
         cutOff = 0;
-        ttCutOff = 0;
-        mtdfResearch = 0;
         
         if(timeIsUp){
             break;

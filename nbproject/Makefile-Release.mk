@@ -42,7 +42,6 @@ OBJECTFILES= \
 	${OBJECTDIR}/navigation.o \
 	${OBJECTDIR}/network.o \
 	${OBJECTDIR}/tools.o \
-	${OBJECTDIR}/tt.o \
 	${OBJECTDIR}/visuals.o
 
 
@@ -104,11 +103,6 @@ ${OBJECTDIR}/tools.o: tools.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/tools.o tools.cpp
-
-${OBJECTDIR}/tt.o: tt.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/tt.o tt.cpp
 
 ${OBJECTDIR}/visuals.o: visuals.cpp 
 	${MKDIR} -p ${OBJECTDIR}

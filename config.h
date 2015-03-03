@@ -10,10 +10,6 @@
 
 //#define DEBUG_MOVE_ORDERING
 
-//#define mtdf
-#define dyn_mtdf
-#define tt
-#define secure_tt
 //#define collision_stats
 //#define null_window
 //#define move_ordering
@@ -24,20 +20,7 @@
     #define move_cutoff_state
 #endif
 
-
-//2^24 ungefähr 235mb : 16777216
-//2 ^ 25 ungefähr 470mb : 33554432
-//31250000
-//62500000
-//
-#ifdef secure_tt
-#define ENTRY_MAP_SIZE 16777216
-#else
-#define ENTRY_MAP_SIZE 33554432
-#endif
 #define TIME_FOR_CALC 1900
-
-#define DYN_MTDF_BORDER 40
 
 #define DYN_START_DEEP
 #define START_DEEP_PERCENT 80

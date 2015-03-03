@@ -21,7 +21,6 @@
 #include "navigation.h"
 #include "boardstate.h"
 #include "navigation.h"
-#include "tt.h"
 
 #endif	/* MAIN_H */
 

@@ -13,7 +13,6 @@
       <itemPath>navigation.h</itemPath>
       <itemPath>network.h</itemPath>
       <itemPath>tools.h</itemPath>
-      <itemPath>tt.h</itemPath>
       <itemPath>types.h</itemPath>
       <itemPath>visuals.h</itemPath>
     </logicalFolder>
@@ -31,7 +30,6 @@
       <itemPath>navigation.cpp</itemPath>
       <itemPath>network.cpp</itemPath>
       <itemPath>tools.cpp</itemPath>
-      <itemPath>tt.cpp</itemPath>
       <itemPath>visuals.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
@@ -87,10 +85,6 @@
       <item path="tools.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tools.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="tt.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tt.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="types.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -150,10 +144,6 @@
       <item path="tools.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tools.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="tt.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tt.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="types.h" ex="false" tool="3" flavor2="0">
       </item>
