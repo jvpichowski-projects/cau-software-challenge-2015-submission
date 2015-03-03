@@ -46,7 +46,7 @@ int evaluate(int playerId, Board board){
 //        std::cout << "Points: " << points << std::endl;
        
 
-    int result = points + movePoints * 2;
+    int result = points + movePoints;
         
         
     if(playerId != ID_WE){
