@@ -210,7 +210,7 @@ namespace BoardTools{
         
 #ifdef DEBUG_MOVE_ORDERING
         for(int i = 0; i < freePosSize; i++){
-            std::cout << "VM: " << valuedMoves[i].value << std::endl;
+            std::cout << "VM: " << moves[i].value << std::endl;
         }
 #endif
         delete[] freePos;
