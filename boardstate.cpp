@@ -281,28 +281,29 @@ namespace BoardTools{
             
             return moves;
         }
-
+#ifdef ordered_setmoves
         return generateOderedSetMoves(state, playerId, length);
-        
-//        //else return setMove to firs free field
-//        u_int64_t freeSetPositions = Globals::ones & ~state.used;
-//        int freePosSize = 0;
-//        int* freePos = Tools::bitScan(freeSetPositions,  &freePosSize);
-//        //std::cout << "FreePosSize " << freePosSize << std::endl;
-//        *length = freePosSize;
-//        Move* moves = new Move[freePosSize];
-//
-//        for(int i = 0; i < freePosSize; i++){
-//            #ifdef DEBUG_MOVEGEN
-//                    std::cout << "moveGen: Adding move: From: " << " To: " << freePos[i] << std::endl; 
-//            #endif
-//            Move m = Move();
-//            m.from = INVALID_POS;
-//            m.to = freePos[i];
-//            moves[i] = m;
-//        }
-//        delete[] freePos;
-//        return moves; 
+#else
+        //else return setMove
+        u_int64_t freeSetPositions = Globals::ones & ~state.used;
+        int freePosSize = 0;
+        int* freePos = Tools::bitScan(freeSetPositions,  &freePosSize);
+        //std::cout << "FreePosSize " << freePosSize << std::endl;
+        *length = freePosSize;
+        Move* moves = new Move[freePosSize];
+
+        for(int i = 0; i < freePosSize; i++){
+            #ifdef DEBUG_MOVEGEN
+                    std::cout << "moveGen: Adding move: From: " << " To: " << freePos[i] << std::endl; 
+            #endif
+            Move m = Move();
+            m.from = INVALID_POS;
+            m.to = freePos[i];
+            moves[i] = m;
+        }
+        delete[] freePos;
+        return moves; 
+#endif
     }
     
     
