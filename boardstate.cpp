@@ -80,6 +80,35 @@ namespace BoardTools{
 //        return state.movecount ^ state.mypos ^ state.oppos ^ state.pointsdiff ^ state.used;
 //    }
     
+    /**
+     * 
+     * @param valuedMoves the pointer to the first element of the move array in which the move should be insert
+     * @param m the move
+     * @param state
+     * @param playerId 
+     * @param length of move array
+     * @return value of move
+     */
+    int insertMove(Move* valuedMoves, Move m, Board state, int playerId, int length){
+        Board tmpBoard = state;
+        BoardTools::apply(&tmpBoard, playerId, m);
+        int value = evaluate(playerId, tmpBoard);  
+        m.value = value;
+        //valuedMoves[i] = vm;
+        int b = length-1;
+        for(; b > 0; --b){
+            if(valuedMoves[b-1].value < value){
+                valuedMoves[b] = valuedMoves[b-1];
+            }else{
+                valuedMoves[b] = m;
+                break;
+            }     
+        }
+        if(!b){
+            valuedMoves[0] = m;
+        }
+        return value;
+    }
     
     Move* generateOderedSetMoves(Board state, int playerId, int *length){
          //else return setMove to firs free field
@@ -90,7 +119,6 @@ namespace BoardTools{
         *length = freePosSize;
         Move* valuedMoves = new Move[freePosSize];
 
-        Board tmpBoard = state;
         for(int i = 0; i < freePosSize; ++i){
             #ifdef DEBUG_MOVEGEN
                     std::cout << "moveGen: Adding move: From: " << " To: " << freePos[i] << std::endl; 
@@ -98,23 +126,7 @@ namespace BoardTools{
             Move m = Move();
             m.from = INVALID_POS;
             m.to = freePos[i];
-            BoardTools::apply(&tmpBoard, playerId, m);
-            int value = evaluate(playerId, tmpBoard);
-            tmpBoard = state;    
-            m.value = value;
-            //valuedMoves[i] = vm;
-            int b = freePosSize-1;
-            for(; b > 0; --b){
-                if(valuedMoves[b-1].value < value){
-                    valuedMoves[b] = valuedMoves[b-1];
-                }else{
-                    valuedMoves[b] = m;
-                    break;
-                }     
-            }
-            if(!b){
-                valuedMoves[0] = m;
-            }
+            insertMove(valuedMoves, m, state, playerId, freePosSize);
         }
 #ifdef DEBUG_MOVE_ORDERING
         for(int i = 0; i < freePosSize; i++){
