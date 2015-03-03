@@ -110,33 +110,6 @@ namespace BoardTools{
         return value;
     }
     
-    Move* generateOderedSetMoves(Board state, int playerId, int *length){
-         //else return setMove to firs free field
-        u_int64_t freeSetPositions = Globals::ones & ~state.used;
-        int freePosSize = 0;
-        int* freePos = Tools::bitScan(freeSetPositions,  &freePosSize);
-        //std::cout << "FreePosSize " << freePosSize << std::endl;
-        *length = freePosSize;
-        Move* valuedMoves = new Move[freePosSize];
-
-        for(int i = 0; i < freePosSize; ++i){
-            #ifdef DEBUG_MOVEGEN
-                    std::cout << "moveGen: Adding move: From: " << " To: " << freePos[i] << std::endl; 
-            #endif
-            Move m = Move();
-            m.from = INVALID_POS;
-            m.to = freePos[i];
-            insertMove(valuedMoves, m, state, playerId, freePosSize);
-        }
-#ifdef DEBUG_MOVE_ORDERING
-        for(int i = 0; i < freePosSize; i++){
-            std::cout << "VM: " << valuedMoves[i].value << std::endl;
-        }
-#endif
-        delete[] freePos;
-        return valuedMoves; 
-    }
-    
     /**
     //This method returns all valid moves for the player. 
     //The moves should be sorted best to bad. Consequently the NullMove is the lastMove
@@ -213,9 +186,6 @@ namespace BoardTools{
             
             return moves;
         }
-#ifdef ordered_setmoves
-        return generateOderedSetMoves(state, playerId, length);
-#else
         //else return setMove
         u_int64_t freeSetPositions = Globals::ones & ~state.used;
         int freePosSize = 0;
@@ -231,11 +201,20 @@ namespace BoardTools{
             Move m = Move();
             m.from = INVALID_POS;
             m.to = freePos[i];
+#ifdef ordered_setmoves
+            insertMove(moves, m, state, playerId, freePosSize);
+#else
             moves[i] = m;
+#endif
         }
+        
+#ifdef DEBUG_MOVE_ORDERING
+        for(int i = 0; i < freePosSize; i++){
+            std::cout << "VM: " << valuedMoves[i].value << std::endl;
+        }
+#endif
         delete[] freePos;
         return moves; 
-#endif
     }
     
     
