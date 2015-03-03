@@ -122,7 +122,7 @@ namespace BoardTools{
         int* freePos = Tools::bitScan(freeSetPositions,  &freePosSize);
         //std::cout << "FreePosSize " << freePosSize << std::endl;
         *length = freePosSize;
-        ValuedMove* valuedMoves = new ValuedMove[freePosSize];
+        Move* valuedMoves = new Move[freePosSize];
 
         Board tmpBoard = state;
         for(int i = 0; i < freePosSize; ++i){
@@ -134,34 +134,29 @@ namespace BoardTools{
             m.to = freePos[i];
             BoardTools::apply(&tmpBoard, playerId, m);
             int value = evaluate(playerId, tmpBoard);
-            tmpBoard = state;            
-            ValuedMove vm = ValuedMove();
-            vm.move = m;
-            vm.value = value;
+            tmpBoard = state;    
+            m.value = value;
             //valuedMoves[i] = vm;
             int b = freePosSize-1;
             for(; b > 0; --b){
                 if(valuedMoves[b-1].value < value){
                     valuedMoves[b] = valuedMoves[b-1];
                 }else{
-                    valuedMoves[b] = vm;
+                    valuedMoves[b] = m;
                     break;
                 }     
             }
             if(!b){
-                valuedMoves[0] = vm;
+                valuedMoves[0] = m;
             }
         }
-        Move* moves = new Move[freePosSize];
-        for(int i = 0; i < freePosSize; i++){
-            moves[i] = valuedMoves[i].move;
 #ifdef DEBUG_MOVE_ORDERING
+        for(int i = 0; i < freePosSize; i++){
             std::cout << "VM: " << valuedMoves[i].value << std::endl;
-#endif
         }
-        delete[] valuedMoves;
+#endif
         delete[] freePos;
-        return moves; 
+        return valuedMoves; 
     }
     
     /**
