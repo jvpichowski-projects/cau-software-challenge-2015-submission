@@ -12,17 +12,17 @@
 
 //#define quiscens_search
 #define ordered_setmoves
-#define ordered_runmoves
+//#define ordered_runmoves
 //#define collision_stats
 //#define null_window
 
-#define limit_move_gen
+//#define limit_move_gen
 #define MOVE_GEN_LIMIT 10
 
 #define move_order_stats
 
 #ifdef move_order_stats
-    //#define move_cutoff_state
+    #define move_cutoff_state
 #endif
 
 #define TIME_FOR_CALC 1800
