@@ -250,6 +250,9 @@ namespace BoardTools{
             std::cout << "VM: " << moves[i].value << std::endl;
         }
 #endif
+#ifdef limit_move_gen
+            *length = MOVE_GEN_LIMIT;
+#endif
             return moves;
         }
         //else return setMove
@@ -278,6 +281,9 @@ namespace BoardTools{
         for(int i = 0; i < freePosSize; i++){
             std::cout << "VM: " << moves[i].value << std::endl;
         }
+#endif
+#ifdef limit_move_gen
+            *length = MOVE_GEN_LIMIT;
 #endif
         delete[] freePos;
         return moves; 
