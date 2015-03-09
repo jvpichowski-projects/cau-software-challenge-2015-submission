@@ -76,7 +76,7 @@ namespace Tactic
         
         getOneFieldMove();
         
-        if((_newDiff - _nowDiff) > 20)
+        if((_newDiff - _nowDiff) > 8)
         {
             resultMoves = &_newMove;
             return 1;
@@ -179,6 +179,7 @@ namespace Tactic
         int playLng;
         int* playPos = Tools::bitScan(playField, &playLng);
         int ruckgabe = 0;
+        
         u_int64_t avFields = 0ULL;
         
         for(u_int8_t i = 0; i < playLng; i++)
@@ -212,12 +213,12 @@ namespace Tactic
             u_int64_t mf = Tools::getMoveField(ringpos[i], board.used);
             result |= mf;
             
-            /*int* mfPosis = Tools::bitScan(mf, &mflng);
+            int* mfPosis = Tools::bitScan(mf, &mflng);
             
             for(u_int8_t j = 0; j < mflng; j++)
             {
                 result |= Tools::getMoveField(mfPosis[j], board.used);
-            }*/
+            }
         }
         
         return result;
