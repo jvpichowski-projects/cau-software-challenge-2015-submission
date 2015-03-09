@@ -10,12 +10,13 @@
 
 //#define DEBUG_MOVE_ORDERING
 
+//#define quiscens_search
 #define ordered_setmoves
 //#define ordered_runmoves
 //#define collision_stats
 //#define null_window
 
-//#define move_order_stats
+#define move_order_stats
 
 #ifdef move_order_stats
     #define move_cutoff_state
