@@ -70,6 +70,9 @@ int alphaBetaTT(Board board, int depth, int alpha, int beta, int player, Move *r
     int best = MIN_AB_VALUE-1;
     int i;
     Board nextBoard;
+#ifdef move_order_stats
+    int bestMoveNum = 0;
+#endif
     for(i = 0; i < moveCount; ++i)
     {
         nextBoard = board;
@@ -90,6 +93,9 @@ int alphaBetaTT(Board board, int depth, int alpha, int beta, int player, Move *r
         
         if(value > best){
             best = value;
+#ifdef move_order_stats
+            bestMoveNum = i;
+#endif
             if(resultMove){
                 *resultMove = moves[i];
             }
@@ -108,6 +114,13 @@ int alphaBetaTT(Board board, int depth, int alpha, int beta, int player, Move *r
             break;
         }
     }
+#ifdef move_order_stats
+    //not for set moves
+    if(board.movecount >= 8){
+       ++Globals::Log::move_order[moveCount][bestMoveNum];
+    }
+#endif
+    
     delete[] moves;
     return best;
 }
