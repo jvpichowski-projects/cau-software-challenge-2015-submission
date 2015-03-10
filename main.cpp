@@ -92,6 +92,8 @@ void onMoveReq()
         move = preResult;
         printf("\n\npppppppppppppppppppppppppppppppprevalUsed\n\n");
     }
+        
+        
 //    if(move.from == move.to && move.from != INVALID_POS){
 //        std::cout << "======================================================" << std::endl;
 //        std::cout << "Error!!! Move.from = Move.to = " << (u_int64_t)move.from << std::endl;
