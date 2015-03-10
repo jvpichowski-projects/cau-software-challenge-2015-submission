@@ -74,24 +74,24 @@ void onMoveReq()
 //    std::cout << "Oppos:" << std::endl;
 //    Tools::printField(_board->oppos);
 //    std::cout << "movecount: " << _board->movecount << " pointsdiff: " << _board->pointsdiff << std::endl;
+  
     
-    
-    u_int64_t activePlayer;
-    int rlng;
-    Move preResult;
-    
-    int preEvalRes = Tactic::preliminaries(&preResult, &rlng, &activePlayer);
-    
-    if(preEvalRes == 0)
-    {
+//    u_int64_t activePlayer;
+//    int rlng;
+//    Move preResult;
+//    
+//    int preEvalRes = Tactic::preliminaries(&preResult, &rlng, &activePlayer);
+//    
+//    if(preEvalRes == 0)
+//    {
         std::cout << "IT: " << iterativeDeepening(Globals::_board, ID_WE, 60, 0, &move) << std::endl;//change first guess to 100?
         std::cout << "MT: " << (u_int64_t)move.from << "->" << (u_int64_t)move.to << std::endl;
-    }
-    else
-    {
-        move = preResult;
-        printf("\n\npppppppppppppppppppppppppppppppprevalUsed\n\n");
-    }
+//    }
+//    else
+//    {
+//        move = preResult;
+//        printf("\n\npppppppppppppppppppppppppppppppprevalUsed\n\n");
+//    }
         
         
 //    if(move.from == move.to && move.from != INVALID_POS){

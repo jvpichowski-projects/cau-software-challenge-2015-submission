@@ -76,7 +76,7 @@ namespace Tactic
         
         getOneFieldMove();
         
-        if((_newDiff - _nowDiff) > 5)
+        if((_newDiff - _nowDiff) > 6)
         {
             resultMoves = &_newMove;
             return 1;
