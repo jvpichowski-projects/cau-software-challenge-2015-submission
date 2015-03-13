@@ -1,4 +1,5 @@
 #include "main.h"
+#include "tactic.h"
 
 bool isInitialized = false;
 bool sentMove = false;
@@ -73,7 +74,7 @@ void onMoveReq()
 //    std::cout << "Oppos:" << std::endl;
 //    Tools::printField(_board->oppos);
 //    std::cout << "movecount: " << _board->movecount << " pointsdiff: " << _board->pointsdiff << std::endl;
-    
+  
     
 //    u_int64_t activePlayer;
 //    int rlng;

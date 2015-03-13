@@ -76,7 +76,7 @@ namespace Tactic
         
         getOneFieldMove();
         
-        if((_newDiff - _nowDiff) > 8)
+        if((_newDiff - _nowDiff) > 5)
         {
             resultMoves = &_newMove;
             return 1;
@@ -180,21 +180,39 @@ namespace Tactic
         int* playPos = Tools::bitScan(playField, &playLng);
         int ruckgabe = 0;
         
-        u_int64_t avFields = 0ULL;
+        
         
         for(u_int8_t i = 0; i < playLng; i++)
-            avFields |= getBigMoveField(playPos[i], board);
+        {
         
-        ruckgabe += Tools::popCount(avFields & Globals::ones);
-        ruckgabe += Tools::popCount(avFields & Globals::twos)*2;
-        ruckgabe += Tools::popCount(avFields & Globals::threes)*3;
+            u_int64_t avFields = 0ULL;
+            
+            avFields |= getBigMoveField(playPos[i], board);
+            
+            ruckgabe += Tools::popCount(avFields & Globals::ones);
+            ruckgabe += Tools::popCount(avFields & Globals::twos)*2;
+            ruckgabe += Tools::popCount(avFields & Globals::threes)*3;
+        
+        
+        }
+        
+        
+        
+        
+        return ruckgabe;
     }
     
     u_int64_t getBigMoveField(u_int8_t pos, Board board)
     {
         u_int64_t result = Tools::getMoveField(pos, board.used);
         
-        u_int64_t ring = result & _fieldsAround[pos];
+        int len;
+        int* posis = Tools::bitScan(result, &len);
+        
+        for(u_int8_t i = 0; i < len; i++)
+            result |= Tools::getMoveField(posis[i], board.used);
+        
+        /*u_int64_t ring = result & _fieldsAround[pos];
         int length;
         
         int* ringpos = Tools::bitScan(ring, &length);        
@@ -219,7 +237,7 @@ namespace Tactic
             {
                 result |= Tools::getMoveField(mfPosis[j], board.used);
             }
-        }
+        }*/
         
         return result;
     }
