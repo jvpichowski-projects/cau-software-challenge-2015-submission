@@ -8,7 +8,7 @@
 #ifndef MAIN_H
 #define	MAIN_H
 
-#define build "Build Minimal"
+#define build "Build 15.03.13"
 
 #include <unistd.h>
 #include <limits>
