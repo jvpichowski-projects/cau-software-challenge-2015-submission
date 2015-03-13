@@ -1,4 +1,5 @@
 #include "evaluation.h"
+#include "boardstate.h"
 
 //int64_t _fieldsAround[60] = {
 //            /* |  00 */0x182ULL,             /* |  01 */0x305ULL,             /* |  02 */0x60AULL,             /* |  03 */0xC14ULL,
@@ -68,8 +69,58 @@ int evaluate(int playerId, Board board){
 
 //        std::cout << "Points: " << points << std::endl;
        
+//    Board qBoard = board;
+//    int qId = playerId;
+//    for(int i = 0; i < 1 && board.movecount < 60; ++i){
+//        int len;
+//        Move* moves = BoardTools::generatePossibleMoves(qBoard, qId, &len);
+//        BoardTools::apply(&qBoard, qId, moves[0]);
+//        qId != qId;
+//        delete[] moves;
+//    }
+//    
+//    int qpoints = qBoard.pointsdiff;
+//    if(qId != playerId){
+//        qpoints = -qpoints;
+//    }
+//    int qMovePoints = 0;
+//        
+//    if(qBoard.movecount < 60){
+//        int l = 0;
+//        int *penguinPos = Tools::fastBitScan(board.mypos, &l);
+//
+//        //wenn sich zwei linien kruezen wird das kreuz-feld nur einmal gerechnet
+//        u_int64_t moveFields = Tools::getMoveField(penguinPos[0], board.used) 
+//                | Tools::getMoveField(penguinPos[1], board.used) 
+//                | Tools::getMoveField(penguinPos[2], board.used)
+//                | Tools::getMoveField(penguinPos[3], board.used);
+//
+//
+//        qMovePoints += Tools::popCount(moveFields & Globals::threes) * 4;
+//        qMovePoints += Tools::popCount(moveFields & Globals::twos) * 2;
+//        qMovePoints += Tools::popCount(moveFields & Globals::ones);
+//
+//
+//        delete[] penguinPos;
+//
+//        penguinPos = Tools::fastBitScan(board.oppos, &l);
+//
+//        //wenn sich zwei linien kreuzen wird das kreuz-feld nur einmal gerechnet
+//        moveFields = Tools::getMoveField(penguinPos[0], board.used) 
+//                | Tools::getMoveField(penguinPos[1], board.used) 
+//                | Tools::getMoveField(penguinPos[2], board.used)
+//                | Tools::getMoveField(penguinPos[3], board.used);
+//
+//        qMovePoints -= Tools::popCount(moveFields & Globals::threes) * 4;
+//        qMovePoints -= Tools::popCount(moveFields & Globals::twos) * 2;
+//        qMovePoints -= Tools::popCount(moveFields & Globals::ones);
+//
+//        delete[] penguinPos;
+//    }
+
     
-    int result = points + movePoints;
+    
+    int result = points + movePoints// + (qpoints / 3);// + qMovePoints;
        
         
     if(playerId != ID_WE){
