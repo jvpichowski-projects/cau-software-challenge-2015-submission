@@ -251,7 +251,9 @@ namespace BoardTools{
         }
 #endif
 #ifdef limit_move_gen
-            *length = MOVE_GEN_LIMIT;
+            if(*length > MOVE_GEN_LIMIT){
+                *length = MOVE_GEN_LIMIT;
+            }
 #endif
             return moves;
         }
@@ -283,7 +285,9 @@ namespace BoardTools{
         }
 #endif
 #ifdef limit_move_gen
-            *length = MOVE_GEN_LIMIT;
+            if(*length > MOVE_GEN_LIMIT){
+                *length = MOVE_GEN_LIMIT;
+            }
 #endif
         delete[] freePos;
         return moves; 
