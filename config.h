@@ -16,8 +16,10 @@
 //#define collision_stats
 //#define null_window
 
+#define bigfield_eval
+
 #define limit_move_gen
-#define MOVE_GEN_LIMIT 20
+#define MOVE_GEN_LIMIT 10
 
 #define move_order_stats
 
@@ -25,7 +27,7 @@
     #define move_cutoff_state
 #endif
 
-#define TIME_FOR_CALC 1500
+#define TIME_FOR_CALC 1800
 
 #define DYN_START_DEEP
 #define START_DEEP_PERCENT 80

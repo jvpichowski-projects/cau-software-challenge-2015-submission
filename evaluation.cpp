@@ -39,23 +39,12 @@ int evaluate(int playerId, Board board){
 
 
     int movePoints = 0;
-    movePoints += Tools::popCount(moveFields & Globals::threes) * 8;
-    movePoints += Tools::popCount(moveFields & Globals::twos) * 4;
-    movePoints += Tools::popCount(moveFields & Globals::ones) * 2;
+    movePoints += Tools::popCount(moveFields & Globals::threes) * 4;
+    movePoints += Tools::popCount(moveFields & Globals::twos) * 2;
+    movePoints += Tools::popCount(moveFields & Globals::ones);
     
-    u_int64_t bigmovefield = 0ULL;        
-    int len;
-    int* posis = Tools::bitScan(moveFields, &len);
-
-    for(u_int8_t i = 0; i < len; i++)
-        bigmovefield |= Tools::genMoveField(posis[i], board.used);
+    delete[] penguinPos;
     
-    movePoints += Tools::popCount(bigmovefield & Globals::threes) * 4;
-    movePoints += Tools::popCount(bigmovefield & Globals::twos) * 2;
-    movePoints += Tools::popCount(bigmovefield & Globals::ones);
-
-
-    delete[] penguinPos, posis;
 
     penguinPos = Tools::fastBitScan(board.oppos, &l);
 
@@ -65,21 +54,38 @@ int evaluate(int playerId, Board board){
             | Tools::genMoveField(penguinPos[2], board.used)
             | Tools::genMoveField(penguinPos[3], board.used);
 
-    movePoints -= Tools::popCount(moveFields & Globals::threes) * 8;
-    movePoints -= Tools::popCount(moveFields & Globals::twos) * 4;
-    movePoints -= Tools::popCount(moveFields & Globals::ones) * 2;
+    movePoints -= Tools::popCount(moveFields & Globals::threes) * 4;
+    movePoints -= Tools::popCount(moveFields & Globals::twos) * 2;
+    movePoints -= Tools::popCount(moveFields & Globals::ones);
+    
+    delete[] penguinPos;
+    
+#ifdef bigfield_eval
+    int bigPoints = 0;
+    
+    u_int64_t bigmovefield = 0ULL;        
+    int len;
+    int* posis = Tools::bitScan(moveFields, &len);
 
+    for(u_int8_t i = 0; i < len; i++)
+        bigmovefield |= Tools::genMoveField(posis[i], board.used);
+    
+    bigPoints += Tools::popCount(bigmovefield & Globals::threes) * 4;
+    bigPoints += Tools::popCount(bigmovefield & Globals::twos) * 2;
+    bigPoints += Tools::popCount(bigmovefield & Globals::ones);
+
+    delete[] posis;
     
     bigmovefield = 0ULL;        
-    int len2;
+    int len = 0;
     posis = Tools::bitScan(moveFields, &len);
 
     for(u_int8_t i = 0; i < len; i++)
         bigmovefield |= Tools::genMoveField(posis[i], board.used);
     
-    movePoints -= Tools::popCount(bigmovefield & Globals::threes) * 4;
-    movePoints -= Tools::popCount(bigmovefield & Globals::twos) * 2;
-    movePoints -= Tools::popCount(bigmovefield & Globals::ones);
+    bigPoints -= Tools::popCount(bigmovefield & Globals::threes) * 4;
+    bigPoints -= Tools::popCount(bigmovefield & Globals::twos) * 2;
+    bigPoints -= Tools::popCount(bigmovefield & Globals::ones);
     
 //    for(int i = 0; i < l; i++)
 //    {
@@ -87,7 +93,8 @@ int evaluate(int playerId, Board board){
 //            movePoints += 2;
 //    }
 
-    delete[] penguinPos, posis;
+    delete[] posis;
+#endif
 
 //        std::cout << "Points: " << points << std::endl;
        
@@ -140,9 +147,15 @@ int evaluate(int playerId, Board board){
 //        delete[] penguinPos;
 //    }
 
+#ifdef bigfield_eval
+    points *= 4;
+    movePoints *= 2;
+#endif
     
-    int result = 4 * points + movePoints;
-       
+    int result = points + movePoints;
+#ifdef bigfield_eval
+    result += bigPoints;
+#endif
         
     if(playerId != ID_WE){
         return -result;
