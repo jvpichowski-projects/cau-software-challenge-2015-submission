@@ -60,6 +60,47 @@ int evaluate(int playerId, Board board){
     
     delete[] penguinPos;
     
+#ifdef eval_reachPoints
+    int reachablePoints = 0;
+    
+    u_int64_t reachableField = 0ULL;
+    u_int64_t lastpos = board.mypos;
+    while(lastpos){
+        int l = 0;
+        int *expandedPos = Tools::fastBitScan(lastpos, &l);
+        u_int64_t movefield = 0ULL;
+        for(int i = 0; i < l; ++i){
+            movefield |= Tools::genMoveField(expandedPos[i], reachableField | board.used); 
+        }
+        delete[] expandedPos;
+        lastpos = movefield;
+        reachableField |= movefield;
+    }
+    
+    reachablePoints += Tools::popCount(reachableField & Globals::threes) * 4;
+    reachablePoints += Tools::popCount(reachableField & Globals::twos) * 2;
+    reachablePoints += Tools::popCount(reachableField & Globals::ones);
+    
+    
+    reachableField = 0ULL;
+    lastpos = board.oppos;
+    while(lastpos){
+        int l = 0;
+        int *expandedPos = Tools::fastBitScan(lastpos, &l);
+        u_int64_t movefield = 0ULL;
+        for(int i = 0; i < l; ++i){
+            movefield |= Tools::genMoveField(expandedPos[i], reachableField | board.used); 
+        }
+        delete[] expandedPos;
+        lastpos = movefield;
+        reachableField |= movefield;
+    }
+    
+    reachablePoints -= Tools::popCount(reachableField & Globals::threes) * 4;
+    reachablePoints -= Tools::popCount(reachableField & Globals::twos) * 2;
+    reachablePoints -= Tools::popCount(reachableField & Globals::ones);
+#endif
+    
 #ifdef bigfield_eval
     int bigPoints = 0;
     
@@ -155,6 +196,11 @@ int evaluate(int playerId, Board board){
     int result = points + movePoints;
 #ifdef bigfield_eval
     result += bigPoints;
+#endif
+    
+#ifdef eval_reachPoints
+    result *= 4;
+    result += reachablePoints;
 #endif
         
     if(playerId != ID_WE){

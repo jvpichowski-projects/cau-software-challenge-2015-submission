@@ -17,6 +17,7 @@
 //#define null_window
 
 //#define bigfield_eval
+#define eval_reachPoints
 
 #define limit_move_gen
 #define MOVE_GEN_LIMIT 10
