@@ -77,7 +77,7 @@ int evaluate(int playerId, Board board){
     delete[] posis;
     
     bigmovefield = 0ULL;        
-    int len = 0;
+    len = 0;
     posis = Tools::bitScan(moveFields, &len);
 
     for(u_int8_t i = 0; i < len; i++)
