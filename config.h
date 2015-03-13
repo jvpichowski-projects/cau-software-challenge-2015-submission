@@ -16,8 +16,8 @@
 //#define collision_stats
 //#define null_window
 
-//#define bigfield_eval
-#define eval_reachPoints
+#define bigfield_eval
+//#define eval_reachPoints
 
 #define limit_move_gen
 #define MOVE_GEN_LIMIT 10
@@ -28,7 +28,7 @@
     #define move_cutoff_state
 #endif
 
-#define TIME_FOR_CALC 1800
+#define TIME_FOR_CALC 1850
 
 #define DYN_START_DEEP
 #define START_DEEP_PERCENT 80
