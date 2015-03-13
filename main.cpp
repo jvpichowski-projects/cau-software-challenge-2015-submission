@@ -85,6 +85,7 @@ void onMoveReq()
 //    {
         std::cout << "IT: " << iterativeDeepening(Globals::_board, ID_WE, 60, 0, &move) << std::endl;//change first guess to 100?
         std::cout << "MT: " << (u_int64_t)move.from << "->" << (u_int64_t)move.to << std::endl;
+        std::cout << "Used before: " << Globals::_board.used << std::endl;
 //    }
 //    else
 //    {
@@ -116,7 +117,9 @@ void onMoveReq()
 //    std::cout << "movecount: " << _board->movecount << " pointsdiff: " << _board->pointsdiff << std::endl;
     
     if(!BoardTools::isValidMove(Globals::_board, move, ID_WE)){
+        std::cout << "Found invalid move: " << ((u_int64_t)move.from) << " -> " << ((u_int64_t)move.to) << " value: " << move.value << std::endl; 
         move = BoardTools::generateGoodMove(Globals::_board, ID_WE);
+        std::cout << "New move: " << ((u_int64_t)move.from) << " -> " << ((u_int64_t)move.to) << " value: " << move.value << std::endl; 
     }
     
     struct timespec nowTime;
@@ -167,6 +170,12 @@ void onLastMove(Move move)
 
 int main(int argc, char** argv)
 {          
+//    Tools::printField(468356338187396469ULL);
+//    Tools::printField(Tools::genMoveField(33, 468356338187396469ULL));
+//    Tools::printField(Tools::genMoveField(33, 0));
+    
+//    return 0;
+    
     Globals::tt_enabled = true;
     
     std::cout << "Build: " << build << std::endl << std::endl;

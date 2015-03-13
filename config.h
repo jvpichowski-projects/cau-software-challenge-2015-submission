@@ -16,8 +16,8 @@
 //#define collision_stats
 //#define null_window
 
-#define limit_move_gen
-#define MOVE_GEN_LIMIT 10
+//#define limit_move_gen
+//#define MOVE_GEN_LIMIT 20
 
 #define move_order_stats
 

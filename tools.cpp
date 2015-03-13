@@ -173,163 +173,163 @@ namespace Tools
         
     }
     
-    u_int64_t getMoveField(int pos, u_int64_t used){
-        
-        //------------------------------top left to down right------------------
-        
-        int right_shift = 59-pos;
-        
-        u_int64_t tl_dr = (ROW_TL_DR << pos) | (ROW_TL_DR_LAST >> right_shift);
-        
-        int l = 0;
-        int *hits = Tools::bitScan(tl_dr & STOP_TOP_LEFT, &l);
-        for(int i = 0; i < l; ++i){
-            if(*hits <= pos){
-                //cout << "Pos " << *hits << " strtPos " << pos << endl;
-                tl_dr = tl_dr >> *hits;
-                tl_dr = tl_dr << *hits;
-            }
-            ++hits;
-        }
-        hits-=l;
-        delete[] hits;
-        
-        hits = Tools::bitScan(tl_dr & STOP_DOWN_RIGHT, &l);
-        int i;
-        for(i = 0; i < l; ++i){
-            if(*hits >= pos){
-                //cout << "Pos " << *hits << " strtPos " << pos << endl;
-                tl_dr = tl_dr << 63-*hits;
-                tl_dr = tl_dr >> 63-*hits;
-                //always from low to heigh, all next hits are behind this
-                break;
-            }
-            ++hits;
-        }
-        hits-=i;
-        delete[] hits;
-        
-        hits = Tools::bitScan(tl_dr & used, &l);
-        for(i = 0; i < l; ++i){
-            if(*hits < pos){
-                //cout << "Pos " << *hits << " strtPos " << pos << endl;
-                tl_dr = tl_dr >> *hits+1;
-                tl_dr = tl_dr << *hits+1;
-            }else if(*hits > pos){
-                tl_dr = tl_dr << 63-*hits+1;
-                tl_dr = tl_dr >> 63-*hits+1;
-                //always from low to heigh, all next hits are behind this
-                break;
-            }
-            ++hits;
-        }
-        hits-=i;
-        delete[] hits;
-        
-        //----------------------top right to down left--------------------------
-        
-        u_int64_t tr_dl = (ROW_TR_DL << pos) | (ROW_TR_DL_LAST >> right_shift);
-        hits = Tools::bitScan(tr_dl & STOP_TOP_RIGHT, &l);
-        for(int i = 0; i < l; ++i){
-            if(*hits <= pos){
-                //cout << "Pos " << *hits << " strtPos " << pos << endl;
-                tr_dl = tr_dl >> *hits;
-                tr_dl = tr_dl << *hits;
-            }
-            ++hits;
-        }
-        hits-=l;
-        delete[] hits;
-        
-        hits = Tools::bitScan(tr_dl & STOP_DOWN_LEFT, &l);
-        for(i = 0; i < l; ++i){
-            if(*hits >= pos){
-                //cout << "Pos " << *hits << " strtPos " << pos << endl;
-                tr_dl = tr_dl << 63-*hits;
-                tr_dl = tr_dl >> 63-*hits;
-                //always from low to heigh, all next hits are behind this
-                break;
-            }
-            ++hits;
-        }
-        hits-=i;
-        delete[] hits;
-        
-        hits = Tools::bitScan(tr_dl & used, &l);
-        for(i = 0; i < l; ++i){
-            if(*hits < pos){
-                //cout << "Pos " << *hits << " strtPos " << pos << endl;
-                tr_dl = tr_dl >> *hits+1;
-                tr_dl = tr_dl << *hits+1;
-            }else if(*hits > pos){
-                tr_dl = tr_dl << 63-*hits+1;
-                tr_dl = tr_dl >> 63-*hits+1;
-                //always from low to heigh, all next hits are behind this
-                break;
-            }
-            ++hits;
-        }
-        hits-=i;
-        delete[] hits;
-        
-        //----------------------left to right-----------------------------------
-        
-        u_int64_t l_r = (ROW_LR << pos) | (ROW_LR_LAST >> right_shift);
-        hits = Tools::bitScan(l_r & STOP_LEFT, &l);
-        for(int i = 0; i < l; ++i){
-            if(*hits <= pos){
-                //cout << "Pos " << *hits << " strtPos " << pos << endl;
-                l_r = l_r >> *hits;
-                l_r = l_r << *hits;
-            }
-            ++hits;
-        }
-        hits-=l;
-        delete[] hits;
-        
-        hits = Tools::bitScan(l_r & STOP_RIGHT, &l);
-        for(i = 0; i < l; ++i){
-            if(*hits >= pos){
-                //cout << "Pos " << *hits << " strtPos " << pos << endl;
-                l_r = l_r << 63-*hits;
-                l_r = l_r >> 63-*hits;
-                //always from low to heigh, all next hits are behind this
-                break;
-            }
-            ++hits;
-        }
-        hits-=i;
-        delete[] hits;
-        
-        hits = Tools::bitScan(l_r & used, &l);
-        for(i = 0; i < l; ++i){
-            if(*hits < pos){
-                //cout << "Pos " << *hits << " strtPos " << pos << endl;
-                l_r = l_r >> *hits+1;
-                l_r = l_r << *hits+1;
-            }else if(*hits > pos){
-                l_r = l_r << 63-*hits+1;
-                l_r = l_r >> 63-*hits+1;
-                //always from low to heigh, all next hits are behind this
-                break;
-            }
-            ++hits;
-        }
-        hits-=i;
-        delete[] hits;
-        
-        //------------------------combine lines---------------------------------
-        
-        u_int64_t result = tl_dr | tr_dl | l_r;
-        result &= ~FIT;
-        result &= ~used;
-        
-        result &= ~(1LL << pos);          //No moves to own position anymore.
-        
-        //printField(result);
-        
-        return result;
-    }
+//    u_int64_t getMoveField(int pos, u_int64_t used){
+//        
+//        //------------------------------top left to down right------------------
+//        
+//        int right_shift = 59-pos;
+//        
+//        u_int64_t tl_dr = (ROW_TL_DR << pos) | (ROW_TL_DR_LAST >> right_shift);
+//        
+//        int l = 0;
+//        int *hits = Tools::bitScan(tl_dr & STOP_TOP_LEFT, &l);
+//        for(int i = 0; i < l; ++i){
+//            if(*hits <= pos){
+//                //cout << "Pos " << *hits << " strtPos " << pos << endl;
+//                tl_dr = tl_dr >> *hits;
+//                tl_dr = tl_dr << *hits;
+//            }
+//            ++hits;
+//        }
+//        hits-=l;
+//        delete[] hits;
+//        
+//        hits = Tools::bitScan(tl_dr & STOP_DOWN_RIGHT, &l);
+//        int i;
+//        for(i = 0; i < l; ++i){
+//            if(*hits >= pos){
+//                //cout << "Pos " << *hits << " strtPos " << pos << endl;
+//                tl_dr = tl_dr << 63-*hits;
+//                tl_dr = tl_dr >> 63-*hits;
+//                //always from low to heigh, all next hits are behind this
+//                break;
+//            }
+//            ++hits;
+//        }
+//        hits-=i;
+//        delete[] hits;
+//        
+//        hits = Tools::bitScan(tl_dr & used, &l);
+//        for(i = 0; i < l; ++i){
+//            if(*hits < pos){
+//                //cout << "Pos " << *hits << " strtPos " << pos << endl;
+//                tl_dr = tl_dr >> *hits+1;
+//                tl_dr = tl_dr << *hits+1;
+//            }else if(*hits > pos){
+//                tl_dr = tl_dr << 63-*hits+1;
+//                tl_dr = tl_dr >> 63-*hits+1;
+//                //always from low to heigh, all next hits are behind this
+//                break;
+//            }
+//            ++hits;
+//        }
+//        hits-=i;
+//        delete[] hits;
+//        
+//        //----------------------top right to down left--------------------------
+//        
+//        u_int64_t tr_dl = (ROW_TR_DL << pos) | (ROW_TR_DL_LAST >> right_shift);
+//        hits = Tools::bitScan(tr_dl & STOP_TOP_RIGHT, &l);
+//        for(int i = 0; i < l; ++i){
+//            if(*hits <= pos){
+//                //cout << "Pos " << *hits << " strtPos " << pos << endl;
+//                tr_dl = tr_dl >> *hits;
+//                tr_dl = tr_dl << *hits;
+//            }
+//            ++hits;
+//        }
+//        hits-=l;
+//        delete[] hits;
+//        
+//        hits = Tools::bitScan(tr_dl & STOP_DOWN_LEFT, &l);
+//        for(i = 0; i < l; ++i){
+//            if(*hits >= pos){
+//                //cout << "Pos " << *hits << " strtPos " << pos << endl;
+//                tr_dl = tr_dl << 63-*hits;
+//                tr_dl = tr_dl >> 63-*hits;
+//                //always from low to heigh, all next hits are behind this
+//                break;
+//            }
+//            ++hits;
+//        }
+//        hits-=i;
+//        delete[] hits;
+//        
+//        hits = Tools::bitScan(tr_dl & used, &l);
+//        for(i = 0; i < l; ++i){
+//            if(*hits < pos){
+//                //cout << "Pos " << *hits << " strtPos " << pos << endl;
+//                tr_dl = tr_dl >> *hits+1;
+//                tr_dl = tr_dl << *hits+1;
+//            }else if(*hits > pos){
+//                tr_dl = tr_dl << 63-*hits+1;
+//                tr_dl = tr_dl >> 63-*hits+1;
+//                //always from low to heigh, all next hits are behind this
+//                break;
+//            }
+//            ++hits;
+//        }
+//        hits-=i;
+//        delete[] hits;
+//        
+//        //----------------------left to right-----------------------------------
+//        
+//        u_int64_t l_r = (ROW_LR << pos) | (ROW_LR_LAST >> right_shift);
+//        hits = Tools::bitScan(l_r & STOP_LEFT, &l);
+//        for(int i = 0; i < l; ++i){
+//            if(*hits <= pos){
+//                //cout << "Pos " << *hits << " strtPos " << pos << endl;
+//                l_r = l_r >> *hits;
+//                l_r = l_r << *hits;
+//            }
+//            ++hits;
+//        }
+//        hits-=l;
+//        delete[] hits;
+//        
+//        hits = Tools::bitScan(l_r & STOP_RIGHT, &l);
+//        for(i = 0; i < l; ++i){
+//            if(*hits >= pos){
+//                //cout << "Pos " << *hits << " strtPos " << pos << endl;
+//                l_r = l_r << 63-*hits;
+//                l_r = l_r >> 63-*hits;
+//                //always from low to heigh, all next hits are behind this
+//                break;
+//            }
+//            ++hits;
+//        }
+//        hits-=i;
+//        delete[] hits;
+//        
+//        hits = Tools::bitScan(l_r & used, &l);
+//        for(i = 0; i < l; ++i){
+//            if(*hits < pos){
+//                //cout << "Pos " << *hits << " strtPos " << pos << endl;
+//                l_r = l_r >> *hits+1;
+//                l_r = l_r << *hits+1;
+//            }else if(*hits > pos){
+//                l_r = l_r << 63-*hits+1;
+//                l_r = l_r >> 63-*hits+1;
+//                //always from low to heigh, all next hits are behind this
+//                break;
+//            }
+//            ++hits;
+//        }
+//        hits-=i;
+//        delete[] hits;
+//        
+//        //------------------------combine lines---------------------------------
+//        
+//        u_int64_t result = tl_dr | tr_dl | l_r;
+//        result &= ~FIT;
+//        result &= ~used;
+//        
+//        result &= ~(1LL << pos);          //No moves to own position anymore.
+//        
+//        //printField(result);
+//        
+//        return result;
+//    }
     
 //----------------------------------------------------------------------bittools
 

@@ -32,10 +32,10 @@ int evaluate(int playerId, Board board){
     int *penguinPos = Tools::fastBitScan(board.mypos, &l);
 
     //wenn sich zwei linien kruezen wird das kreuz-feld nur einmal gerechnet
-    u_int64_t moveFields = Tools::getMoveField(penguinPos[0], board.used) 
-            | Tools::getMoveField(penguinPos[1], board.used) 
-            | Tools::getMoveField(penguinPos[2], board.used)
-            | Tools::getMoveField(penguinPos[3], board.used);
+    u_int64_t moveFields = Tools::genMoveField(penguinPos[0], board.used) 
+            | Tools::genMoveField(penguinPos[1], board.used) 
+            | Tools::genMoveField(penguinPos[2], board.used)
+            | Tools::genMoveField(penguinPos[3], board.used);
 
 
     int movePoints = 0;
@@ -49,10 +49,10 @@ int evaluate(int playerId, Board board){
     penguinPos = Tools::fastBitScan(board.oppos, &l);
 
     //wenn sich zwei linien kreuzen wird das kreuz-feld nur einmal gerechnet
-    moveFields = Tools::getMoveField(penguinPos[0], board.used) 
-            | Tools::getMoveField(penguinPos[1], board.used) 
-            | Tools::getMoveField(penguinPos[2], board.used)
-            | Tools::getMoveField(penguinPos[3], board.used);
+    moveFields = Tools::genMoveField(penguinPos[0], board.used) 
+            | Tools::genMoveField(penguinPos[1], board.used) 
+            | Tools::genMoveField(penguinPos[2], board.used)
+            | Tools::genMoveField(penguinPos[3], board.used);
 
     movePoints -= Tools::popCount(moveFields & Globals::threes) * 4;
     movePoints -= Tools::popCount(moveFields & Globals::twos) * 2;
@@ -120,7 +120,7 @@ int evaluate(int playerId, Board board){
 
     
     
-    int result = points + movePoints// + (qpoints / 3);// + qMovePoints;
+    int result = points + movePoints;// + (qpoints / 3);// + qMovePoints;
        
         
     if(playerId != ID_WE){

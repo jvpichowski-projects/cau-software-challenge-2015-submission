@@ -119,10 +119,10 @@ namespace BoardTools{
 
         u_int64_t *moveFields = new u_int64_t[4];
 
-        moveFields[0] = Tools::getMoveField(penguinPos[0], state.used);
-        moveFields[1] = Tools::getMoveField(penguinPos[1], state.used);
-        moveFields[2] = Tools::getMoveField(penguinPos[2], state.used);
-        moveFields[3] = Tools::getMoveField(penguinPos[3], state.used);
+        moveFields[0] = Tools::genMoveField(penguinPos[0], state.used);
+        moveFields[1] = Tools::genMoveField(penguinPos[1], state.used);
+        moveFields[2] = Tools::genMoveField(penguinPos[2], state.used);
+        moveFields[3] = Tools::genMoveField(penguinPos[3], state.used);
 
         *length = Tools::popCount(moveFields[0] & Globals::threes)
             + Tools::popCount(moveFields[1] & Globals::threes)
@@ -175,10 +175,10 @@ namespace BoardTools{
 
             u_int64_t *moveFields = new u_int64_t[4];
 
-            moveFields[0] = Tools::getMoveField(penguinPos[0], state.used);
-            moveFields[1] = Tools::getMoveField(penguinPos[1], state.used);
-            moveFields[2] = Tools::getMoveField(penguinPos[2], state.used);
-            moveFields[3] = Tools::getMoveField(penguinPos[3], state.used);
+            moveFields[0] = Tools::genMoveField(penguinPos[0], state.used);
+            moveFields[1] = Tools::genMoveField(penguinPos[1], state.used);
+            moveFields[2] = Tools::genMoveField(penguinPos[2], state.used);
+            moveFields[3] = Tools::genMoveField(penguinPos[3], state.used);
 
             *length = Tools::popCount(moveFields[0])
                 + Tools::popCount(moveFields[1])
@@ -297,7 +297,7 @@ namespace BoardTools{
             //BitBoard::printField(penguinPositions);
 
             int from = Tools::bitScanForward(penguinPositions);
-            u_int64_t moveField = Tools::getMoveField(from, state.used);
+            u_int64_t moveField = Tools::genMoveField(from, state.used);
             int to;
             if(Globals::threes & moveField){
                 to = Tools::bitScanForward(Globals::threes & moveField);

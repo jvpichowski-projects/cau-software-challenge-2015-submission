@@ -32,7 +32,7 @@ namespace Tools
     int opponent(int id);
     
     u_int64_t genMoveField(int pos, u_int64_t used);
-    u_int64_t getMoveField(int pos, u_int64_t used);
+    //u_int64_t getMoveField(int pos, u_int64_t used);
 
     int bitScanForward(u_int64_t bb);
     int popCount (u_int64_t x);
