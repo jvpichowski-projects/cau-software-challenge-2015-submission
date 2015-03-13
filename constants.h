@@ -38,6 +38,8 @@ const u_int64_t LEFT_OUTER_BORDER = (1LL << 7) | (1LL << 22) | (1LL << 37) | (1L
 const u_int64_t RIGHT_OUTER_BORDER = (1LL << 14) | (1LL << 29) | (1LL << 44) | (1LL << 59);// always (x-14)%15 = 0;
 const u_int64_t LEFT_INNER_BORDER = (1LL << 0) | (1LL << 15) | (1LL << 30) | (1LL << 45); // always x%15 = 0;
 const u_int64_t RIGHT_INNER_BORDER = (1LL << 6) | (1LL << 21) | (1LL << 36) | (1LL << 51);//always (x-6)%15 = 0;
+const u_int64_t RIGHT_BORDER = RIGHT_OUTER_BORDER | RIGHT_INNER_BORDER;
+const u_int64_t LEFT_BORDER = LEFT_INNER_BORDER | LEFT_OUTER_BORDER;
 
 const u_int64_t STOP_TOP_LEFT = LEFT_OUTER_BORDER | TOP_LINE | FIT;
 const u_int64_t STOP_TOP_RIGHT = RIGHT_OUTER_BORDER | TOP_LINE | FIT;  
@@ -58,6 +60,55 @@ const u_int64_t ROW_TR_DL = 1LL | (1LL << 7) | (1LL << 14) | (1LL << 21) | (1LL 
 const u_int64_t ROW_TR_DL_LAST = (1LL << 59) | (1LL << 52) | (1LL << 45) | (1LL << 38) | (1LL << 31) | (1LL << 24) | (1LL << 17) | (1LL << 10);
 const u_int64_t ROW_LR = 1LL | (1LL << 1) | (1LL << 2) | (1LL << 3) | (1LL << 4) | (1LL << 5) | (1LL << 6) | (1LL << 7);//(1LL << 7) | (1LL << 8) | (1LL << 9) | (1LL << 10) | (1LL << 11) | (1LL << 12) | (1LL << 13) | (1LL << 14);
 const u_int64_t ROW_LR_LAST = (1LL << 52) | (1LL << 53) | (1LL << 54) | (1LL << 55) | (1LL << 56) | (1LL << 57) | (1LL << 58) | (1LL << 59);
+
+
+const u_int64_t ROW_DR_7 =  (1LL << 8) | (1LL << 16) | (1LL << 24) | (1LL << 32) | (1LL << 40) | (1LL << 48) | (1LL << 56);
+const u_int64_t ROW_DR_6 =  (1LL << 8) | (1LL << 16) | (1LL << 24) | (1LL << 32) | (1LL << 40) | (1LL << 48);
+const u_int64_t ROW_DR_5 =  (1LL << 8) | (1LL << 16) | (1LL << 24) | (1LL << 32) | (1LL << 40);
+const u_int64_t ROW_DR_4 =  (1LL << 8) | (1LL << 16) | (1LL << 24) | (1LL << 32);
+const u_int64_t ROW_DR_3 =  (1LL << 8) | (1LL << 16) | (1LL << 24);
+const u_int64_t ROW_DR_2 =  (1LL << 8) | (1LL << 16);
+const u_int64_t ROW_DR_1 =  (1LL << 8);
+
+const u_int64_t ROW_TL_7 =  (1LL << 3) | (1LL << 11) | (1LL << 19) | (1LL << 27) | (1LL << 35) | (1LL << 43) | (1LL << 51);
+const u_int64_t ROW_TL_6 =  (1LL << 11) | (1LL << 19) | (1LL << 27) | (1LL << 35) | (1LL << 43) | (1LL << 51);
+const u_int64_t ROW_TL_5 =  (1LL << 19) | (1LL << 27) | (1LL << 35) | (1LL << 43) | (1LL << 51);
+const u_int64_t ROW_TL_4 =  (1LL << 27) | (1LL << 35) | (1LL << 43) | (1LL << 51);
+const u_int64_t ROW_TL_3 =  (1LL << 35) | (1LL << 43) | (1LL << 51);
+const u_int64_t ROW_TL_2 =  (1LL << 43) | (1LL << 51);
+const u_int64_t ROW_TL_1 =  (1LL << 51);
+
+const u_int64_t ROW_DL_7 =  (1LL << 7) | (1LL << 14) | (1LL << 21) | (1LL << 28) | (1LL << 35) | (1LL << 42) | (1LL << 49);
+const u_int64_t ROW_DL_6 =  (1LL << 7) | (1LL << 14) | (1LL << 21) | (1LL << 28) | (1LL << 35) | (1LL << 42);
+const u_int64_t ROW_DL_5 =  (1LL << 7) | (1LL << 14) | (1LL << 21) | (1LL << 28) | (1LL << 35);
+const u_int64_t ROW_DL_4 =  (1LL << 7) | (1LL << 14) | (1LL << 21) | (1LL << 28);
+const u_int64_t ROW_DL_3 =  (1LL << 7) | (1LL << 14) | (1LL << 21);
+const u_int64_t ROW_DL_2 =  (1LL << 7) | (1LL << 14);
+const u_int64_t ROW_DL_1 =  (1LL << 7);
+
+const u_int64_t ROW_TR_7 = (1LL << 52) | (1LL << 45) | (1LL << 38) | (1LL << 31) | (1LL << 24) | (1LL << 17) | (1LL << 10);
+const u_int64_t ROW_TR_6 = (1LL << 52) | (1LL << 45) | (1LL << 38) | (1LL << 31) | (1LL << 24) | (1LL << 17);
+const u_int64_t ROW_TR_5 = (1LL << 52) | (1LL << 45) | (1LL << 38) | (1LL << 31) | (1LL << 24);
+const u_int64_t ROW_TR_4 = (1LL << 52) | (1LL << 45) | (1LL << 38) | (1LL << 31);
+const u_int64_t ROW_TR_3 = (1LL << 52) | (1LL << 45) | (1LL << 38);
+const u_int64_t ROW_TR_2 = (1LL << 52) | (1LL << 45);
+const u_int64_t ROW_TR_1 = (1LL << 52);
+
+const u_int64_t ROW_R_7  = (1LL << 1) | (1LL << 2) | (1LL << 3) | (1LL << 4) | (1LL << 5) | (1LL << 6) | (1LL << 7);
+const u_int64_t ROW_R_6  = (1LL << 1) | (1LL << 2) | (1LL << 3) | (1LL << 4) | (1LL << 5) | (1LL << 6);
+const u_int64_t ROW_R_5  = (1LL << 1) | (1LL << 2) | (1LL << 3) | (1LL << 4) | (1LL << 5);
+const u_int64_t ROW_R_4  = (1LL << 1) | (1LL << 2) | (1LL << 3) | (1LL << 4);
+const u_int64_t ROW_R_3  = (1LL << 1) | (1LL << 2) | (1LL << 3);
+const u_int64_t ROW_R_2  = (1LL << 1) | (1LL << 2);
+const u_int64_t ROW_R_1  = (1LL << 1);
+
+const u_int64_t ROW_L_7  = (1LL << 52) | (1LL << 53) | (1LL << 54) | (1LL << 55) | (1LL << 56) | (1LL << 57) | (1LL << 58);
+const u_int64_t ROW_L_6  = (1LL << 53) | (1LL << 54) | (1LL << 55) | (1LL << 56) | (1LL << 57) | (1LL << 58);
+const u_int64_t ROW_L_5  = (1LL << 54) | (1LL << 55) | (1LL << 56) | (1LL << 57) | (1LL << 58);
+const u_int64_t ROW_L_4  = (1LL << 55) | (1LL << 56) | (1LL << 57) | (1LL << 58);
+const u_int64_t ROW_L_3  = (1LL << 56) | (1LL << 57) | (1LL << 58);
+const u_int64_t ROW_L_2  = (1LL << 57) | (1LL << 58);
+const u_int64_t ROW_L_1  = (1LL << 58);
 
 
 #endif	/* CONSTANTS_H */

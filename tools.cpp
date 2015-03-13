@@ -49,6 +49,130 @@ namespace Tools
         return (1LL << 63) | (1LL << 62) | (1LL << 61) | (1LL << 60);
     }
     
+    u_int64_t genMoveField(int pos, u_int64_t used){
+        
+        int right_shift = 59-pos;
+        
+        
+//bool f;         // conditional flag
+//unsigned int m; // the bit mask
+//unsigned int w; // the word to modify:  if (f) w |= m; else w &= ~m; 
+//w ^= (-f ^ w) & m;
+//w = (w & ~m) | (-f & m);
+        
+//    u_int64_t var = 0ULL;
+//    u_int64_t pattern = (1ULL << 15);
+//    u_int64_t nonfree = 0;//pattern;//0;//pattern;
+//    var |= (-(!(pattern & nonfree))) & pattern; //- sets all bits to 1 or to 0
+//    Tools::printField(var);
+        
+        u_int64_t dr = 0ULL;
+        //dr = (ROW_TL_DR << pos);// | */(ROW_TL_DR_LAST >> right_shift);
+        //dr &= ~(1LL << pos);          //No moves to own position anymore.
+        u_int64_t dr_1 = (ROW_DR_1 << pos);
+        dr |= (-(!((dr_1 & LEFT_OUTER_BORDER) || (dr_1 & used)))) & dr_1;
+        u_int64_t dr_2 = (ROW_DR_2 << pos);
+        dr |= (-(!((dr_2 & LEFT_OUTER_BORDER) || (dr_2 & used)))) & dr_2;
+        u_int64_t dr_3 = (ROW_DR_3 << pos);
+        dr |= (-(!((dr_3 & LEFT_OUTER_BORDER) || (dr_3 & used)))) & dr_3;
+        u_int64_t dr_4 = (ROW_DR_4 << pos);
+        dr |= (-(!((dr_4 & LEFT_OUTER_BORDER) || (dr_4 & used)))) & dr_4;
+        u_int64_t dr_5 = (ROW_DR_5 << pos);
+        dr |= (-(!((dr_5 & LEFT_OUTER_BORDER) || (dr_5 & used)))) & dr_5;
+        u_int64_t dr_6 = (ROW_DR_6 << pos);
+        dr |= (-(!((dr_6 & LEFT_OUTER_BORDER) || (dr_6 & used)))) & dr_6;
+        u_int64_t dr_7 = (ROW_DR_7 << pos);
+        dr |= (-(!((dr_7 & LEFT_OUTER_BORDER) || (dr_7 & used)))) & dr_7;
+        
+        u_int64_t tl = 0ULL;
+        u_int64_t tl_1 = (ROW_TL_1 >> right_shift);
+        tl |= (-(!((tl_1 & RIGHT_OUTER_BORDER) || (tl_1 & used)))) & tl_1;
+        u_int64_t tl_2 = (ROW_TL_2 >> right_shift);
+        tl |= (-(!((tl_2 & RIGHT_OUTER_BORDER) || (tl_2 & used)))) & tl_2;
+        u_int64_t tl_3 = (ROW_TL_3 >> right_shift);
+        tl |= (-(!((tl_3 & RIGHT_OUTER_BORDER) || (tl_3 & used)))) & tl_3;
+        u_int64_t tl_4 = (ROW_TL_4 >> right_shift);
+        tl |= (-(!((tl_4 & RIGHT_OUTER_BORDER) || (tl_4 & used)))) & tl_4;
+        u_int64_t tl_5 = (ROW_TL_5 >> right_shift);
+        tl |= (-(!((tl_5 & RIGHT_OUTER_BORDER) || (tl_5 & used)))) & tl_5;
+        u_int64_t tl_6 = (ROW_TL_6 >> right_shift);
+        tl |= (-(!((tl_6 & RIGHT_OUTER_BORDER) || (tl_6 & used)))) & tl_6;
+        u_int64_t tl_7 = (ROW_TL_7 >> right_shift);
+        tl |= (-(!((tl_7 & RIGHT_OUTER_BORDER) || (tl_7 & used)))) & tl_7;
+        
+        u_int64_t dl = 0ULL;
+        u_int64_t dl_1 = (ROW_DL_1 << pos);
+        dl |= (-(!((dl_1 & RIGHT_OUTER_BORDER) || (dl_1 & used)))) & dl_1;
+        u_int64_t dl_2 = (ROW_DL_2 << pos);
+        dl |= (-(!((dl_2 & RIGHT_OUTER_BORDER) || (dl_2 & used)))) & dl_2;
+        u_int64_t dl_3 = (ROW_DL_3 << pos);
+        dl |= (-(!((dl_3 & RIGHT_OUTER_BORDER) || (dl_3 & used)))) & dl_3;
+        u_int64_t dl_4 = (ROW_DL_4 << pos);
+        dl |= (-(!((dl_4 & RIGHT_OUTER_BORDER) || (dl_4 & used)))) & dl_4;
+        u_int64_t dl_5 = (ROW_DL_5 << pos);
+        dl |= (-(!((dl_5 & RIGHT_OUTER_BORDER) || (dl_5 & used)))) & dl_5;
+        u_int64_t dl_6 = (ROW_DL_6 << pos);
+        dl |= (-(!((dl_6 & RIGHT_OUTER_BORDER) || (dl_6 & used)))) & dl_6;
+        u_int64_t dl_7 = (ROW_DL_7 << pos);
+        dl |= (-(!((dl_7 & RIGHT_OUTER_BORDER) || (dl_7 & used)))) & dl_7;
+        
+        
+        u_int64_t tr = 0ULL;
+        u_int64_t tr_1 = (ROW_TR_1 >> right_shift);
+        tr |= (-(!((tr_1 & LEFT_OUTER_BORDER) || (tr_1 & used)))) & tr_1;
+        u_int64_t tr_2 = (ROW_TR_2 >> right_shift);
+        tr |= (-(!((tr_2 & LEFT_OUTER_BORDER) || (tr_2 & used)))) & tr_2;
+        u_int64_t tr_3 = (ROW_TR_3 >> right_shift);
+        tr |= (-(!((tr_3 & LEFT_OUTER_BORDER) || (tr_3 & used)))) & tr_3;
+        u_int64_t tr_4 = (ROW_TR_4 >> right_shift);
+        tr |= (-(!((tr_4 & LEFT_OUTER_BORDER) || (tr_4 & used)))) & tr_4;
+        u_int64_t tr_5 = (ROW_TR_5 >> right_shift);
+        tr |= (-(!((tr_5 & LEFT_OUTER_BORDER) || (tr_5 & used)))) & tr_5;
+        u_int64_t tr_6 = (ROW_TR_6 >> right_shift);
+        tr |= (-(!((tr_6 & LEFT_OUTER_BORDER) || (tr_6 & used)))) & tr_6;
+        u_int64_t tr_7 = (ROW_TR_7 >> right_shift);
+        tr |= (-(!((tr_7 & LEFT_OUTER_BORDER) || (tr_7 & used)))) & tr_7;
+
+        
+        u_int64_t r = 0ULL;
+        u_int64_t r_1 = (ROW_R_1 << pos);
+        r |= (-(!((r_1 & LEFT_BORDER) || (r_1 & used)))) & r_1;
+        u_int64_t r_2 = (ROW_R_2 << pos);
+        r |= (-(!((r_2 & LEFT_BORDER) || (r_2 & used)))) & r_2;
+        u_int64_t r_3 = (ROW_R_3 << pos);
+        r |= (-(!((r_3 & LEFT_BORDER) || (r_3 & used)))) & r_3;
+        u_int64_t r_4 = (ROW_R_4 << pos);
+        r |= (-(!((r_4 & LEFT_BORDER) || (r_4 & used)))) & r_4;
+        u_int64_t r_5 = (ROW_R_5 << pos);
+        r |= (-(!((r_5 & LEFT_BORDER) || (r_5 & used)))) & r_5;
+        u_int64_t r_6 = (ROW_R_6 << pos);
+        r |= (-(!((r_6 & LEFT_BORDER) || (r_6 & used)))) & r_6;
+        u_int64_t r_7 = (ROW_R_7 << pos);
+        r |= (-(!((r_7 & LEFT_BORDER) || (r_7 & used)))) & r_7;
+        
+        
+        u_int64_t l = 0ULL;
+        u_int64_t l_1 = (ROW_L_1 >> right_shift);
+        l |= (-(!((l_1 & RIGHT_BORDER) || (l_1 & used)))) & l_1;
+        u_int64_t l_2 = (ROW_L_2 >> right_shift);
+        l |= (-(!((l_2 & RIGHT_BORDER) || (l_2 & used)))) & l_2;
+        u_int64_t l_3 = (ROW_L_3 >> right_shift);
+        l |= (-(!((l_3 & RIGHT_BORDER) || (l_3 & used)))) & l_3;
+        u_int64_t l_4 = (ROW_L_4 >> right_shift);
+        l |= (-(!((l_4 & RIGHT_BORDER) || (l_4 & used)))) & l_4;
+        u_int64_t l_5 = (ROW_L_5 >> right_shift);
+        l |= (-(!((l_5 & RIGHT_BORDER) || (l_5 & used)))) & l_5;
+        u_int64_t l_6 = (ROW_L_6 >> right_shift);
+        l |= (-(!((l_6 & RIGHT_BORDER) || (l_6 & used)))) & l_6;
+        u_int64_t l_7 = (ROW_L_7 >> right_shift);
+        l |= (-(!((l_7 & RIGHT_BORDER) || (l_7 & used)))) & l_7;
+        
+        u_int64_t result = dr | tl | dl | tr | r | l;
+        result &= ~FIT;
+        return result;
+        
+    }
+    
     u_int64_t getMoveField(int pos, u_int64_t used){
         
         //------------------------------top left to down right------------------
