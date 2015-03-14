@@ -216,7 +216,7 @@ int evaluate(int playerId, Board board, bool qsearch){
             qId = !qId;
         }
         int qPoints = evaluate(playerId, qBoard, false);
-        result *= 4;
+        result *= 2;
         result += qPoints;
     }
 #endif

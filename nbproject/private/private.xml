@@ -9,10 +9,10 @@
         <group>
             <file>file:/home/jan/NetBeansProjects/SC/sc/main.h</file>
             <file>file:/home/jan/NetBeansProjects/SC/sc/tactic.cpp</file>
+            <file>file:/home/jan/NetBeansProjects/SC/sc/evaluation.h</file>
             <file>file:/home/jan/NetBeansProjects/SC/sc/evaluation.cpp</file>
             <file>file:/home/jan/NetBeansProjects/SC/sc/tools.cpp</file>
             <file>file:/home/jan/NetBeansProjects/SC/sc/tools.h</file>
-            <file>file:/home/jan/NetBeansProjects/SC/sc/boardstate.cpp</file>
             <file>file:/home/jan/NetBeansProjects/SC/sc/main.cpp</file>
             <file>file:/home/jan/NetBeansProjects/SC/sc/config.h</file>
         </group>
