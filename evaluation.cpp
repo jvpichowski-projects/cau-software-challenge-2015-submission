@@ -193,7 +193,7 @@ int evaluate(int playerId, Board board){
     movePoints *= 2;
 #endif
     
-    int result = points + movePoints;
+    int result = points*3 + movePoints;
 #ifdef bigfield_eval
     result += bigPoints;
 #endif

@@ -16,7 +16,7 @@
 //#define collision_stats
 //#define null_window
 
-#define bigfield_eval
+//#define bigfield_eval
 //#define eval_reachPoints
 
 #define limit_move_gen
