@@ -18,7 +18,7 @@
 //            /* |  52 */0x20200000000000ULL,  /* |  53 */0x50600000000000ULL,  /* |  54 */0xA0C00000000000ULL,  /* |  55 */0x141800000000000ULL,
 //            /* |  56 */0x283000000000000ULL, /* |  57 */0x506000000000000ULL, /* |  58 */0xA0C000000000000ULL, /* |  59 */0x408000000000000ULL   };
 
-int evaluate(int playerId, Board board){
+int evaluate(int playerId, Board board, bool qsearch){
     int points = board.pointsdiff;
         
     if(board.movecount >= 60){
@@ -188,6 +188,8 @@ int evaluate(int playerId, Board board){
 //        delete[] penguinPos;
 //    }
 
+    
+    
 #ifdef bigfield_eval
     points *= 4;
     movePoints *= 2;
@@ -201,6 +203,22 @@ int evaluate(int playerId, Board board){
 #ifdef eval_reachPoints
     result *= 4;
     result += reachablePoints;
+#endif
+#ifdef Q_SEARCH
+    if(qsearch){
+        Board qBoard = board;
+        int qId = playerId;
+        for(int i = 0; i < Q_SEARCH_DEEP && qBoard.movecount < 60; ++i){
+            int l;
+            Move* moves = BoardTools::generatePossibleMoves(qBoard, qId, &l);
+            BoardTools::apply(&qBoard, qId, moves[0]);
+            delete[] moves;
+            qId = !qId;
+        }
+        int qPoints = evaluate(playerId, qBoard, false);
+        result *= 4;
+        result += qPoints;
+    }
 #endif
         
     if(playerId != ID_WE){

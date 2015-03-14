@@ -13,7 +13,7 @@
 #include "globals.h"
 #include "tools.h"
 
-int evaluate(int playerId, Board board);
+int evaluate(int playerId, Board board, bool qsearch);
 
 #endif	/* EVALUATION_H */
 

@@ -19,6 +19,9 @@
 //#define bigfield_eval
 //#define eval_reachPoints
 
+//#define Q_SEARCH
+#define Q_SEARCH_DEEP 10
+
 #define limit_move_gen
 #define MOVE_GEN_LIMIT 10
 
