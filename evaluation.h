@@ -13,7 +13,10 @@
 #include "globals.h"
 #include "tools.h"
 
-int evaluate(int playerId, Board board, bool qsearch);
+namespace Evaluation
+{
+    int evaluate(int playerId, Board board, bool qsearch);
+}
 
 #endif	/* EVALUATION_H */
 

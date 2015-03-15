@@ -92,7 +92,7 @@ namespace BoardTools{
     int insertMove(Move* valuedMoves, Move m, Board state, int playerId, int length){
         Board tmpBoard = state;
         BoardTools::apply(&tmpBoard, playerId, m);
-        int value = evaluate(playerId, tmpBoard, false);  
+        int value = Evaluation::evaluate(playerId, tmpBoard, false);  
         m.value = value;
         //valuedMoves[i] = vm;
         int b = length-1;
