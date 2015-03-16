@@ -29,10 +29,15 @@ namespace Evaluation
     {
         evaluate = &Evaluation::evaluateNormal;
         
-        if(Globals::_board.movecount < 22)
+        if(Globals::_board.movecount < 12)
         {
             multpPoints = 1;
             multpMovepo = 2;
+        }
+        else if(Globals::_board.movecount < 40)
+        {
+            multpPoints = 2;
+            multpMovepo = 1;
         }
         else
         {
