@@ -15,7 +15,11 @@
 
 namespace Evaluation
 {
-    int evaluate(int playerId, Board board, bool qsearch);
+    typedef int (*ToEvaluate)(int playerId, Board board, bool qsearch);
+    extern ToEvaluate evaluate;
+    
+    int evaluateNormal(int playerId, Board board, bool qsearch);
+    int preEvaluate();
 }
 
 #endif	/* EVALUATION_H */

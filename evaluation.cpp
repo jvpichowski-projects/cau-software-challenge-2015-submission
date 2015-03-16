@@ -20,8 +20,29 @@
 
 namespace Evaluation
 {
-
-    int evaluate(int playerId, Board board, bool qsearch){
+    Evaluation::ToEvaluate evaluate;
+    
+    u_int8_t multpPoints = 3;
+    u_int8_t multpMovepo = 1;
+    
+    int preEvaluate()
+    {
+        evaluate = &Evaluation::evaluateNormal;
+        
+        if(Globals::_board.movecount < 22)
+        {
+            multpPoints = 1;
+            multpMovepo = 2;
+        }
+        else
+        {
+            multpPoints = 3;
+            multpMovepo = 1;
+        }
+    }
+    
+    int evaluateNormal(int playerId, Board board, bool qsearch)
+    {
         int points = board.pointsdiff;
 
         if(board.movecount >= 60){
@@ -198,7 +219,7 @@ namespace Evaluation
         movePoints *= 2;
     #endif
 
-        int result = points*3 + movePoints;
+        int result = points*multpPoints + movePoints*multpMovepo;
     #ifdef bigfield_eval
         result += bigPoints;
     #endif
