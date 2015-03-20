@@ -1,6 +1,6 @@
 #include "evaluation.h"
 #include "boardstate.h"
-
+typedef int PVOID;
 //int64_t _fieldsAround[60] = {
 //            /* |  00 */0x182ULL,             /* |  01 */0x305ULL,             /* |  02 */0x60AULL,             /* |  03 */0xC14ULL,
 //            /* |  04 */0x1828ULL,            /* |  05 */0x3050ULL,            /* |  06 */0x6020ULL,            /* |  07 */0x8101ULL,
@@ -29,7 +29,7 @@ namespace Evaluation
     {
         evaluate = &Evaluation::evaluateNormal;
         
-        if(Globals::_board.movecount < 12)
+        /*if(Globals::_board.movecount < 12)
         {
             multpPoints = 1;
             multpMovepo = 2;
@@ -40,10 +40,10 @@ namespace Evaluation
             multpMovepo = 1;
         }
         else
-        {
+        {fa
             multpPoints = 3;
             multpMovepo = 1;
-        }
+        }*/
     }
     
     int evaluateNormal(int playerId, Board board, bool qsearch)

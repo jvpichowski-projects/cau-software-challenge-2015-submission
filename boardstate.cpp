@@ -144,6 +144,8 @@ namespace BoardTools{
                 m.to = threesPos[k];
                 insertMove(moves, m, state, playerId, *length);
             }
+            
+            delete[] threesPos;
         }
         delete[] moveFields;
 
@@ -152,6 +154,8 @@ namespace BoardTools{
         std::cout << "VM: " << moves[i].value << std::endl;
     }
 #endif
+        delete[] penguinPos;
+        
         return moves;
     }
     
@@ -207,6 +211,7 @@ namespace BoardTools{
                     moves[++c] = m;
 #endif
                 }
+                delete[] threesPos;
 
                 int twosSize = 0;
                 int* twosPos = Tools::bitScan(twos, &twosSize);
@@ -220,6 +225,7 @@ namespace BoardTools{
                     moves[++c] = m;
 #endif
                 }
+                delete[] twosPos;
 
                 int onesSize = 0;
                 int* onesPos = Tools::bitScan(ones, &onesSize);
@@ -233,6 +239,8 @@ namespace BoardTools{
                     moves[++c] = m;
 #endif
                 }
+                delete[] onesPos;
+                
             }
             Move m = Move();
             m.from = INVALID_POS;
@@ -243,7 +251,7 @@ namespace BoardTools{
                     moves[++c] = m;
 #endif
 
-            delete[] moveFields;
+            delete[] moveFields, penguinPos;
             
 #ifdef DEBUG_MOVE_ORDERING
         for(int i = 0; i < *length; i++){

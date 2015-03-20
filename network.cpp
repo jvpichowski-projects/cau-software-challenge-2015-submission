@@ -58,7 +58,8 @@ void Ocean::GetFood()
         packetBuffer += incoming_data_buffer;
                 
         if(packetBuffer.substr(packetBuffer.length() - 6, 6) == "/room>" || packetBuffer.substr(packetBuffer.length() - 10, 10) == "/protocol>"){
-            _onr((char*)packetBuffer.c_str());
+            char* packeBufferAr = (char*)packetBuffer.c_str();
+            _onr(packeBufferAr);
             packetBuffer = "";
         }
     }
@@ -75,7 +76,6 @@ void Ocean::GetFood()
            ticks = 0;
        }
    #endif
-
 }
 
 void Ocean::Send(char* msg)
