@@ -38,6 +38,7 @@ struct FirstOpponentMoveStruct
 {
     Move firstOpponentMove;
     OpponentPositionsStruct* usedFields;
+    int deep;
 };
     
 #endif	/* SORTEDMOVEMEMORYSTRUCTS_H */
