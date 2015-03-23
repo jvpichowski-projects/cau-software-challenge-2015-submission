@@ -10,36 +10,48 @@
 
 #include "types.h"
 
-struct OwnPositionsStruct
+struct OwnPositionsStruct4
 {
+    OwnPositionsStruct4() : ownPositions(0), length(0){}
+    
     u_int64_t ownPositions;
     Move* sortedmoves;
+    int length;
 };
 
-struct PointsAndDeepStruct
+struct PointsAndDeepStruct3
 {
+    PointsAndDeepStruct3() : pointsAndDeepHash(0), length(0){}
+    
     u_int64_t pointsAndDeepHash;
-    OwnPositionsStruct* ownPositions;
+    OwnPositionsStruct4* ownPositions;
+    int length;
 };
 
-struct OpponentPositionsStruct
+struct OpponentPositionsStruct2
 {
+    OpponentPositionsStruct2() : opponentPositions(0), length(0){}
+    
     u_int64_t opponentPositions;
-    PointsAndDeepStruct* pointsAndDeep;
+    PointsAndDeepStruct3* pointsAndDeep;
+    int length;
 };
 
-struct UsedFieldsStruct
+struct UsedFieldsStruct1
 {
+    UsedFieldsStruct1() : usedFiels(0), length(0){}
+    
     u_int64_t usedFiels;
-    OpponentPositionsStruct* opponentPositions;
+    OpponentPositionsStruct2* opponentPositions;
+    int length;
 };
 
-struct FirstOpponentMoveStruct
+struct ShelfStruct
 {
-    Move firstOpponentMove;
-    OpponentPositionsStruct* usedFields;
-    int deep;
+    ShelfStruct() : length(0){}
+    
+    UsedFieldsStruct1* shelfStuff;
+    int length;
 };
     
 #endif	/* SORTEDMOVEMEMORYSTRUCTS_H */
-
