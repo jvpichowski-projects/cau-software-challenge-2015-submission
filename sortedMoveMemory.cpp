@@ -21,15 +21,15 @@ namespace SortedMoveMemory
         return pos%240;
     }
     
-    Move* getSortedMoves(Board board, bool* inMemory)
-    {
-        Move* result;
-        inMemory = true;
-        
-        int shelfPos = getShelfPos(board);
-        int UsedFieldsStructPos = getUsedFieldsStructPos(board, shelfPos);
-        
-    }
+//    Move* getSortedMoves(Board board, bool* inMemory)
+//    {
+//        Move* result;
+//        /*inMemory = true;
+//        
+//        int shelfPos = getShelfPos(board);
+//        int UsedFieldsStructPos = getUsedFieldsStructPos(board, shelfPos);/
+//        
+//    }
     
     int getUsedFieldsStructPos(Board board, int shelfPos)
     {
@@ -37,12 +37,55 @@ namespace SortedMoveMemory
             return -1;
         
         int min = 0;
-        int max = _shelf1[shelfPos];
+        int max = _shelf1[shelfPos].length;
+        int posnow;
         
-        while(min != max)
+        /*if(_shelf1[shelfPos].length == 0)
+            return -1;
+        
+        if(_shelf1[shelfPos].length == 1){
+            if(_shelf1[shelfPos].shelfStuff[0].usedFiels == board.used)
+                return 0;
+            else
+                return -1;
+        }*/
+        
+        while(min < max)
         {
-            
-        }
+   	 int z = (max - min);
+   	 
+   	 posnow = min + (z/2) + (z & 1);
+   	 
+   	 if(max == posnow)
+   	 {
+   		 if(_shelf1[shelfPos].shelfStuff[posnow-1].usedFiels == board.used){
+   			 return posnow - 1;
+   			 
+   		 }
+   		 if(_shelf1[shelfPos].shelfStuff[posnow].usedFiels){
+   			 return posnow;
+   			 
+   		 }
+   		 else{
+   			 return -1;
+   		 }
+   	 }
+   	 
+   	 if(_shelf1[shelfPos].shelfStuff[posnow].usedFiels > board.used)
+   		 max = posnow;
+   		 
+   	 if(_shelf1[shelfPos].shelfStuff[posnow].usedFiels < board.used)
+   		 min = posnow;
+   		 
+   	 if(_shelf1[shelfPos].shelfStuff[posnow].usedFiels == board.used){
+   		 return posnow;
+   	 }
+   	 
+   	 
+    }
+
+        
+        return -1;
     }
     
     int init()
