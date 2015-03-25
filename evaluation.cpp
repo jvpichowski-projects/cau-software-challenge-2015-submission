@@ -29,6 +29,11 @@ namespace Evaluation
     
     int preEvaluate()
     {
+        if(Globals::_board.movecount > 29)
+        {
+            multpFiAr = 1; 
+        }
+        
         
         if(Globals::_board.movecount < 8)
         {
@@ -36,12 +41,16 @@ namespace Evaluation
             
             u_int8_t multpPoints = 1;
             u_int8_t multpMovepo = 1;
+            
+            multpFiAr = 2;
         }
         else if(Globals::_board.movecount < 12)
         {
             evaluate = &Evaluation::evaluateNormal;
             multpPoints = 1;
             multpMovepo = 2;
+            
+            multpFiAr = 2;
         }
         else if(Globals::_board.movecount < 40)
         {
@@ -55,10 +64,7 @@ namespace Evaluation
             multpFiAr = 0; 
         }
         
-        if(Globals::_board.movecount < 34)
-        {
-            multpFiAr = 1; 
-        }
+        
     }
     
     int evaluateNormal(int playerId, Board board, bool qsearch)
