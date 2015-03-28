@@ -1,3 +1,5 @@
+//Ver2
+
 #include "evaluation.h"
 #include "boardstate.h"
 typedef int PVOID;
@@ -29,40 +31,46 @@ namespace Evaluation
     
     int preEvaluate()
     {
-        if(Globals::_board.movecount > 29)
-        {
-            multpFiAr = 1; 
-        }
-        
         
         if(Globals::_board.movecount < 8)
         {
             evaluate = &Evaluation::evaluateSetMoves;
             
-            u_int8_t multpPoints = 1;
+            u_int8_t multpPoints = 3;
             u_int8_t multpMovepo = 1;
-            
-            multpFiAr = 2;
         }
-        else if(Globals::_board.movecount < 12)
+        else if(Globals::_board.movecount >= 52)
         {
-            evaluate = &Evaluation::evaluateNormal;
-            multpPoints = 1;
-            multpMovepo = 2;
-            
-            multpFiAr = 2;
+            multpFiAr = 0; 
         }
-        else if(Globals::_board.movecount < 40)
+        else if(Globals::_board.movecount >= 40)
         {
-            multpPoints = 2;
-            multpMovepo = 1;
+            multpFiAr = 1;
         }
-        else
+        else if(Globals::_board.movecount >= 34)
         {
             multpPoints = 3;
             multpMovepo = 1;
-            multpFiAr = 0; 
+            
+            multpFiAr = 1;
         }
+        else if(Globals::_board.movecount >= 20)
+        {
+            multpPoints = 2;
+            multpMovepo = 1;
+            
+            multpFiAr = 2;
+        }
+        else if(Globals::_board.movecount >= 8)
+        {
+            evaluate = &Evaluation::evaluateNormal;
+            
+            multpPoints = 1;
+            multpMovepo = 1;
+        }
+        
+        
+        
         
         
     }
@@ -92,12 +100,9 @@ namespace Evaluation
         movePoints += Tools::popCount(moveFields & Globals::twos) * 2;
         movePoints += Tools::popCount(moveFields & Globals::ones);
 
-        movePoints += multpFiAr*Tools::popCount(Tools::genMoveField(penguinPos[0], board.used) & _fieldsAround[penguinPos[0]]);
-        
-        movePoints += multpFiAr*Tools::popCount(Tools::genMoveField(penguinPos[1], board.used) & _fieldsAround[penguinPos[1]]);
-        
-        movePoints += multpFiAr*Tools::popCount(Tools::genMoveField(penguinPos[2], board.used) & _fieldsAround[penguinPos[2]]);
-        
+        movePoints += multpFiAr*Tools::popCount(Tools::genMoveField(penguinPos[0], board.used) & _fieldsAround[penguinPos[0]]);        
+        movePoints += multpFiAr*Tools::popCount(Tools::genMoveField(penguinPos[1], board.used) & _fieldsAround[penguinPos[1]]);        
+        movePoints += multpFiAr*Tools::popCount(Tools::genMoveField(penguinPos[2], board.used) & _fieldsAround[penguinPos[2]]);        
         movePoints += multpFiAr*Tools::popCount(Tools::genMoveField(penguinPos[3], board.used) & _fieldsAround[penguinPos[3]]);
 
         delete[] penguinPos;
@@ -115,12 +120,9 @@ namespace Evaluation
         movePoints -= Tools::popCount(moveFields & Globals::twos) * 2;
         movePoints -= Tools::popCount(moveFields & Globals::ones);
 
-        movePoints -= multpFiAr*Tools::popCount(Tools::genMoveField(penguinPos[0], board.used) & _fieldsAround[penguinPos[0]]);
-        
-        movePoints -= multpFiAr*Tools::popCount(Tools::genMoveField(penguinPos[1], board.used) & _fieldsAround[penguinPos[1]]);
-        
-        movePoints -= multpFiAr*Tools::popCount(Tools::genMoveField(penguinPos[2], board.used) & _fieldsAround[penguinPos[2]]);
-        
+        movePoints -= multpFiAr*Tools::popCount(Tools::genMoveField(penguinPos[0], board.used) & _fieldsAround[penguinPos[0]]);        
+        movePoints -= multpFiAr*Tools::popCount(Tools::genMoveField(penguinPos[1], board.used) & _fieldsAround[penguinPos[1]]);        
+        movePoints -= multpFiAr*Tools::popCount(Tools::genMoveField(penguinPos[2], board.used) & _fieldsAround[penguinPos[2]]);        
         movePoints -= multpFiAr*Tools::popCount(Tools::genMoveField(penguinPos[3], board.used) & _fieldsAround[penguinPos[3]]);
 
         delete[] penguinPos;
@@ -354,9 +356,9 @@ namespace Evaluation
                 pluspoints += 50;
 
             if((Tools::popCount((board.mypos & Q4_all))) > 1)
-                pluspoints -= 500;
+                pluspoints -= 50;
             else
-                pluspoints += 500;
+                pluspoints += 50;
             
             /////////////////////////////
             
