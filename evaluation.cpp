@@ -39,7 +39,7 @@ namespace Evaluation
             u_int8_t multpPoints = 3;
             u_int8_t multpMovepo = 1;
         }
-        else if(Globals::_board.movecount >= 52)
+        /*else if(Globals::_board.movecount >= 52)
         {
             multpFiAr = 0; 
         }
@@ -60,12 +60,24 @@ namespace Evaluation
             multpMovepo = 1;
             
             multpFiAr = 2;
+        }*/
+        else if(Globals::_board.movecount >= 50)
+        {
+            multpPoints = 3;
+            multpMovepo = 1;
+            multpFiAr = 0;
+        }
+        else if(Globals::_board.movecount >= 36)
+        {
+            multpPoints = 3;
+            multpMovepo = 1;
+            multpFiAr = 1;
         }
         else if(Globals::_board.movecount >= 8)
         {
             evaluate = &Evaluation::evaluateNormal;
             
-            multpPoints = 1;
+            multpPoints = 2;
             multpMovepo = 1;
         }
         
