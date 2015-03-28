@@ -23,7 +23,7 @@ struct PointsAndDeepStruct3
 {
     PointsAndDeepStruct3() : pointsAndDeepHash(0), length(0){}
     
-    u_int64_t pointsAndDeepHash;
+    u_int32_t pointsAndDeepHash;
     OwnPositionsStruct4* ownPositions;
     int length;
 };

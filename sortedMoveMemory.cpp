@@ -21,15 +21,168 @@ namespace SortedMoveMemory
         return pos%240;
     }
     
-//    Move* getSortedMoves(Board board, bool* inMemory)
-//    {
-//        Move* result;
-//        /*inMemory = true;
-//        
-//        int shelfPos = getShelfPos(board);
-//        int UsedFieldsStructPos = getUsedFieldsStructPos(board, shelfPos);/
-//        
-//    }
+    Move* getSortedMoves(Board board, bool* inMemory, int* length)
+    {
+        Move* result;
+        
+        
+        int shelfPos = getShelfPos(board);
+        if(shelfPos == -1){
+            *inMemory = false;
+            result[0] = Move();
+            *length = -1;
+        }
+        
+        int usedFieldsStructPos = getUsedFieldsStructPos(board, shelfPos);
+        if(usedFieldsStructPos == -1){
+            *inMemory = false;
+            result[0] = Move();
+            *length = -1;
+        }
+        
+        int opPostructPos = getOpponentPositionsStruct(board, shelfPos, usedFieldsStructPos);
+        if(opPostructPos == -1){
+            *inMemory = false;
+            result[0] = Move();
+            *length = -1;
+        }
+        
+        int pointsDeepStructPos = getPointsDeepStruct(board, shelfPos, usedFieldsStructPos, opPostructPos);
+        if(pointsDeepStructPos == -1){
+            *inMemory = false;
+            result[0] = Move();
+            *length = -1;
+        }
+        
+        int ownPosStructPos = getOwnPostruct(board, shelfPos, usedFieldsStructPos, opPostructPos, pointsDeepStructPos);
+        if(ownPosStructPos == -1){
+            *inMemory = false;
+            result[0] = Move();
+            *length = -1;
+        }
+        
+        
+        *inMemory = true;
+        *length = _shelf1[shelfPos].shelfStuff[usedFieldsStructPos].opponentPositions[opPostructPos].pointsAndDeep[pointsDeepStructPos].ownPositions[ownPosStructPos].length;
+        return _shelf1[shelfPos].shelfStuff[usedFieldsStructPos].opponentPositions[opPostructPos].pointsAndDeep[pointsDeepStructPos].ownPositions[ownPosStructPos].sortedmoves;
+    }
+    
+    int getOwnPostruct(Board board, int shelfPos, int usedFieldsStructPos, int opPostructPos, int pointsDeepStructPos)
+    {
+        if(_shelf1[shelfPos].length == 0)
+            return -1;
+        
+        int min = 0;
+        int max = _shelf1[shelfPos].length;
+        int posnow;
+        
+        while(min < max)
+        {
+            int z = (max - min);
+
+            posnow = min + (z/2) + (z & 1);
+
+            if(max == posnow)
+            {
+                    if(_shelf1[shelfPos].shelfStuff[usedFieldsStructPos].opponentPositions[opPostructPos].pointsAndDeep[pointsDeepStructPos].ownPositions[posnow-1].ownPositions == board.mypos)
+                            return posnow - 1;
+                    if(_shelf1[shelfPos].shelfStuff[usedFieldsStructPos].opponentPositions[opPostructPos].pointsAndDeep[pointsDeepStructPos].ownPositions[posnow].ownPositions == board.mypos)
+                            return posnow;
+                    else
+                            return -1;
+            }
+
+            if(_shelf1[shelfPos].shelfStuff[usedFieldsStructPos].opponentPositions[opPostructPos].pointsAndDeep[pointsDeepStructPos].ownPositions[posnow].ownPositions > board.mypos)
+                    max = posnow;
+
+            if(_shelf1[shelfPos].shelfStuff[usedFieldsStructPos].opponentPositions[opPostructPos].pointsAndDeep[pointsDeepStructPos].ownPositions[posnow].ownPositions < board.mypos)
+                    min = posnow;
+
+            if(_shelf1[shelfPos].shelfStuff[usedFieldsStructPos].opponentPositions[opPostructPos].pointsAndDeep[pointsDeepStructPos].ownPositions[posnow].ownPositions == board.mypos)
+                    return posnow;
+        }
+
+        return -1;
+    }
+    
+    int getPointsDeepStruct(Board board, int shelfPos, int usedFieldsStructPos, int opPostructPos)
+    {
+        if(_shelf1[shelfPos].length == 0)
+            return -1;
+        
+        int min = 0;
+        int max = _shelf1[shelfPos].length;
+        int posnow;
+        
+        int search = board.pointsdiff;
+        search |= (board.movecount << 16);
+        
+        while(min < max)
+        {
+            int z = (max - min);
+
+            posnow = min + (z/2) + (z & 1);
+
+            if(max == posnow)
+            {
+                    if(_shelf1[shelfPos].shelfStuff[usedFieldsStructPos].opponentPositions[opPostructPos].pointsAndDeep[posnow-1].pointsAndDeepHash == search)
+                            return posnow - 1;
+                    if(_shelf1[shelfPos].shelfStuff[usedFieldsStructPos].opponentPositions[opPostructPos].pointsAndDeep[posnow].pointsAndDeepHash == search)
+                            return posnow;
+                    else
+                            return -1;
+            }
+
+            if(_shelf1[shelfPos].shelfStuff[usedFieldsStructPos].opponentPositions[opPostructPos].pointsAndDeep[posnow].pointsAndDeepHash > search)
+                    max = posnow;
+
+            if(_shelf1[shelfPos].shelfStuff[usedFieldsStructPos].opponentPositions[opPostructPos].pointsAndDeep[posnow].pointsAndDeepHash < search)
+                    min = posnow;
+
+            if(_shelf1[shelfPos].shelfStuff[usedFieldsStructPos].opponentPositions[opPostructPos].pointsAndDeep[posnow].pointsAndDeepHash == search)
+                    return posnow;
+        }
+
+        return -1;
+    }
+    
+    int getOpponentPositionsStruct(Board board, int shelfPos, int usedFieldsStructPos)
+    {
+        if(_shelf1[shelfPos].length == 0)
+            return -1;
+        
+        int min = 0;
+        int max = _shelf1[shelfPos].length;
+        int posnow;
+        
+        while(min < max)
+        {
+            int z = (max - min);
+
+            posnow = min + (z/2) + (z & 1);
+
+            if(max == posnow)
+            {
+                    if(_shelf1[shelfPos].shelfStuff[usedFieldsStructPos].opponentPositions[posnow-1].opponentPositions == board.oppos)
+                            return posnow - 1;
+                    if(_shelf1[shelfPos].shelfStuff[usedFieldsStructPos].opponentPositions[posnow].opponentPositions == board.oppos)
+                            return posnow;
+                    else
+                            return -1;
+            }
+
+            if(_shelf1[shelfPos].shelfStuff[usedFieldsStructPos].opponentPositions[posnow].opponentPositions > board.oppos)
+                    max = posnow;
+
+            if(_shelf1[shelfPos].shelfStuff[usedFieldsStructPos].opponentPositions[posnow].opponentPositions < board.oppos)
+                    min = posnow;
+
+            if(_shelf1[shelfPos].shelfStuff[usedFieldsStructPos].opponentPositions[posnow].opponentPositions == board.oppos)
+                    return posnow;
+        }
+
+        return -1;
+    }
     
     int getUsedFieldsStructPos(Board board, int shelfPos)
     {
@@ -40,51 +193,32 @@ namespace SortedMoveMemory
         int max = _shelf1[shelfPos].length;
         int posnow;
         
-        /*if(_shelf1[shelfPos].length == 0)
-            return -1;
-        
-        if(_shelf1[shelfPos].length == 1){
-            if(_shelf1[shelfPos].shelfStuff[0].usedFiels == board.used)
-                return 0;
-            else
-                return -1;
-        }*/
-        
         while(min < max)
         {
-   	 int z = (max - min);
-   	 
-   	 posnow = min + (z/2) + (z & 1);
-   	 
-   	 if(max == posnow)
-   	 {
-   		 if(_shelf1[shelfPos].shelfStuff[posnow-1].usedFiels == board.used){
-   			 return posnow - 1;
-   			 
-   		 }
-   		 if(_shelf1[shelfPos].shelfStuff[posnow].usedFiels){
-   			 return posnow;
-   			 
-   		 }
-   		 else{
-   			 return -1;
-   		 }
-   	 }
-   	 
-   	 if(_shelf1[shelfPos].shelfStuff[posnow].usedFiels > board.used)
-   		 max = posnow;
-   		 
-   	 if(_shelf1[shelfPos].shelfStuff[posnow].usedFiels < board.used)
-   		 min = posnow;
-   		 
-   	 if(_shelf1[shelfPos].shelfStuff[posnow].usedFiels == board.used){
-   		 return posnow;
-   	 }
-   	 
-   	 
-    }
+            int z = (max - min);
 
-        
+            posnow = min + (z/2) + (z & 1);
+
+            if(max == posnow)
+            {
+                    if(_shelf1[shelfPos].shelfStuff[posnow-1].usedFiels == board.used)
+                            return posnow - 1;
+                    if(_shelf1[shelfPos].shelfStuff[posnow].usedFiels == board.used)
+                            return posnow;
+                    else
+                            return -1;
+            }
+
+            if(_shelf1[shelfPos].shelfStuff[posnow].usedFiels > board.used)
+                    max = posnow;
+
+            if(_shelf1[shelfPos].shelfStuff[posnow].usedFiels < board.used)
+                    min = posnow;
+
+            if(_shelf1[shelfPos].shelfStuff[posnow].usedFiels == board.used)
+                    return posnow;
+        }
+
         return -1;
     }
     
