@@ -47,8 +47,23 @@ namespace SortedMoveMemory
             opPosS.opponentPositions = board.oppos;
             opPosS.pointsAndDeep[0] = pointsDeepS;
             
+            UsedFieldsStruct1 usedS = UsedFieldsStruct1();
+            usedS.length = 1;
+            usedS.opponentPositions[0] = opPosS;
+            usedS.usedFiels = board.used;
             
+            ////////////////
             
+            _shelf1[shelfPos].shelfStuff[0] = usedS;
+            
+            for(int i = _shelf1[shelfPos].length; ((i > 0) && (_shelf1[shelfPos].shelfStuff[i-1].usedFiels > _shelf1[shelfPos].shelfStuff[i].usedFiels)); i++)
+            {
+                UsedFieldsStruct1 tmp = _shelf1[shelfPos].shelfStuff[i];
+                _shelf1[shelfPos].shelfStuff[i-1] = _shelf1[shelfPos].shelfStuff[i];
+                _shelf1[shelfPos].shelfStuff[i] = tmp;
+            }
+            
+            ++_shelf1[shelfPos].length;
         }
         
         int opPostructPos = getOpponentPositionsStruct(board, shelfPos, usedFieldsStructPos);
