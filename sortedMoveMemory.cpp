@@ -7,10 +7,12 @@
 
 #include "sortedMoveMemory.h"
 
+#define SHELFSIZE 240 
+
 namespace SortedMoveMemory
 {
     bool _firstUse = true;
-    ShelfStruct _shelf1[240];
+    ShelfStruct _shelf1[SHELFSIZE];
     
     int getShelfPos(Board board)
     {
@@ -18,7 +20,68 @@ namespace SortedMoveMemory
         pos ^= (board.mypos & board.oppos);
         pos ^= board.pointsdiff;
         //return (int)(pos & 255);  //faster to calc, but not better to save in memory
-        return pos%240;
+        return pos%SHELFSIZE;
+    }
+    
+    int addSortedMoves(Board board, Move* moves,  int length)
+    {
+        int shelfPos = getShelfPos(board);
+        
+        OwnPositionsStruct4 sortedMovesS = OwnPositionsStruct4();
+        sortedMovesS.length = length;
+        sortedMovesS.sortedmoves = moves;
+        sortedMovesS.ownPositions = board.mypos;
+        
+        int usedFieldsStructPos = getUsedFieldsStructPos(board, shelfPos);
+        if(usedFieldsStructPos == -1){
+            int hash = board.pointsdiff;
+            hash |= (board.movecount << 16);
+            
+            PointsAndDeepStruct3 pointsDeepS = PointsAndDeepStruct3();
+            pointsDeepS.length = 1;
+            pointsDeepS.ownPositions[0] = sortedMovesS;
+            pointsDeepS.pointsAndDeepHash = hash;
+            
+            OpponentPositionsStruct2 opPosS = OpponentPositionsStruct2();
+            opPosS.length = 1;
+            opPosS.opponentPositions = board.oppos;
+            opPosS.pointsAndDeep[0] = pointsDeepS;
+            
+            
+            
+        }
+        
+        int opPostructPos = getOpponentPositionsStruct(board, shelfPos, usedFieldsStructPos);
+        if(opPostructPos == -1){
+            int hash = board.pointsdiff;
+            hash |= (board.movecount << 16);
+            
+            PointsAndDeepStruct3 pointsDeepS = PointsAndDeepStruct3();
+            pointsDeepS.length = 1;
+            pointsDeepS.ownPositions[0] = sortedMovesS;
+            pointsDeepS.pointsAndDeepHash = hash;
+            
+            OpponentPositionsStruct2 opPosS = OpponentPositionsStruct2();
+            opPosS.length = 1;
+            opPosS.opponentPositions = board.oppos;
+            opPosS.pointsAndDeep[0] = pointsDeepS;
+        }
+        
+        int pointsDeepStructPos = getPointsDeepStruct(board, shelfPos, usedFieldsStructPos, opPostructPos);
+        if(pointsDeepStructPos == -1){
+            int hash = board.pointsdiff;
+            hash |= (board.movecount << 16);
+            
+            PointsAndDeepStruct3 pointsDeepS = PointsAndDeepStruct3();
+            pointsDeepS.length = 1;
+            pointsDeepS.ownPositions[0] = sortedMovesS;
+            pointsDeepS.pointsAndDeepHash = hash;
+        }
+        
+        int ownPosStructPos = getOwnPostruct(board, shelfPos, usedFieldsStructPos, opPostructPos, pointsDeepStructPos);
+        if(ownPosStructPos == -1){
+            
+        }
     }
     
     Move* getSortedMoves(Board board, bool* inMemory, int* length)
@@ -226,7 +289,7 @@ namespace SortedMoveMemory
     {   
         //bad long code to clean memory
         if(!_firstUse){
-            for(int s1 = 0; s1 < 240; s1++){
+            for(int s1 = 0; s1 < SHELFSIZE; s1++){
                 for(int u2 = 0; u2 < _shelf1[s1].length; u2++){
                     for(int o3 = 0; o3 < _shelf1[s1].shelfStuff[u2].length; o3++){                    
                         for(int p4 = 0; p4 < _shelf1[s1].shelfStuff[u2].opponentPositions[o3].length; p4++){                            
@@ -249,7 +312,7 @@ namespace SortedMoveMemory
         else
         {
             _firstUse = false;
-            for(int i = 0; i < 240; i++){
+            for(int i = 0; i < SHELFSIZE; i++){
                 _shelf1[i] = ShelfStruct();
             }
         }

@@ -12,6 +12,7 @@
 
 namespace SortedMoveMemory
 {
+    int addSortedMoves(Board board, Move* moves,  int length);
     int getShelfPos(Board board);
     Move* getSortedMoves(Board board, bool* inMemory);
     int getOwnPostruct(Board board, int shelfPos, int usedFieldsStructPos, int opPostructPos, int pointsDeepStructPos);
