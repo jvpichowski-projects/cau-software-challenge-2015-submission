@@ -26,76 +26,85 @@ namespace SortedMoveMemory
     int addSortedMoves(Board board, Move* moves,  int length)
     {
         int shelfPos = getShelfPos(board);
+        bool searchPos = true;
         
-        OwnPositionsStruct4 sortedMovesS = OwnPositionsStruct4();
-        sortedMovesS.length = length;
-        sortedMovesS.sortedmoves = moves;
-        sortedMovesS.ownPositions = board.mypos;
+        u_int32_t hash = board.pointsdiff;
+        hash |= (board.movecount << 16);
         
-        int usedFieldsStructPos = getUsedFieldsStructPos(board, shelfPos);
-        if(usedFieldsStructPos == -1){
-            int hash = board.pointsdiff;
-            hash |= (board.movecount << 16);
+        int usedFieldsStructPos = -1;
+        UsedFieldsStruct1 usedFieldsStruct;
+        if(searchPos && (usedFieldsStructPos = getUsedFieldsStructPos(board, shelfPos)) != -1){
+            usedFieldsStruct = _shelf1[shelfPos].shelfStuff[usedFieldsStructPos];
+        }
+        else{
+            searchPos = false;  //in this case, searching again is hopeless
             
-            PointsAndDeepStruct3 pointsDeepS = PointsAndDeepStruct3();
-            pointsDeepS.length = 1;
-            pointsDeepS.ownPositions[0] = sortedMovesS;
-            pointsDeepS.pointsAndDeepHash = hash;
-            
-            OpponentPositionsStruct2 opPosS = OpponentPositionsStruct2();
-            opPosS.length = 1;
-            opPosS.opponentPositions = board.oppos;
-            opPosS.pointsAndDeep[0] = pointsDeepS;
-            
-            UsedFieldsStruct1 usedS = UsedFieldsStruct1();
-            usedS.length = 1;
-            usedS.opponentPositions[0] = opPosS;
-            usedS.usedFiels = board.used;
-            
-            ////////////////
-            
-            _shelf1[shelfPos].shelfStuff[0] = usedS;
-            
-            for(int i = _shelf1[shelfPos].length; ((i > 0) && (_shelf1[shelfPos].shelfStuff[i-1].usedFiels > _shelf1[shelfPos].shelfStuff[i].usedFiels)); i++)
-            {
-                UsedFieldsStruct1 tmp = _shelf1[shelfPos].shelfStuff[i];
+            usedFieldsStruct = UsedFieldsStruct1();
+            usedFieldsStruct.usedFiels = board.used;
+            _shelf1[shelfPos].shelfStuff[_shelf1[shelfPos].length] = usedFieldsStruct;  //add
+            //sort:
+            for(int i = _shelf1[shelfPos].length; i > 0; i--){
+                if(_shelf1[shelfPos].shelfStuff[i-1].usedFiels < _shelf1[shelfPos].shelfStuff[i].usedFiels)
+                    break;
+                UsedFieldsStruct1 tmp = _shelf1[shelfPos].shelfStuff[i-1];
                 _shelf1[shelfPos].shelfStuff[i-1] = _shelf1[shelfPos].shelfStuff[i];
                 _shelf1[shelfPos].shelfStuff[i] = tmp;
             }
-            
-            ++_shelf1[shelfPos].length;
+            ++_shelf1[shelfPos].length; //update length
         }
         
-        int opPostructPos = getOpponentPositionsStruct(board, shelfPos, usedFieldsStructPos);
-        if(opPostructPos == -1){
-            int hash = board.pointsdiff;
-            hash |= (board.movecount << 16);
-            
-            PointsAndDeepStruct3 pointsDeepS = PointsAndDeepStruct3();
-            pointsDeepS.length = 1;
-            pointsDeepS.ownPositions[0] = sortedMovesS;
-            pointsDeepS.pointsAndDeepHash = hash;
-            
-            OpponentPositionsStruct2 opPosS = OpponentPositionsStruct2();
-            opPosS.length = 1;
-            opPosS.opponentPositions = board.oppos;
-            opPosS.pointsAndDeep[0] = pointsDeepS;
+        int opPoStructPos = -1;
+        OpponentPositionsStruct2 opPoStruct;
+        if(searchPos && (opPoStructPos = getOpponentPositionsStruct(board, shelfPos, usedFieldsStructPos)) != -1){
+            opPoStruct = usedFieldsStruct.opponentPositions[opPoStructPos];
+        }
+        else{
+            searchPos = false;  //in this case, searching again is hopeless
+            opPoStruct = OpponentPositionsStruct2();
+            opPoStruct.opponentPositions = board.oppos;
+            usedFieldsStruct.opponentPositions[usedFieldsStruct.length] = opPoStruct;   //add
+            //sort:
+            for(int i = usedFieldsStruct.length; i > 0; i--){
+                if(usedFieldsStruct.opponentPositions[i-1].opponentPositions < usedFieldsStruct.opponentPositions[i].opponentPositions)
+                    break;
+                OpponentPositionsStruct2 tmp = usedFieldsStruct.opponentPositions[i-1];
+                usedFieldsStruct.opponentPositions[i-1] = usedFieldsStruct.opponentPositions[i];
+                usedFieldsStruct.opponentPositions[i] = tmp;
+            }
         }
         
-        int pointsDeepStructPos = getPointsDeepStruct(board, shelfPos, usedFieldsStructPos, opPostructPos);
-        if(pointsDeepStructPos == -1){
-            int hash = board.pointsdiff;
-            hash |= (board.movecount << 16);
-            
-            PointsAndDeepStruct3 pointsDeepS = PointsAndDeepStruct3();
-            pointsDeepS.length = 1;
-            pointsDeepS.ownPositions[0] = sortedMovesS;
-            pointsDeepS.pointsAndDeepHash = hash;
+        int pointsDeepStructPos = -1;
+        PointsAndDeepStruct3 pointsDeepStruct;
+        if(searchPos && (pointsDeepStructPos = getPointsDeepStruct(board, shelfPos, usedFieldsStructPos, opPoStructPos)) != -1){
+            pointsDeepStruct = opPoStruct.pointsAndDeep[pointsDeepStructPos];
+        }
+        else{
+            searchPos = false;  //in this case, searching again is hopeless
+            pointsDeepStruct = PointsAndDeepStruct3();
+            pointsDeepStruct.pointsAndDeepHash = hash;
+            opPoStruct.pointsAndDeep[opPoStruct.length] = pointsDeepStruct; //add
+            //sort:
+            for(int i = opPoStruct.length; i > 0; i--){
+                if(opPoStruct.pointsAndDeep[i-1].pointsAndDeepHash < opPoStruct.pointsAndDeep[i].pointsAndDeepHash)
+                    break;
+                PointsAndDeepStruct3 tmp = opPoStruct.pointsAndDeep[i-1];
+                opPoStruct.pointsAndDeep[i-1] = opPoStruct.pointsAndDeep[i];
+                opPoStruct.pointsAndDeep[i] = tmp;
+            }
         }
         
-        int ownPosStructPos = getOwnPostruct(board, shelfPos, usedFieldsStructPos, opPostructPos, pointsDeepStructPos);
-        if(ownPosStructPos == -1){
-            
+        OwnPositionsStruct4 ownPosStruct = OwnPositionsStruct4();
+        ownPosStruct.ownPositions = board.mypos;
+        ownPosStruct.sortedmoves = moves;   //add the information
+        ownPosStruct.length = length;       //
+        pointsDeepStruct.ownPositions[pointsDeepStruct.length] = ownPosStruct;  //add
+        //sort:
+        for(int i = 0; i > 0; i--){
+            if(pointsDeepStruct.ownPositions[i-1].ownPositions < pointsDeepStruct.ownPositions[i].ownPositions)
+                break;
+            OwnPositionsStruct4 tmp = pointsDeepStruct.ownPositions[i-1];
+            pointsDeepStruct.ownPositions[i-1] = pointsDeepStruct.ownPositions[i];
+            pointsDeepStruct.ownPositions[i] = tmp;
         }
     }
     
@@ -192,7 +201,7 @@ namespace SortedMoveMemory
         int max = _shelf1[shelfPos].length;
         int posnow;
         
-        int search = board.pointsdiff;
+        u_int32_t search = board.pointsdiff;
         search |= (board.movecount << 16);
         
         while(min < max)
