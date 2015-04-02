@@ -20,6 +20,7 @@ void theVictory();
 
 #ifdef move_order_stats
 void printMoveOrderStats();
+void printSortedMoveList(Move* move, int length);
 #endif
 
 #endif	/* VISUAL_H */
