@@ -179,3 +179,110 @@ int iterativeDeepening(Board board, int player, int depth, int firstguess, Move 
     
     return firstguess;
 }
+
+struct Node{
+    int childsCount = 0;
+    int moveCount;
+    Node *childs;
+    Move *moves;
+    
+    Board board;
+    int best;
+    //int alpha = -1000;
+    //int beta = 1000;
+};
+
+
+int nextMoveNumber[] = {0,0,0,0,0,0,0,0,0,0,0};//for 10
+
+int pSearch(int deep, int player, Node *node, bool *changed, bool *isLast, Move *resultMove) {
+    Board board = node->board;
+    if(deep <= 0){
+        ++evalCount;
+        *changed = true;
+        if(nextMoveNumber[deep] >= 3){
+            nextMoveNumber[deep] = 0;
+        }
+        if(nextMoveNumber[deep] != 0){
+            *isLast = false;
+        }
+        return Evaluation::evaluate(player, board, true);//(player == ID_WE) ? board.pointsdiff : -board.pointsdiff;
+    }
+    
+    if(nextMoveNumber[deep] >= 3){//3 = count of moves for that board
+        ++nextMoveNumber[deep-1];//next deep
+        nextMoveNumber[deep] = 0;
+    }
+    
+    if(node->childsCount <= nextMoveNumber[deep]){
+    //maybe use special board for leaf node
+        Board nextBoard = board;
+        BoardTools::apply(&nextBoard, player, node->moves[nextMoveNumber[deep]]);
+        //Board nextBoard = applyMove(board, player, node->moves[nextMoveNumber[deep]]);
+        Node childNode = Node();
+        childNode.board = nextBoard;
+        childNode.childs = new Node[3];
+        //childNode.moves = generateMoves(!player);
+        childNode.moves = BoardTools::generatePossibleMoves(nextBoard, !player, &childNode.moveCount);
+//        childNode.alpha = -node->beta;
+//        childNode.beta = -node->alpha;
+        node->childs[nextMoveNumber[deep]] = childNode;
+        ++node->childsCount;
+    }
+    
+    int value = -pSearch(deep-1, !player, &node->childs[nextMoveNumber[deep]], changed, isLast, 0);
+    if(&changed){
+        if(value > node->best){
+            node->best = value;
+            if(resultMove){
+                *resultMove = node->moves[nextMoveNumber[deep]]; 
+            }
+            *changed = true;
+        }
+//don't know if it is a good idea. also it needs a correct finish code
+//        if(node->best > node->alpha){
+//            node->alpha = node->best;
+//        }
+//        if(node->best >= node->beta){
+//            ++cutOff;
+//            
+//            ++nextMoveNumber[deep-1];//next deep
+//            nextMoveNumber[deep] = 0;
+//        }
+    }
+    
+    if(nextMoveNumber[deep] != 0){
+        //wasn't resetted -> wasn't last
+        *isLast = false;
+    }
+    
+    return value;
+}
+
+Move startPSearch(int maxDeep, int player, Board board){
+    Move rMove;
+    Node rootNode = Node();
+    rootNode.childs = new Node[3];
+    rootNode.moves = BoardTools::generatePossibleMoves(board, !player, &rootNode.moveCount);
+    rootNode.board = board;
+    bool isLast = false;//maby dangerous if only one move is available
+    while(true){
+        bool changed = false;
+        int value = pSearch(maxDeep, player, &rootNode, &changed, &isLast, &rMove);
+        if(nextMoveNumber[maxDeep] >= 3){//3 = count of moves for that board
+            ++nextMoveNumber[maxDeep-1];//next deep
+            nextMoveNumber[maxDeep] = 0;
+        }
+        if(nextMoveNumber[maxDeep] != 0){
+            //wasn't resetted -> wasn't last
+            isLast = false;
+        }
+        if(isLast){
+            break;
+        }
+        ++nextMoveNumber[maxDeep];
+        isLast = true;
+    }
+    
+    return rMove;
+}
