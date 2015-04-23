@@ -193,14 +193,15 @@ struct Node{
 };
 
 
-int nextMoveNumber[] = {0,0,0,0,0,0,0,0,0,0,0};//for 10
+//int nextMoveNumber[] = {0,0,0,0,0,0,0,0,0,0,0};//for 10
+int *nextMoveNumber;
 
 int pSearch(int deep, int player, Node *node, bool *changed, bool *isLast, Move *resultMove) {
     Board board = node->board;
     if(deep <= 0){
         ++evalCount;
         *changed = true;
-        if(nextMoveNumber[deep] >= 3){
+        if(nextMoveNumber[deep] >= node->moveCount){
             nextMoveNumber[deep] = 0;
         }
         if(nextMoveNumber[deep] != 0){
@@ -209,7 +210,7 @@ int pSearch(int deep, int player, Node *node, bool *changed, bool *isLast, Move 
         return Evaluation::evaluate(player, board, true);//(player == ID_WE) ? board.pointsdiff : -board.pointsdiff;
     }
     
-    if(nextMoveNumber[deep] >= 3){//3 = count of moves for that board
+    if(nextMoveNumber[deep] >= node->moveCount){//3 = count of moves for that board
         ++nextMoveNumber[deep-1];//next deep
         nextMoveNumber[deep] = 0;
     }
@@ -221,9 +222,9 @@ int pSearch(int deep, int player, Node *node, bool *changed, bool *isLast, Move 
         //Board nextBoard = applyMove(board, player, node->moves[nextMoveNumber[deep]]);
         Node childNode = Node();
         childNode.board = nextBoard;
-        childNode.childs = new Node[3];
         //childNode.moves = generateMoves(!player);
         childNode.moves = BoardTools::generatePossibleMoves(nextBoard, !player, &childNode.moveCount);
+        childNode.childs = new Node[childNode.moveCount];
 //        childNode.alpha = -node->beta;
 //        childNode.beta = -node->alpha;
         node->childs[nextMoveNumber[deep]] = childNode;
@@ -260,16 +261,17 @@ int pSearch(int deep, int player, Node *node, bool *changed, bool *isLast, Move 
 }
 
 Move startPSearch(int maxDeep, int player, Board board){
+    nextMoveNumber = new int[maxDeep+1];
     Move rMove;
     Node rootNode = Node();
-    rootNode.childs = new Node[3];
     rootNode.moves = BoardTools::generatePossibleMoves(board, !player, &rootNode.moveCount);
+    rootNode.childs = new Node[rootNode.moveCount];
     rootNode.board = board;
     bool isLast = false;//maby dangerous if only one move is available
     while(true){
         bool changed = false;
         int value = pSearch(maxDeep, player, &rootNode, &changed, &isLast, &rMove);
-        if(nextMoveNumber[maxDeep] >= 3){//3 = count of moves for that board
+        if(nextMoveNumber[maxDeep] >= rootNode.moveCount){//3 = count of moves for that board
             ++nextMoveNumber[maxDeep-1];//next deep
             nextMoveNumber[maxDeep] = 0;
         }
