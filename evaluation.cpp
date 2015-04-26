@@ -138,6 +138,43 @@ namespace Evaluation
         movePoints -= multpFiAr*Tools::popCount(Tools::genMoveField(penguinPos[3], board.used) & _fieldsAround[penguinPos[3]]);
 
         delete[] penguinPos;
+        
+//        movePoints += Tools::popCount(RING1 & board.mypos) * 3;         //Test 10:10
+//        movePoints += Tools::popCount(RING2 & board.mypos);
+//        movePoints += Tools::popCount(RING1 & board.mypos) * -1;
+        
+//        movePoints += Tools::popCount(RING1 & board.mypos) * 1;         //Test 15:5Win ; 7:13Lost
+        
+//        movePoints += Tools::popCount(RING1 & board.mypos) * 3;         //Test 8:12Lost
+        
+//        movePoints += Tools::popCount(RING1 & board.mypos) * -3;         //Test 10:10 
+        
+//        movePoints += Tools::popCount(RING1 & board.mypos) * 2;         //Test 11:9Win
+        
+//        movePoints += Tools::popCount(RING1 & board.mypos) * 2;         //Test 8:12 Lost
+//        movePoints += Tools::popCount(RING4 & board.mypos) * -1;
+        
+//        movePoints += Tools::popCount(RING1 & board.mypos) * 2;         //Test 4:16Lost
+//        movePoints += Tools::popCount(RING4 & board.mypos) * 2;
+        
+//        movePoints += Tools::popCount(RING1 & board.mypos) * -2;         //Test14:6Win ; 20:24Lost
+//        movePoints += Tools::popCount(RING4 & board.mypos) * 2;
+        
+//        movePoints += Tools::popCount(RING1 & board.mypos) * 2;         //Test 84:76Win
+//        movePoints += Tools::popCount(RING4 & board.mypos) * -2;
+        
+//        movePoints += Tools::popCount(RING1 & board.mypos) * 3;         //Test 78:82Lost
+//        movePoints += Tools::popCount(RING4 & board.mypos) * -1;
+        
+        movePoints += Tools::popCount(RING1 & board.mypos) * 1;         //Test Win 87:73
+        movePoints -= Tools::popCount(RING4 & board.mypos);
+        
+        
+//        movePoints += Tools::popCount(RING1 & board.mypos) * 3;         //Test 8:12 Lost
+//        movePoints += Tools::popCount(RING2 & board.mypos);
+//        movePoints += Tools::popCount(RING4 & board.mypos) * -1;
+        
+        
 
     #ifdef eval_reachPoints
         int reachablePoints = 0;
