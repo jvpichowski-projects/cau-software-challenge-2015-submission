@@ -38,6 +38,7 @@ namespace Evaluation
 {
     typedef int (*ToEvaluate)(int playerId, Board board, bool qsearch);
     extern ToEvaluate evaluate;
+    extern bool ring1good;
     
     int evaluateNormal(int playerId, Board board, bool qsearch);
     int evaluateSetMoves(int playerId, Board board, bool qsearch);

@@ -1,8 +1,22 @@
 #include "main.h"
 #include "tactic.h"
+#include <sstream>  // Required for stringstreams
+#include <string> 
+
 
 bool isInitialized = false;
 bool sentMove = false;
+
+std::string intToString ( int number )
+{
+  std::ostringstream oss;
+
+  // Works just like cout
+  oss<< number;
+
+  // Return the underlying string
+  return oss.str();
+}
 
 void onPacket(char* msg){
     #ifdef DEBUG_OCEAN
@@ -238,6 +252,68 @@ int main(int argc, char** argv)
     {
         Ocean::GetFood();
     }
+    
+    int pointsoutside = Tools::popCount(RING1 & Globals::ones);
+    pointsoutside += Tools::popCount(RING1 & Globals::twos) * 2;
+    pointsoutside += Tools::popCount(RING1 & Globals::threes) * 3;
+    std::string stringRingGameData(intToString(pointsoutside));
+    stringRingGameData.append(",");
+    
+    pointsoutside = Tools::popCount(RING1 & Globals::threes);
+    stringRingGameData.append(intToString(pointsoutside));
+    stringRingGameData.append(",");
+    
+    pointsoutside = Tools::popCount(RING2 & Globals::ones);
+    pointsoutside += Tools::popCount(RING2 & Globals::twos) * 2;
+    pointsoutside += Tools::popCount(RING2 & Globals::threes) * 3;
+    stringRingGameData.append(intToString(pointsoutside));
+    stringRingGameData.append(",");
+    
+    pointsoutside = Tools::popCount(RING2 & Globals::threes);
+    stringRingGameData.append(intToString(pointsoutside));
+    stringRingGameData.append(",");
+    
+    pointsoutside = Tools::popCount(RING3 & Globals::ones);
+    pointsoutside += Tools::popCount(RING3 & Globals::twos) * 2;
+    pointsoutside += Tools::popCount(RING3 & Globals::threes) * 3;
+    stringRingGameData.append(intToString(pointsoutside));
+    stringRingGameData.append(",");
+    
+    pointsoutside = Tools::popCount(RING3 & Globals::threes);
+    stringRingGameData.append(intToString(pointsoutside));
+    stringRingGameData.append(",");
+    
+    pointsoutside = Tools::popCount(RING4 & Globals::ones);
+    pointsoutside += Tools::popCount(RING4 & Globals::twos) * 2;
+    pointsoutside += Tools::popCount(RING4 & Globals::threes) * 3;
+    stringRingGameData.append(intToString(pointsoutside));
+    stringRingGameData.append(",");
+    
+    pointsoutside = Tools::popCount(RING4 & Globals::threes);
+    stringRingGameData.append(intToString(pointsoutside));
+    stringRingGameData.append(",");
+    
+    if(Globals::_board.pointsdiff > 0)
+        stringRingGameData.append(",W,");
+    else if(Globals::_board.pointsdiff < 0)
+        stringRingGameData.append(",L,");
+    else if(Globals::_board.pointsdiff == 0)
+        stringRingGameData.append(",N,");
+    
+    stringRingGameData.append(intToString(Globals::_board.pointsdiff));
+    
+    std::cout << "\n\n\nStatistikzeile_Rings: " << stringRingGameData << "\n\n\n";
+    
+    
+    
+    std::string cmdToSave("echo \"");
+    cmdToSave.append(stringRingGameData);
+    cmdToSave.append("\" >> /home/jonas/NetBeansProjectsSC-15-04-24/sc/dist/Release/GNU-Linux-x86/ringtestlog.csv");
+    
+    const char* cmdToSaveCs = cmdToSave.c_str();
+    
+    system(cmdToSaveCs);
+    
     
     std::cout << std::endl << "Bilance: " << std::endl;
     std::cout << "CutOff: " << Globals::Log::globalCutOff << std::endl;

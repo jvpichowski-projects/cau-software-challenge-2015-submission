@@ -27,10 +27,27 @@ namespace Evaluation
     u_int8_t multpPoints = 3;
     u_int8_t multpMovepo = 1;
     
+    u_int8_t multpMovep1 = 1;
+    u_int8_t multpMovep2 = 2;
+    u_int8_t multpMovep3 = 4;
+    
+    bool ring1good = true;
+    
     u_int8_t multpFiAr = 2;
     
     int preEvaluate()
     {
+        //Globals::pointsRing1 = Tools::popCount(RING1 & Globals::threes);
+        
+//        if(Tools::popCount(RING1 & Globals::threes) < 5)
+//        {
+//            ring1good = false;
+//            std::cout << "\n\n====================================== no = ! !RING1\n\n";
+//        }
+//        else
+//        {
+//            std::cout << "\n\n============================================== RING1\n\n";
+//        }
         
         if(Globals::_board.movecount < 8)
         {
@@ -67,18 +84,31 @@ namespace Evaluation
             multpMovepo = 1;
             multpFiAr = 0;
         }
-        else if(Globals::_board.movecount >= 36)
+        else if(Globals::_board.movecount >= 38)
         {
             multpPoints = 3;
             multpMovepo = 1;
             multpFiAr = 1;
         }
+        else if(Globals::_board.movecount >= 12)
+        {
+            multpPoints = 2;
+            multpMovepo = 1;
+            
+            multpMovep1 = 1;
+            multpMovep2 = 2;
+            multpMovep3 = 4;
+        }
         else if(Globals::_board.movecount >= 8)
         {
             evaluate = &Evaluation::evaluateNormal;
             
-            multpPoints = 2;
+            multpPoints = 4;
             multpMovepo = 1;
+            
+            multpMovep1 = 0;
+            multpMovep2 = 0;
+            multpMovep3 = 2;
         }
         
         
@@ -108,9 +138,9 @@ namespace Evaluation
                 | Tools::genMoveField(penguinPos[3], board.used);
                 
         int movePoints = 0;
-        movePoints += Tools::popCount(moveFields & Globals::threes) * 4;
-        movePoints += Tools::popCount(moveFields & Globals::twos) * 2;
-        movePoints += Tools::popCount(moveFields & Globals::ones);
+        movePoints += Tools::popCount(moveFields & Globals::threes) * multpMovep3;
+        movePoints += Tools::popCount(moveFields & Globals::twos) * multpMovep2;
+        movePoints += Tools::popCount(moveFields & Globals::ones) * multpMovep1;
 
         movePoints += multpFiAr*Tools::popCount(Tools::genMoveField(penguinPos[0], board.used) & _fieldsAround[penguinPos[0]]);        
         movePoints += multpFiAr*Tools::popCount(Tools::genMoveField(penguinPos[1], board.used) & _fieldsAround[penguinPos[1]]);        
@@ -128,9 +158,9 @@ namespace Evaluation
                 | Tools::genMoveField(penguinPos[2], board.used)
                 | Tools::genMoveField(penguinPos[3], board.used);
 
-        movePoints -= Tools::popCount(moveFields & Globals::threes) * 4;
-        movePoints -= Tools::popCount(moveFields & Globals::twos) * 2;
-        movePoints -= Tools::popCount(moveFields & Globals::ones);
+        movePoints -= Tools::popCount(moveFields & Globals::threes) * multpMovep3;
+        movePoints -= Tools::popCount(moveFields & Globals::twos) * multpMovep2;
+        movePoints -= Tools::popCount(moveFields & Globals::ones) * multpMovep1;
 
         movePoints -= multpFiAr*Tools::popCount(Tools::genMoveField(penguinPos[0], board.used) & _fieldsAround[penguinPos[0]]);        
         movePoints -= multpFiAr*Tools::popCount(Tools::genMoveField(penguinPos[1], board.used) & _fieldsAround[penguinPos[1]]);        
@@ -166,8 +196,10 @@ namespace Evaluation
 //        movePoints += Tools::popCount(RING1 & board.mypos) * 3;         //Test 78:82Lost
 //        movePoints += Tools::popCount(RING4 & board.mypos) * -1;
         
-        movePoints += Tools::popCount(RING1 & board.mypos) * 1;         //Test Win 87:73
-        movePoints -= Tools::popCount(RING4 & board.mypos);
+        
+//        movePoints += Tools::popCount(RING1 & board.mypos);         //Test Win 87:73
+//        movePoints -= Tools::popCount(RING4 & board.mypos);
+        
         
         
 //        movePoints += Tools::popCount(RING1 & board.mypos) * 3;         //Test 8:12 Lost
@@ -364,9 +396,10 @@ namespace Evaluation
                 | Tools::genMoveField(penguinPos[3], board.used);
                 
         int movePoints = 0;
-        movePoints += Tools::popCount(moveFields & Globals::threes) * 4;
-        movePoints += Tools::popCount(moveFields & Globals::twos) * 2;
-        movePoints += Tools::popCount(moveFields & Globals::ones);
+//        movePoints += Tools::popCount((_fieldsAround[penguinPos[0]] & _fieldsAround[penguinPos[1]] & _fieldsAround[penguinPos[2]], _fieldsAround[penguinPos[3]]) & Globals::threes);
+        movePoints += Tools::popCount(moveFields & Globals::threes) * 2;
+        //movePoints += Tools::popCount(moveFields & Globals::twos) * 1;
+        //movePoints += Tools::popCount(moveFields & Globals::ones);
 
         delete[] penguinPos;
 
@@ -379,9 +412,10 @@ namespace Evaluation
                 | Tools::genMoveField(penguinPos[2], board.used)
                 | Tools::genMoveField(penguinPos[3], board.used);
 
-        movePoints -= Tools::popCount(moveFields & Globals::threes) * 4;
-        movePoints -= Tools::popCount(moveFields & Globals::twos) * 2;
-        movePoints -= Tools::popCount(moveFields & Globals::ones);
+//        movePoints -= Tools::popCount((_fieldsAround[penguinPos[0]] & _fieldsAround[penguinPos[1]] & _fieldsAround[penguinPos[2]], _fieldsAround[penguinPos[3]]) & Globals::threes);
+        movePoints -= Tools::popCount(moveFields & Globals::threes) * 2;
+        //movePoints -= Tools::popCount(moveFields & Globals::twos) * 1;
+        //movePoints -= Tools::popCount(moveFields & Globals::ones);
 
         delete[] penguinPos;
         
