@@ -114,10 +114,10 @@ void onMoveReq()
 //        Tools::printField(Globals::threes);
 //        
 //        exit(0);
-        
-        std::cout << "PSearch: " << startPSearch(3, ID_WE, Globals::_board).value << std::endl;
+        move = startPSearch(10, ID_WE, Globals::_board);
+        //std::cout << "PSearchTo: " << (u_int64_t)startPSearch(5, ID_WE, Globals::_board).to << std::endl;
     
-        std::cout << "IT: " << iterativeDeepening(Globals::_board, ID_WE, 60, 0, &move) << std::endl;//change first guess to 100?
+        //std::cout << "IT: " << iterativeDeepening(Globals::_board, ID_WE, 60, 0, &move) << std::endl;//change first guess to 100?
         std::cout << "MT: " << (u_int64_t)move.from << "->" << (u_int64_t)move.to << std::endl;
         std::cout << "Used before: " << Globals::_board.used << std::endl;
 //    }
@@ -210,26 +210,23 @@ int main(int argc, char** argv)
     
 //    return 0;
     
-    Globals::threes = 578994071121432588;
-    Globals::twos = 578994071121432588;
-    Globals::ones = 578994071121432588;
-    Globals::_board = Board();
-    
-    Move move;
-    Evaluation::preEvaluate();
-    
-    Move psearchM = startPSearch(1, ID_WE, Globals::_board);
-    std::cout << "PS: " << psearchM.value << std::endl;//change first guess to 100?
-    std::cout << "PM: " << (u_int64_t)psearchM.from << "->" << (u_int64_t)psearchM.to << std::endl;
-
-    clock_gettime(Globals::clockTime, &Globals::moveReqTime); 
-    std::cout << "IT: " << iterativeDeepening(Globals::_board, ID_WE, 1, 0, &move) << std::endl;//change first guess to 100?
-    std::cout << "MT: " << (u_int64_t)move.from << "->" << (u_int64_t)move.to << std::endl;
-        
-    exit(0);
-    
-    
-    
+//    Globals::threes = 578994071121432588;
+//    Globals::twos = 578994071121432588;
+//    Globals::ones = 578994071121432588;
+//    Globals::_board = Board();
+//    
+//    Move move;
+//    Evaluation::preEvaluate();
+//    clock_gettime(Globals::clockTime, &Globals::moveReqTime); 
+//    
+//    Move psearchM = startPSearch(5, ID_WE, Globals::_board);
+//    std::cout << "PS: " << psearchM.value << std::endl;//change first guess to 100?
+//    std::cout << "PM: " << (u_int64_t)psearchM.from << "->" << (u_int64_t)psearchM.to << std::endl;
+//
+//    std::cout << "IT: " << iterativeDeepening(Globals::_board, ID_WE, 5, 0, &move) << std::endl;//change first guess to 100?
+//    std::cout << "MT: " << (u_int64_t)move.from << "->" << (u_int64_t)move.to << std::endl;
+//        
+//    exit(0);
     
     Globals::tt_enabled = true;
     

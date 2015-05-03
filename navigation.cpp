@@ -187,7 +187,7 @@ struct Node{
     Move *moves;
     
     Board board;
-    int best;
+    int best = MIN_AB_VALUE;
     //int alpha = -1000;
     //int beta = 1000;
 };
@@ -196,9 +196,9 @@ struct Node{
 //int nextMoveNumber[] = {0,0,0,0,0,0,0,0,0,0,0};//for 10
 int *nextMoveNumber;
 
-int pSearch(int deep, int player, Node *node, bool *changed, bool *isLast, Move *resultMove) {
+int pSearch(int deep, int player, Node *node, bool *changed, bool *isLast, Move *resultMove, int *bestValue, bool *timeIsUp) {
     Board board = node->board;
-    if(deep <= 0){
+    if(deep <= 0  || board.movecount >= 60){
         ++evalCount;
         *changed = true;
         if(nextMoveNumber[deep] >= node->moveCount){
@@ -207,6 +207,14 @@ int pSearch(int deep, int player, Node *node, bool *changed, bool *isLast, Move 
         if(nextMoveNumber[deep] != 0){
             *isLast = false;
         }
+        
+        struct timespec nowTime;
+        clock_gettime(Globals::clockTime, &nowTime);
+
+        if((((nowTime.tv_sec * 1000000000 + nowTime.tv_nsec) - (Globals::moveReqTime.tv_sec * 1000000000 + Globals::moveReqTime.tv_nsec)) / 1000000) > (TIME_FOR_CALC)){
+            *timeIsUp = true;
+        }
+        
         return Evaluation::evaluate(player, board, true);//(player == ID_WE) ? board.pointsdiff : -board.pointsdiff;
     }
     
@@ -230,13 +238,14 @@ int pSearch(int deep, int player, Node *node, bool *changed, bool *isLast, Move 
         node->childs[nextMoveNumber[deep]] = childNode;
         ++node->childsCount;
     }
-    
-    int value = -pSearch(deep-1, !player, &node->childs[nextMoveNumber[deep]], changed, isLast, 0);
+//    std::cout << "nextMn" << nextMoveNumber[deep] << std::endl;
+    int value = -pSearch(deep-1, !player, &node->childs[nextMoveNumber[deep]], changed, isLast, 0, 0, timeIsUp);
     if(&changed){
         if(value > node->best){
             node->best = value;
             if(resultMove){
                 *resultMove = node->moves[nextMoveNumber[deep]]; 
+                *bestValue = value;
             }
             *changed = true;
         }
@@ -261,19 +270,22 @@ int pSearch(int deep, int player, Node *node, bool *changed, bool *isLast, Move 
 }
 
 Move startPSearch(int maxDeep, int player, Board board){
-    nextMoveNumber = new int[maxDeep+1];
+    nextMoveNumber = new int[maxDeep+1];//why??????
+    for(int i = 0; i < maxDeep+1; ++i){
+        nextMoveNumber[i] = 0;
+    }
     Move rMove;
     Node rootNode = Node();
-    rootNode.moves = BoardTools::generatePossibleMoves(board, !player, &rootNode.moveCount);
-    if(rootNode.moveCount > 3){
-        rootNode.moveCount = 3;
-    }
-    rootNode.childs = new Node[rootNode.moveCount];
     rootNode.board = board;
+    rootNode.moves = BoardTools::generatePossibleMoves(board, !player, &rootNode.moveCount);
+    rootNode.childs = new Node[rootNode.moveCount];
     bool isLast = false;//maby dangerous if only one move is available
+    int bestValue;
+    bool timeIsUp = false;
+    
     while(true){
         bool changed = false;
-        int value = pSearch(maxDeep, player, &rootNode, &changed, &isLast, &rMove);
+        int value = pSearch(maxDeep, player, &rootNode, &changed, &isLast, &rMove, &bestValue, &timeIsUp);
         if(nextMoveNumber[maxDeep] >= rootNode.moveCount){//3 = count of moves for that board
             ++nextMoveNumber[maxDeep-1];//next deep
             nextMoveNumber[maxDeep] = 0;
@@ -282,12 +294,13 @@ Move startPSearch(int maxDeep, int player, Board board){
             //wasn't resetted -> wasn't last
             isLast = false;
         }
-        if(isLast){
+        if(isLast || timeIsUp){
             break;
         }
         ++nextMoveNumber[maxDeep];
         isLast = true;
     }
+    std::cout << "PSearch value: " << bestValue << std::endl;
     
     return rMove;
 }
