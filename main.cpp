@@ -218,7 +218,9 @@ int main(int argc, char** argv)
     Move move;
     Evaluation::preEvaluate();
     
-    //std::cout << "PSearch: " << startPSearch(3, ID_WE, Globals::_board).value << std::endl;
+    Move psearchM = startPSearch(1, ID_WE, Globals::_board);
+    std::cout << "PS: " << psearchM.value << std::endl;//change first guess to 100?
+    std::cout << "PM: " << (u_int64_t)psearchM.from << "->" << (u_int64_t)psearchM.to << std::endl;
 
     clock_gettime(Globals::clockTime, &Globals::moveReqTime); 
     std::cout << "IT: " << iterativeDeepening(Globals::_board, ID_WE, 1, 0, &move) << std::endl;//change first guess to 100?
