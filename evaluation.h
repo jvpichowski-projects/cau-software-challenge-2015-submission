@@ -24,6 +24,11 @@
 #define Q4_best 0x60C0000000000ULL
 #define Q4_lim 0x708101000000000ULL
 
+#define RING1 0xFF830306060C0FFULL
+#define RING2 0x7C84890913F00ULL
+#define RING3 0x785090E0000ULL
+#define RING4 0x206000000ULL
+
 #include "types.h"
 #include "constants.h"
 #include "globals.h"
@@ -33,6 +38,7 @@ namespace Evaluation
 {
     typedef int (*ToEvaluate)(int playerId, Board board, bool qsearch);
     extern ToEvaluate evaluate;
+    extern bool ring1good;
     
     int evaluateNormal(int playerId, Board board, bool qsearch);
     int evaluateSetMoves(int playerId, Board board, bool qsearch);

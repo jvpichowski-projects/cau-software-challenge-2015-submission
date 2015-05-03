@@ -14,6 +14,8 @@
 #include "config.h"
 
 namespace Globals{
+    extern int pointsRing1;
+    
     extern u_int64_t ones;
     extern u_int64_t twos;
     extern u_int64_t threes;

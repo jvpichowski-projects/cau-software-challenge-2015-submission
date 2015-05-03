@@ -1,6 +1,8 @@
 #include "globals.h"
 
 namespace Globals{
+    int pointsRing1;
+    
     u_int64_t ones;
     u_int64_t twos;
     u_int64_t threes;
