@@ -100,6 +100,21 @@ void onMoveReq()
 //    {
         Evaluation::preEvaluate();
         
+//        std::cout << "used: " << Globals::_board.used << std::endl;
+//        Tools::printField(Globals::_board.used);
+//        std::cout << "mypos: " << Globals::_board.mypos << std::endl;
+//        Tools::printField(Globals::_board.mypos);
+//        std::cout << "oppos: " << Globals::_board.oppos << std::endl;
+//        Tools::printField(Globals::_board.oppos);
+//        std::cout << "threes: " << Globals::threes << std::endl;
+//        Tools::printField(Globals::threes);
+//        std::cout << "twos: " << Globals::threes << std::endl;
+//        Tools::printField(Globals::threes);
+//        std::cout << "ones: " << Globals::threes << std::endl;
+//        Tools::printField(Globals::threes);
+//        
+//        exit(0);
+        
         std::cout << "PSearch: " << startPSearch(3, ID_WE, Globals::_board).value << std::endl;
     
         std::cout << "IT: " << iterativeDeepening(Globals::_board, ID_WE, 60, 0, &move) << std::endl;//change first guess to 100?
@@ -195,6 +210,25 @@ int main(int argc, char** argv)
     
 //    return 0;
     
+    Globals::threes = 578994071121432588;
+    Globals::twos = 578994071121432588;
+    Globals::ones = 578994071121432588;
+    Globals::_board = Board();
+    
+    Move move;
+    Evaluation::preEvaluate();
+    
+    //std::cout << "PSearch: " << startPSearch(3, ID_WE, Globals::_board).value << std::endl;
+
+    clock_gettime(Globals::clockTime, &Globals::moveReqTime); 
+    std::cout << "IT: " << iterativeDeepening(Globals::_board, ID_WE, 1, 0, &move) << std::endl;//change first guess to 100?
+    std::cout << "MT: " << (u_int64_t)move.from << "->" << (u_int64_t)move.to << std::endl;
+        
+    exit(0);
+    
+    
+    
+    
     Globals::tt_enabled = true;
     
     std::cout << "Build: " << build << std::endl << std::endl;
@@ -254,6 +288,9 @@ int main(int argc, char** argv)
     {
         Ocean::GetFood();
     }
+    
+    
+    
     
     int pointsoutside = Tools::popCount(RING1 & Globals::ones);
     pointsoutside += Tools::popCount(RING1 & Globals::twos) * 2;
