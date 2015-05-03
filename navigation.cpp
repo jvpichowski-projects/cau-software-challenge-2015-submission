@@ -265,6 +265,9 @@ Move startPSearch(int maxDeep, int player, Board board){
     Move rMove;
     Node rootNode = Node();
     rootNode.moves = BoardTools::generatePossibleMoves(board, !player, &rootNode.moveCount);
+    if(rootNode.moveCount > 3){
+        rootNode.moveCount = 3;
+    }
     rootNode.childs = new Node[rootNode.moveCount];
     rootNode.board = board;
     bool isLast = false;//maby dangerous if only one move is available

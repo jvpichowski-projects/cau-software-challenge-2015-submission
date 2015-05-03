@@ -85,6 +85,8 @@ void onMoveReq()
 //    if(preEvalRes == 0)
 //    {
         Evaluation::preEvaluate();
+        
+        std::cout << "PSearch: " << startPSearch(3, ID_WE, Globals::_board).value << std::endl;
     
         std::cout << "IT: " << iterativeDeepening(Globals::_board, ID_WE, 60, 0, &move) << std::endl;//change first guess to 100?
         std::cout << "MT: " << (u_int64_t)move.from << "->" << (u_int64_t)move.to << std::endl;
