@@ -187,7 +187,12 @@ namespace BoardTools{
             *length = Tools::popCount(moveFields[0])
                 + Tools::popCount(moveFields[1])
                 + Tools::popCount(moveFields[2])
-                + Tools::popCount(moveFields[3]) + 1;
+                + Tools::popCount(moveFields[3]);
+            bool nullMove = false;
+            if(*length <= 0){
+                *length = 1;
+                nullMove = true;
+            }
             Move* moves = new Move[*length];
             //std::cout << "Length: " << *length << std::endl;
 
@@ -242,15 +247,17 @@ namespace BoardTools{
                 delete[] onesPos;
                 
             }
-            Move m = Move();
-            m.from = INVALID_POS;
-            m.to = INVALID_POS;
+            if(nullMove){
+                Move m = Move();
+                m.from = INVALID_POS;
+                m.to = INVALID_POS;
 #ifdef ordered_runmoves
-                    insertMove(moves, m, state, playerId, *length);
+                insertMove(moves, m, state, playerId, *length);
 #else
                     moves[++c] = m;
 #endif
-
+            }
+            
             delete[] moveFields, penguinPos;
             
 #ifdef DEBUG_MOVE_ORDERING

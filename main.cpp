@@ -114,10 +114,10 @@ void onMoveReq()
 //        Tools::printField(Globals::threes);
 //        
 //        exit(0);
-        move = startPSearch(10, ID_WE, Globals::_board);
+        //move = startPSearch(15, ID_WE, Globals::_board);
         //std::cout << "PSearchTo: " << (u_int64_t)startPSearch(5, ID_WE, Globals::_board).to << std::endl;
     
-        //std::cout << "IT: " << iterativeDeepening(Globals::_board, ID_WE, 60, 0, &move) << std::endl;//change first guess to 100?
+        std::cout << "IT: " << iterativeDeepening(Globals::_board, ID_WE, 60, 0, &move) << std::endl;//change first guess to 100?
         std::cout << "MT: " << (u_int64_t)move.from << "->" << (u_int64_t)move.to << std::endl;
         std::cout << "Used before: " << Globals::_board.used << std::endl;
 //    }
