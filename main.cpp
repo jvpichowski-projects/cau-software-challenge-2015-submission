@@ -201,14 +201,84 @@ void onLastMove(Move move)
 
     std::cout << "\n\n\n%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% (O) zug nr:  " << Globals::_board.movecount << "\n";
 }
+int64_t a_fieldsAround[60] = {
+            /* |  00 */0x182ULL,             /* |  01 */0x305ULL,             /* |  02 */0x60AULL,             /* |  03 */0xC14ULL,
+            /* |  04 */0x1828ULL,            /* |  05 */0x3050ULL,            /* |  06 */0x6020ULL,            /* |  07 */0x8101ULL,
+            /* |  08 */0x18283ULL,           /* |  09 */0x30506ULL,           /* |  10 */0x60A0CULL,           /* |  11 */0xC1418ULL,
+            /* |  12 */0x182830ULL,          /* |  13 */0x305060ULL,          /* |  14 */0x202040ULL,          /* |  15 */0xC10180ULL,
+            /* |  16 */0x1828300ULL,         /* |  17 */0x3050600ULL,         /* |  18 */0x60A0C00ULL,         /* |  19 */0xC141800ULL,
+            /* |  20 */0x18283000ULL,        /* |  21 */0x30106000ULL,        /* |  22 */0x40808000ULL,        /* |  23 */0xC1418000ULL,
+            /* |  24 */0x182830000ULL,       /* |  25 */0x305060000ULL,       /* |  26 */0x60A0C0000ULL,       /* |  27 */0xC14180000ULL,
+            /* |  28 */0x1828300000ULL,      /* |  29 */0x1010200000ULL,      /* |  30 */0x6080C00000ULL,      /* |  31 */0xC141800000ULL,
+            /* |  32 */0x18283000000ULL,     /* |  33 */0x30506000000ULL,     /* |  34 */0x60A0C000000ULL,     /* |  35 */0xC1418000000ULL,
+            /* |  36 */0x180830000000ULL,    /* |  37 */0x204040000000ULL,    /* |  38 */0x60A0C0000000ULL,    /* |  39 */0xC14180000000ULL,
+            /* |  40 */0x1828300000000ULL,   /* |  41 */0x3050600000000ULL,   /* |  42 */0x60A0C00000000ULL,   /* |  43 */0xC141800000000ULL,
+            /* |  44 */0x8081000000000ULL,   /* |  45 */0x30406000000000ULL,  /* |  46 */0x60A0C000000000ULL,  /* |  47 */0xC1418000000000ULL,
+            /* |  48 */0x182830000000000ULL, /* |  49 */0x305060000000000ULL, /* |  50 */0x60A0C0000000000ULL, /* |  51 */0xC04180000000000ULL,
+            /* |  52 */0x20200000000000ULL,  /* |  53 */0x50600000000000ULL,  /* |  54 */0xA0C00000000000ULL,  /* |  55 */0x141800000000000ULL,
+            /* |  56 */0x283000000000000ULL, /* |  57 */0x506000000000000ULL, /* |  58 */0xA0C000000000000ULL, /* |  59 */0x408000000000000ULL   };
 
+struct foundNode{
+    u_int64_t field;
+    foundNode *nextNode;    
+};
 int main(int argc, char** argv)
 {          
-//    Tools::printField(468356338187396469ULL);
+    u_int64_t testField = 244892066650788096ULL;
+    foundNode *founds = new foundNode();
+    founds->field = 0;
+    founds->nextNode = 0;
+    for(int i = 0; i < 60; ++i){
+        if(testField & (1ULL << i)){
+            std::cout << "Found set position" << std::endl;
+            u_int64_t around = a_fieldsAround[i];
+            foundNode *nextFound = founds;
+            u_int64_t *firstfoundfield = 0;
+            while(nextFound != 0){
+                foundNode *prev = nextFound;
+                nextFound = nextFound->nextNode;
+                if(nextFound == 0){
+                    std::cout << "Reached end of foundlist" << std::endl;
+                    nextFound = prev;
+                    break;
+                }
+                if(nextFound->field & around){
+                    std::cout << "Found fitting field" << std::endl;
+                    nextFound->field |= (1ULL << i);
+                    if(firstfoundfield != 0){
+                        std::cout << "Connecting fields" << std::endl;
+                        *firstfoundfield |= nextFound->field;
+                        prev->nextNode = nextFound->nextNode;
+                        foundNode *toDelete = nextFound;
+                        nextFound = nextFound->nextNode;
+                        delete toDelete;
+                    }else{
+                        firstfoundfield = &nextFound->field;
+                    }
+                }
+            }            
+            if(firstfoundfield == 0){
+                std::cout << "created new node" << std::endl;
+                foundNode *newFound = new foundNode();
+                newFound->field = (1ULL << i);
+                newFound->nextNode = 0;
+                nextFound->nextNode = newFound;
+            }
+        }
+    }
+    while(founds != 0){
+        Tools::printField(founds->field);
+        foundNode *prev = founds;
+        founds = founds->nextNode;
+        delete prev;
+    }
+    
+    
+    Tools::printField(testField);
 //    Tools::printField(Tools::genMoveField(33, 468356338187396469ULL));
 //    Tools::printField(Tools::genMoveField(33, 0));
     
-//    return 0;
+    return 0;
     
 //    Globals::threes = 578994071121432588;
 //    Globals::twos = 578994071121432588;
