@@ -267,6 +267,7 @@ int main(int argc, char** argv)
         }
     }
     while(founds != 0){
+        //first field is emty as defined
         Tools::printField(founds->field);
         foundNode *prev = founds;
         founds = founds->nextNode;
