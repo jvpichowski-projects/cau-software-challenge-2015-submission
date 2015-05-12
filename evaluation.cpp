@@ -111,10 +111,38 @@ namespace Evaluation
             }
             return points;
         }
+        
+        int b = 0;
+        int *penguinPosWe = Tools::fastBitScan(board.mypos, &b);
+        b = 0;
+        int *penguinPosOp = Tools::fastBitScan(board.oppos, &b);
+        
+        u_int64_t reachFieldWe = 0;
+        u_int64_t reachFieldOp = 0;
+        Tools::getReachableFields(board.used, 
+                penguinPosWe[0], penguinPosWe[1], penguinPosWe[2], penguinPosWe[3], 
+                penguinPosOp[0], penguinPosOp[1], penguinPosOp[2], penguinPosOp[3], 
+                &reachFieldWe, &reachFieldOp);
+        
+        delete[] penguinPosWe;
+        delete[] penguinPosOp;
+                
+        int reachPoints = 0;
+        reachPoints += Tools::popCount(reachFieldWe & Globals::threes) * 3;
+        reachPoints += Tools::popCount(reachFieldWe & Globals::twos) * 2;
+        reachPoints += Tools::popCount(reachFieldWe & Globals::ones) * 1;
+        reachPoints -= Tools::popCount(reachFieldOp & Globals::threes) * 3;
+        reachPoints -= Tools::popCount(reachFieldOp & Globals::twos) * 2;
+        reachPoints -= Tools::popCount(reachFieldOp & Globals::ones) * 1;
+        
+        if(playerId != ID_WE){
+            return -points-reachPoints;
+        }
+        return points+reachPoints;
 
         int l = 0;
         int *penguinPos = Tools::fastBitScan(board.mypos, &l);
-
+        
         //wenn sich zwei linien kruezen wird das kreuz-feld nur einmal gerechnet
         u_int64_t moveFields = Tools::genMoveField(penguinPos[0], board.used) 
                 | Tools::genMoveField(penguinPos[1], board.used) 
