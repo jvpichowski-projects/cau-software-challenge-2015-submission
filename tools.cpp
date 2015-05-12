@@ -173,6 +173,81 @@ namespace Tools
         
     }
     
+    struct foundNode{
+        u_int64_t field;
+        foundNode *nextNode;    
+    };
+    
+    void getReachableFields(u_int64_t field, 
+            int posa1, int posa2, int posa3, int posa4,  
+            int posb1, int posb2, int posb3, int posb4, 
+            u_int64_t *resulta, u_int64_t *resultb){
+        
+        u_int64_t arroundPosA = _fieldsAround[posa1] | _fieldsAround[posa2] | _fieldsAround[posa3] | _fieldsAround[posa4];
+        u_int64_t arroundPosB = _fieldsAround[posb1] | _fieldsAround[posb2] | _fieldsAround[posb3] | _fieldsAround[posb4];
+        
+        foundNode *founds = new foundNode();
+        founds->field = 0;
+        founds->nextNode = 0;
+        for(int i = 0; i < 60; ++i){
+            if(field & (1ULL << i)){
+                //std::cout << "Found set position" << std::endl;
+                u_int64_t around = _fieldsAround[i];
+                foundNode *nextFound = founds;
+                u_int64_t *firstfoundfield = 0;
+                while(nextFound != 0){
+                    foundNode *prev = nextFound;
+                    nextFound = nextFound->nextNode;
+                    if(nextFound == 0){
+                        //std::cout << "Reached end of foundlist" << std::endl;
+                        nextFound = prev;
+                        break;
+                    }
+                    if(nextFound->field & around){
+                        //std::cout << "Found fitting field" << std::endl;
+                        nextFound->field |= (1ULL << i);
+                        if(firstfoundfield != 0){
+                            //std::cout << "Connecting fields" << std::endl;
+                            *firstfoundfield |= nextFound->field;
+                            prev->nextNode = nextFound->nextNode;
+                            foundNode *toDelete = nextFound;
+                            nextFound = nextFound->nextNode;
+                            delete toDelete;
+                        }else{
+                            firstfoundfield = &nextFound->field;
+                        }
+                    }
+                }            
+                if(firstfoundfield == 0){
+                    //std::cout << "created new node" << std::endl;
+                    foundNode *newFound = new foundNode();
+                    newFound->field = (1ULL << i);
+                    newFound->nextNode = 0;
+                    nextFound->nextNode = newFound;
+                }
+            }
+        }
+        
+        //first field is emty as defined
+        foundNode *prev = founds;
+        founds = founds->nextNode;
+        delete prev;
+        
+        while(founds != 0){
+            if(arroundPosA & founds->field){
+                *resulta |= founds->field;
+            }
+            if(arroundPosB & founds->field){
+                *resultb |= founds->field;
+            }
+            foundNode *prev = founds;
+            founds = founds->nextNode;
+            delete prev;
+        }
+        
+        
+    }
+    
 //    u_int64_t getMoveField(int pos, u_int64_t used){
 //        
 //        //------------------------------top left to down right------------------
