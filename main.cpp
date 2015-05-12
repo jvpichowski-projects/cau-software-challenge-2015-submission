@@ -203,20 +203,7 @@ void onLastMove(Move move)
 }
 
 int main(int argc, char** argv)
-{         
-    u_int64_t testField = 244892066650788096ULL;
-    u_int64_t resultA = 0;
-    u_int64_t resultB = 0;
-    Tools::getReachableFields(testField,
-            0, 4, 9, 13,
-            1, 24, 34, 55, 
-            &resultA, &resultB);
-    
-    Tools::printField(resultA);
-    Tools::printField(resultB);
-    
-    return 0;
-    
+{    
 //    Globals::threes = 578994071121432588;
 //    Globals::twos = 578994071121432588;
 //    Globals::ones = 578994071121432588;
