@@ -30,7 +30,7 @@
 #define LOWERBOUND 1
 #define UPPERBOUND 2
 
-int64_t _fieldsAround[60] = {
+const int64_t _fieldsAround[60] = {
             /* |  00 */0x182ULL,             /* |  01 */0x305ULL,             /* |  02 */0x60AULL,             /* |  03 */0xC14ULL,
             /* |  04 */0x1828ULL,            /* |  05 */0x3050ULL,            /* |  06 */0x6020ULL,            /* |  07 */0x8101ULL,
             /* |  08 */0x18283ULL,           /* |  09 */0x30506ULL,           /* |  10 */0x60A0CULL,           /* |  11 */0xC1418ULL,

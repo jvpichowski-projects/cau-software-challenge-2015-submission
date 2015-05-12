@@ -40,6 +40,11 @@ namespace Tools
     int* bitScan (u_int64_t x, int *length);
     int* fastBitScan (u_int64_t x, int *length);
     
+    void getReachableFields(u_int64_t field, 
+            int posa1, int posa2, int posa3, int posa4,  
+            int posb1, int posb2, int posb3, int posb4, 
+            u_int64_t *resulta, u_int64_t *resultb);
+    
 //    int calcBitsSet(u_int64_t value);
 //    int* getBitsSet(u_int64_t value);
 //    int countBitsSet(u_int64_t value);
