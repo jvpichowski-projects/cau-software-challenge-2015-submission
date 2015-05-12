@@ -223,64 +223,7 @@ struct foundNode{
     foundNode *nextNode;    
 };
 int main(int argc, char** argv)
-{          
-    u_int64_t testField = 244892066650788096ULL;
-    foundNode *founds = new foundNode();
-    founds->field = 0;
-    founds->nextNode = 0;
-    for(int i = 0; i < 60; ++i){
-        if(testField & (1ULL << i)){
-            std::cout << "Found set position" << std::endl;
-            u_int64_t around = a_fieldsAround[i];
-            foundNode *nextFound = founds;
-            u_int64_t *firstfoundfield = 0;
-            while(nextFound != 0){
-                foundNode *prev = nextFound;
-                nextFound = nextFound->nextNode;
-                if(nextFound == 0){
-                    std::cout << "Reached end of foundlist" << std::endl;
-                    nextFound = prev;
-                    break;
-                }
-                if(nextFound->field & around){
-                    std::cout << "Found fitting field" << std::endl;
-                    nextFound->field |= (1ULL << i);
-                    if(firstfoundfield != 0){
-                        std::cout << "Connecting fields" << std::endl;
-                        *firstfoundfield |= nextFound->field;
-                        prev->nextNode = nextFound->nextNode;
-                        foundNode *toDelete = nextFound;
-                        nextFound = nextFound->nextNode;
-                        delete toDelete;
-                    }else{
-                        firstfoundfield = &nextFound->field;
-                    }
-                }
-            }            
-            if(firstfoundfield == 0){
-                std::cout << "created new node" << std::endl;
-                foundNode *newFound = new foundNode();
-                newFound->field = (1ULL << i);
-                newFound->nextNode = 0;
-                nextFound->nextNode = newFound;
-            }
-        }
-    }
-    while(founds != 0){
-        //first field is emty as defined
-        Tools::printField(founds->field);
-        foundNode *prev = founds;
-        founds = founds->nextNode;
-        delete prev;
-    }
-    
-    
-    Tools::printField(testField);
-//    Tools::printField(Tools::genMoveField(33, 468356338187396469ULL));
-//    Tools::printField(Tools::genMoveField(33, 0));
-    
-    return 0;
-    
+{         
 //    Globals::threes = 578994071121432588;
 //    Globals::twos = 578994071121432588;
 //    Globals::ones = 578994071121432588;
