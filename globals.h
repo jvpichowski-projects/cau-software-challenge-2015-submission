@@ -14,6 +14,11 @@
 #include "config.h"
 
 namespace Globals{
+    namespace Config{
+        extern int points;
+        extern int reachPoints;
+    }
+    
     extern int pointsRing1;
     
     extern u_int64_t ones;

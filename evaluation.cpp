@@ -136,9 +136,13 @@ namespace Evaluation
         reachPoints -= Tools::popCount(reachFieldOp & Globals::ones) * 1;
         
         if(playerId != ID_WE){
-            return -points-reachPoints;
+            return -points*Globals::Config::points-reachPoints*Globals::Config::reachPoints;
         }
-        return points+reachPoints;
+        return points*Globals::Config::points+reachPoints*Globals::Config::reachPoints;
+        
+        
+//------------------------------------------------------------------------------
+        
 
         int l = 0;
         int *penguinPos = Tools::fastBitScan(board.mypos, &l);

@@ -1,6 +1,12 @@
 #include "globals.h"
 
 namespace Globals{
+    
+    namespace Config{
+        int points = 1;
+        int reachPoints = 1;
+    }
+    
     int pointsRing1;
     
     u_int64_t ones;

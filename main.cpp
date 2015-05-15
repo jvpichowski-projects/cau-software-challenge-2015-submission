@@ -251,6 +251,8 @@ int main(int argc, char** argv)
             send.append(argv[++i]);
             reservated = true;
         }
+        if(strcmp(argv[i], "--points") == 0)Globals::Config::points = argv[++i];
+        if(strcmp(argv[i], "--reachPoints") == 0)Globals::Config::reachPoints = argv[++i];
         
         if(strcmp(argv[i], "-h") == 0)host = argv[++i];
         if(strcmp(argv[i], "-p") == 0)port = argv[++i];
