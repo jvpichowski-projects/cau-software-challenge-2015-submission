@@ -117,9 +117,9 @@ namespace Evaluation
         }
         
         int b = 0;
-        int *penguinPosWe = Tools::fastBitScan(board.mypos, &b);
+        int *penguinPosWe = Tools::bitScan(board.mypos, &b);
         b = 0;
-        int *penguinPosOp = Tools::fastBitScan(board.oppos, &b);
+        int *penguinPosOp = Tools::bitScan(board.oppos, &b);
         
         
         int allLinePoints = 0;
@@ -154,10 +154,11 @@ namespace Evaluation
         
         u_int64_t reachFieldWe = 0;
         u_int64_t reachFieldOp = 0;
-        Tools::getReachableFields(board.used, 
-                penguinPosWe[0], penguinPosWe[1], penguinPosWe[2], penguinPosWe[3], 
-                penguinPosOp[0], penguinPosOp[1], penguinPosOp[2], penguinPosOp[3], 
-                &reachFieldWe, &reachFieldOp);
+        if(board.movecount >= 8)
+            Tools::getReachableFields(board.used, 
+                    penguinPosWe[0], penguinPosWe[1], penguinPosWe[2], penguinPosWe[3], 
+                    penguinPosOp[0], penguinPosOp[1], penguinPosOp[2], penguinPosOp[3], 
+                    &reachFieldWe, &reachFieldOp);
                 
         int reachPoints = 0;
         reachPoints += Tools::popCount(reachFieldWe & Globals::threes) * Globals::Config::reachPoints3;

@@ -183,6 +183,8 @@ namespace Tools
             int posb1, int posb2, int posb3, int posb4, 
             u_int64_t *resulta, u_int64_t *resultb){
         
+        
+        
         u_int64_t arroundPosA = _fieldsAround[posa1] | _fieldsAround[posa2] | _fieldsAround[posa3] | _fieldsAround[posa4];
         u_int64_t arroundPosB = _fieldsAround[posb1] | _fieldsAround[posb2] | _fieldsAround[posb3] | _fieldsAround[posb4];
         
