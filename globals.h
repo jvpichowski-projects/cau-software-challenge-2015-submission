@@ -16,7 +16,18 @@
 namespace Globals{
     namespace Config{
         extern int points;
-        extern int reachPoints;
+        
+        extern int reachPoints1;
+        extern int reachPoints2;
+        extern int reachPoints3;
+        
+        extern int singleLinePoint1;
+        extern int singleLinePoint2;
+        extern int singleLinePoint3;
+        
+        extern int allLinePoints1;
+        extern int allLinePoints2;
+        extern int allLinePoints3;
     }
     
     extern int pointsRing1;

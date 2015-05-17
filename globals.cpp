@@ -4,7 +4,20 @@ namespace Globals{
     
     namespace Config{
         int points = 1;
-        int reachPoints = 1;
+        
+        int reachPoints1 = 1;
+        int reachPoints2 = 1;
+        int reachPoints3 = 1;
+        
+        int singleLinePoint1 = 1;
+        int singleLinePoint2 = 1;
+        int singleLinePoint3 = 1;
+        
+        int allLinePoints1 = 1;
+        int allLinePoints2 = 1;
+        int allLinePoints3 = 1;
+        
+        
     }
     
     int pointsRing1;

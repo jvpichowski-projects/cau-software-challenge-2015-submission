@@ -242,7 +242,15 @@ int main(int argc, char** argv)
             reservated = true;
         }
         if(strcmp(argv[i], "--points") == 0)Globals::Config::points = atoi(argv[++i]);
-        if(strcmp(argv[i], "--reachPoints") == 0)Globals::Config::reachPoints = atoi(argv[++i]);
+        if(strcmp(argv[i], "--rp1") == 0)Globals::Config::reachPoints1 = atoi(argv[++i]);
+        if(strcmp(argv[i], "--rp2") == 0)Globals::Config::reachPoints2 = atoi(argv[++i]);
+        if(strcmp(argv[i], "--rp3") == 0)Globals::Config::reachPoints3 = atoi(argv[++i]);
+        if(strcmp(argv[i], "--slp1") == 0)Globals::Config::singleLinePoint1 = atoi(argv[++i]);
+        if(strcmp(argv[i], "--slp2") == 0)Globals::Config::singleLinePoint2 = atoi(argv[++i]);
+        if(strcmp(argv[i], "--slp3") == 0)Globals::Config::singleLinePoint3 = atoi(argv[++i]);
+        if(strcmp(argv[i], "--alp1") == 0)Globals::Config::allLinePoints1 = atoi(argv[++i]);
+        if(strcmp(argv[i], "--alp2") == 0)Globals::Config::allLinePoints2 = atoi(argv[++i]);
+        if(strcmp(argv[i], "--alp3") == 0)Globals::Config::allLinePoints3 = atoi(argv[++i]);
         
         if(strcmp(argv[i], "-h") == 0)host = argv[++i];
         if(strcmp(argv[i], "-p") == 0)port = argv[++i];
