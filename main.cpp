@@ -7,16 +7,6 @@
 bool isInitialized = false;
 bool sentMove = false;
 
-std::string intToString ( int number )
-{
-  std::ostringstream oss;
-
-  // Works just like cout
-  oss<< number;
-
-  // Return the underlying string
-  return oss.str();
-}
 
 void onPacket(char* msg){
     #ifdef DEBUG_OCEAN
@@ -251,8 +241,8 @@ int main(int argc, char** argv)
             send.append(argv[++i]);
             reservated = true;
         }
-        if(strcmp(argv[i], "--points") == 0)Globals::Config::points = argv[++i];
-        if(strcmp(argv[i], "--reachPoints") == 0)Globals::Config::reachPoints = argv[++i];
+        if(strcmp(argv[i], "--points") == 0)Globals::Config::points = atoi(argv[++i]);
+        if(strcmp(argv[i], "--reachPoints") == 0)Globals::Config::reachPoints = atoi(argv[++i]);
         
         if(strcmp(argv[i], "-h") == 0)host = argv[++i];
         if(strcmp(argv[i], "-p") == 0)port = argv[++i];
@@ -290,41 +280,41 @@ int main(int argc, char** argv)
     int pointsoutside = Tools::popCount(RING1 & Globals::ones);
     pointsoutside += Tools::popCount(RING1 & Globals::twos) * 2;
     pointsoutside += Tools::popCount(RING1 & Globals::threes) * 3;
-    std::string stringRingGameData(intToString(pointsoutside));
+    std::string stringRingGameData(std::to_string(pointsoutside));
     stringRingGameData.append(",");
     
     pointsoutside = Tools::popCount(RING1 & Globals::threes);
-    stringRingGameData.append(intToString(pointsoutside));
+    stringRingGameData.append(std::to_string(pointsoutside));
     stringRingGameData.append(",");
     
     pointsoutside = Tools::popCount(RING2 & Globals::ones);
     pointsoutside += Tools::popCount(RING2 & Globals::twos) * 2;
     pointsoutside += Tools::popCount(RING2 & Globals::threes) * 3;
-    stringRingGameData.append(intToString(pointsoutside));
+    stringRingGameData.append(std::to_string(pointsoutside));
     stringRingGameData.append(",");
     
     pointsoutside = Tools::popCount(RING2 & Globals::threes);
-    stringRingGameData.append(intToString(pointsoutside));
+    stringRingGameData.append(std::to_string(pointsoutside));
     stringRingGameData.append(",");
     
     pointsoutside = Tools::popCount(RING3 & Globals::ones);
     pointsoutside += Tools::popCount(RING3 & Globals::twos) * 2;
     pointsoutside += Tools::popCount(RING3 & Globals::threes) * 3;
-    stringRingGameData.append(intToString(pointsoutside));
+    stringRingGameData.append(std::to_string(pointsoutside));
     stringRingGameData.append(",");
     
     pointsoutside = Tools::popCount(RING3 & Globals::threes);
-    stringRingGameData.append(intToString(pointsoutside));
+    stringRingGameData.append(std::to_string(pointsoutside));
     stringRingGameData.append(",");
     
     pointsoutside = Tools::popCount(RING4 & Globals::ones);
     pointsoutside += Tools::popCount(RING4 & Globals::twos) * 2;
     pointsoutside += Tools::popCount(RING4 & Globals::threes) * 3;
-    stringRingGameData.append(intToString(pointsoutside));
+    stringRingGameData.append(std::to_string(pointsoutside));
     stringRingGameData.append(",");
     
     pointsoutside = Tools::popCount(RING4 & Globals::threes);
-    stringRingGameData.append(intToString(pointsoutside));
+    stringRingGameData.append(std::to_string(pointsoutside));
     stringRingGameData.append(",");
     
     if(Globals::_board.pointsdiff > 0)
@@ -334,7 +324,7 @@ int main(int argc, char** argv)
     else if(Globals::_board.pointsdiff == 0)
         stringRingGameData.append(",N,");
     
-    stringRingGameData.append(intToString(Globals::_board.pointsdiff));
+    stringRingGameData.append(std::to_string(Globals::_board.pointsdiff));
     
     std::cout << "\n\n\nStatistikzeile_Rings: " << stringRingGameData << "\n\n\n";
     

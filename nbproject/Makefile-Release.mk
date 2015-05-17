@@ -49,8 +49,8 @@ OBJECTFILES= \
 CFLAGS=
 
 # CC Compiler Flags
-CCFLAGS=
-CXXFLAGS=
+CCFLAGS=-pthread -std=c++11 -m32 -lrt
+CXXFLAGS=-pthread -std=c++11 -m32 -lrt
 
 # Fortran Compiler Flags
 FFLAGS=
@@ -67,7 +67,7 @@ LDLIBSOPTIONS=
 
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/sc: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
-	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/sc ${OBJECTFILES} ${LDLIBSOPTIONS}
+	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/sc ${OBJECTFILES} ${LDLIBSOPTIONS} -pthread -std=c++11 -m32 -lrt
 
 ${OBJECTDIR}/boardstate.o: boardstate.cpp 
 	${MKDIR} -p ${OBJECTDIR}
