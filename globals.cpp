@@ -3,20 +3,27 @@
 namespace Globals{
     
     namespace Config{
-        int points = 1;
+        int points = 4;
         
         int reachPoints1 = 1;
-        int reachPoints2 = 1;
-        int reachPoints3 = 1;
+        int reachPoints2 = 2;
+        int reachPoints3 = 4;
         
-        int singleLinePoint1 = 1;
-        int singleLinePoint2 = 1;
-        int singleLinePoint3 = 1;
+//        int singleLinePoint1 = 1;//5;
+//        int singleLinePoint2 = 2;//5*2;
+//        int singleLinePoint3 = 4;//5*3;
         
-        int allLinePoints1 = 1;
-        int allLinePoints2 = 1;
-        int allLinePoints3 = 1;
+        int allLinePoints1 = 1;//1;
+        int allLinePoints2 = 2;//1*2;
+        int allLinePoints3 = 4;//1*3;
         
+        int restrictedReachField1 = 1;
+        int restrictedReachField2 = 2;
+        int restrictedReachField3 = 4;
+        
+//        int allRestrictedReachField1 = 1;
+//        int allRestrictedReachField2 = 2;
+//        int allRestrictedReachField3 = 4;
         
     }
     
