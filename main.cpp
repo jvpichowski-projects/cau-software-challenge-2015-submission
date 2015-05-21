@@ -107,8 +107,150 @@ void onMoveReq()
         //move = startPSearch(15, ID_WE, Globals::_board);
         //std::cout << "PSearchTo: " << (u_int64_t)startPSearch(5, ID_WE, Globals::_board).to << std::endl;
     
+//        int b = 0;
+//        int *penguinPosWe = Tools::fastBitScan(Globals::_board.mypos, &b);
+//        b = 0;
+//        int *penguinPosOp = Tools::fastBitScan(Globals::_board.oppos, &b);
+//        
+//        //-------------------------------generate move fields-------------------
+//        
+//        //wenn sich zwei linien kruezen wird das kreuz-feld nur einmal gerechnet
+//        u_int64_t moveFieldsWe = Tools::genMoveField(penguinPosWe[0], Globals::_board.used) 
+//                | Tools::genMoveField(penguinPosWe[1], Globals::_board.used) 
+//                | Tools::genMoveField(penguinPosWe[2], Globals::_board.used)
+//                | Tools::genMoveField(penguinPosWe[3], Globals::_board.used);
+//        
+//        u_int64_t moveFieldsOp = Tools::genMoveField(penguinPosOp[0], Globals::_board.used) 
+//                | Tools::genMoveField(penguinPosOp[1], Globals::_board.used) 
+//                | Tools::genMoveField(penguinPosOp[2], Globals::_board.used)
+//                | Tools::genMoveField(penguinPosOp[3], Globals::_board.used);
+//        
+//        //count number of move fields
+//        int moveFieldCount = Tools::popCount(moveFieldsWe) - Tools::popCount(moveFieldsOp);
+//        int moveFieldPoints = 0;
+//        moveFieldPoints += Tools::popCount(moveFieldsWe & Globals::threes)  * 3;
+//        moveFieldPoints += Tools::popCount(moveFieldsWe & Globals::twos)    * 2;
+//        moveFieldPoints += Tools::popCount(moveFieldsWe & Globals::ones)    * 1;
+//        moveFieldPoints -= Tools::popCount(moveFieldsOp & Globals::threes)  * 3;
+//        moveFieldPoints -= Tools::popCount(moveFieldsOp & Globals::twos)    * 2;
+//        moveFieldPoints -= Tools::popCount(moveFieldsOp & Globals::ones)    * 1;
+//        
+//        
+//        int totalReachFieldCount = 0;
+//        int totalReachFieldPoints = 0;
+//        int restrictedReachFieldCount = 0;
+//        int restrictedReachFieldPoints = 0;
+//        int ringFieldCount = 0;
+//        int ringFieldPoints = 0;
+//        
+//        if(Globals::_board.movecount >= 8){
+//            
+//        //-------------------------------ring points----------------------------
+//            
+//            u_int64_t ringsWe = _fieldsAround[penguinPosWe[0]] | 
+//                    _fieldsAround[penguinPosWe[1]] | 
+//                    _fieldsAround[penguinPosWe[2]] | 
+//                    _fieldsAround[penguinPosWe[3]];
+//            ringsWe &= ~Globals::_board.used;
+//            
+//            u_int64_t ringsOp = _fieldsAround[penguinPosOp[0]] | 
+//                    _fieldsAround[penguinPosOp[1]] | 
+//                    _fieldsAround[penguinPosOp[2]] | 
+//                    _fieldsAround[penguinPosOp[3]];
+//            ringsOp &= ~Globals::_board.used;
+//            
+//            ringFieldCount = Tools::popCount(ringsWe) - Tools::popCount(ringsOp);
+//            
+//            ringFieldPoints += Tools::popCount(ringsWe & Globals::threes)  * 3;
+//            ringFieldPoints += Tools::popCount(ringsWe & Globals::twos)    * 2;
+//            ringFieldPoints += Tools::popCount(ringsWe & Globals::ones)    * 1;
+//            ringFieldPoints -= Tools::popCount(ringsOp & Globals::threes)  * 3;
+//            ringFieldPoints -= Tools::popCount(ringsOp & Globals::twos)    * 2;
+//            ringFieldPoints -= Tools::popCount(ringsOp & Globals::ones)    * 1;
+//            
+//        //-------------------------------total reach field points---------------
+//            
+//            u_int64_t totalReachFieldWe = 0;
+//            u_int64_t totalReachFieldOp = 0;
+//            Tools::getReachableFields((~Globals::_board.used) & ~FIT,
+//                    penguinPosWe[0], penguinPosWe[1], penguinPosWe[2], penguinPosWe[3], 
+//                    penguinPosOp[0], penguinPosOp[1], penguinPosOp[2], penguinPosOp[3], 
+//                    &totalReachFieldWe, &totalReachFieldOp);
+//            
+//            totalReachFieldCount = Tools::popCount(totalReachFieldWe) - Tools::popCount(totalReachFieldOp);
+//            
+//            totalReachFieldPoints += Tools::popCount(totalReachFieldWe & Globals::threes)  * 3;
+//            totalReachFieldPoints += Tools::popCount(totalReachFieldWe & Globals::twos)    * 2;
+//            totalReachFieldPoints += Tools::popCount(totalReachFieldWe & Globals::ones)    * 1;
+//            totalReachFieldPoints -= Tools::popCount(totalReachFieldOp & Globals::threes)  * 3;
+//            totalReachFieldPoints -= Tools::popCount(totalReachFieldOp & Globals::twos)    * 2;
+//            totalReachFieldPoints -= Tools::popCount(totalReachFieldOp & Globals::ones)    * 1;
+//            
+//        //-------------------------------restricted reach field points----------
+//            
+//            u_int64_t restrictedUsedForWe = Globals::_board.used | moveFieldsOp;
+//            u_int64_t restrictedUsedForOp = Globals::_board.used | moveFieldsWe;
+//            u_int64_t trash = 0;
+//            u_int64_t restrictedReachFieldWe = 0;
+//            u_int64_t restrictedReachFieldOp = 0;
+//            Tools::getReachableFields((~restrictedUsedForWe) & ~FIT,
+//                    penguinPosWe[0], penguinPosWe[1], penguinPosWe[2], penguinPosWe[3], 
+//                    penguinPosOp[0], penguinPosOp[1], penguinPosOp[2], penguinPosOp[3], 
+//                    &restrictedReachFieldWe, &trash);
+//            
+//            trash = 0;
+//            Tools::getReachableFields((~restrictedUsedForOp) & ~FIT,
+//                    penguinPosWe[0], penguinPosWe[1], penguinPosWe[2], penguinPosWe[3], 
+//                    penguinPosOp[0], penguinPosOp[1], penguinPosOp[2], penguinPosOp[3], 
+//                    &trash, &restrictedReachFieldOp);
+//            
+//            restrictedReachFieldCount = Tools::popCount(restrictedReachFieldWe) - Tools::popCount(restrictedReachFieldOp);
+//            
+//            restrictedReachFieldPoints += Tools::popCount(restrictedReachFieldWe & Globals::threes)  * 3;
+//            restrictedReachFieldPoints += Tools::popCount(restrictedReachFieldWe & Globals::twos)    * 2;
+//            restrictedReachFieldPoints += Tools::popCount(restrictedReachFieldWe & Globals::ones)    * 1;
+//            restrictedReachFieldPoints -= Tools::popCount(restrictedReachFieldOp & Globals::threes)  * 3;
+//            restrictedReachFieldPoints -= Tools::popCount(restrictedReachFieldOp & Globals::twos)    * 2;
+//            restrictedReachFieldPoints -= Tools::popCount(restrictedReachFieldOp & Globals::ones)    * 1;
+//            
+//            std::cout << "Pos We: " << std::endl;
+//            Tools::printField(Globals::_board.mypos);
+//            std::cout << "Restricted Used We: " << std::endl;
+//            Tools::printField(restrictedUsedForWe);
+//            std::cout << "Restricted Reach We: " << std::endl;
+//            Tools::printField(restrictedReachFieldWe);
+//            std::cout << "Pos Op: " << std::endl;
+//            Tools::printField(Globals::_board.oppos);
+//            std::cout << "Restricted Used Op: " << std::endl;
+//            Tools::printField(restrictedUsedForOp);
+//            std::cout << "Restricted Reach Op: " << std::endl;
+//            Tools::printField(restrictedReachFieldOp);
+//            
+//            
+//        }
+//        
+//        delete[] penguinPosWe;
+//        delete[] penguinPosOp;
+//        
+//        int result =  Globals::_board.pointsdiff * 6                                                //6
+//                    + moveFieldCount * 4 + moveFieldPoints * 1                  //4 1
+//                    + ringFieldCount * 4 + ringFieldPoints * 1                  //4 1
+//                    + totalReachFieldCount * 0 + totalReachFieldPoints * 0
+//                    + restrictedReachFieldCount * 0 + restrictedReachFieldPoints * 0;
+//        
+//        std::cout << "result: " << (int64_t)result << std::endl;
+//        std::cout << "points: " << (int64_t)Globals::_board.pointsdiff << std::endl;
+//        std::cout << "moveFieldCount: " << (int64_t)moveFieldCount << std::endl;
+//        std::cout << "moveFieldPoints: " << (int64_t)moveFieldPoints << std::endl;
+//        std::cout << "ringFieldCount: " << (int64_t)ringFieldCount << std::endl;
+//        std::cout << "ringFieldPoints: " << (int64_t)ringFieldPoints << std::endl;
+//        std::cout << "totalReachFieldCount: " << (int64_t)totalReachFieldCount << std::endl;
+//        std::cout << "totalReachFieldPoints: " << (int64_t)totalReachFieldPoints << std::endl;
+//        std::cout << "restrictedReachFieldCount: " << (int64_t)restrictedReachFieldCount << std::endl;
+//        std::cout << "restrictedReachFieldPoints: " << (int64_t)restrictedReachFieldPoints << std::endl;
+        
         std::cout << "IT: " << iterativeDeepening(Globals::_board, ID_WE, 60, 0, &move) << std::endl;//change first guess to 100?
-        std::cout << "MT: " << (u_int64_t)move.from << "->" << (u_int64_t)move.to << std::endl;
+        std::cout << "MT: " << (int64_t)move.from << "->" << (int64_t)move.to << std::endl;
         std::cout << "Used before: " << Globals::_board.used << std::endl;
 //    }
 //    else

@@ -98,7 +98,7 @@ namespace Evaluation
             
             u_int64_t totalReachFieldWe = 0;
             u_int64_t totalReachFieldOp = 0;
-            Tools::getReachableFields(board.used,
+            Tools::getReachableFields((~board.used) & ~FIT,
                     penguinPosWe[0], penguinPosWe[1], penguinPosWe[2], penguinPosWe[3], 
                     penguinPosOp[0], penguinPosOp[1], penguinPosOp[2], penguinPosOp[3], 
                     &totalReachFieldWe, &totalReachFieldOp);
@@ -119,13 +119,13 @@ namespace Evaluation
             u_int64_t trash = 0;
             u_int64_t restrictedReachFieldWe = 0;
             u_int64_t restrictedReachFieldOp = 0;
-            Tools::getReachableFields(restrictedUsedForWe,
+            Tools::getReachableFields((~restrictedUsedForWe) & ~FIT,            //TODO remove because even if it is set it is not counted in popcount with &
                     penguinPosWe[0], penguinPosWe[1], penguinPosWe[2], penguinPosWe[3], 
                     penguinPosOp[0], penguinPosOp[1], penguinPosOp[2], penguinPosOp[3], 
                     &restrictedReachFieldWe, &trash);
             
             trash = 0;
-            Tools::getReachableFields(restrictedUsedForOp,
+            Tools::getReachableFields((~restrictedUsedForOp) & ~FIT,
                     penguinPosWe[0], penguinPosWe[1], penguinPosWe[2], penguinPosWe[3], 
                     penguinPosOp[0], penguinPosOp[1], penguinPosOp[2], penguinPosOp[3], 
                     &trash, &restrictedReachFieldOp);
@@ -144,11 +144,13 @@ namespace Evaluation
         delete[] penguinPosWe;
         delete[] penguinPosOp;
         
-        int result =  points * 6                                                //6
-                    + moveFieldCount * 4 + moveFieldPoints * 1                  //4 1
-                    + ringFieldCount * 4 + ringFieldPoints * 1                  //4 1
-                    + totalReachFieldCount * 0 + totalReachFieldPoints * 0
-                    + restrictedReachFieldCount * 0 + restrictedReachFieldPoints * 0;
+        //641410000
+        
+        int result =  points * 4                                                //6
+                    + moveFieldCount * 1 + moveFieldPoints * 1                  //4 1
+                    + ringFieldCount * 1 + ringFieldPoints * 1                  //4 1
+                    + totalReachFieldCount * 1 + totalReachFieldPoints * 1
+                    + restrictedReachFieldCount * 1 + restrictedReachFieldPoints * 1;
         
         
         if(playerId != ID_WE){
