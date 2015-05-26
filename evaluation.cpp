@@ -146,12 +146,16 @@ namespace Evaluation
         
         //641410000
         
-        int result =  points * 4                                                //6
-                    + moveFieldCount * 1 + moveFieldPoints * 1                  //4 1
-                    + ringFieldCount * 1 + ringFieldPoints * 1                  //4 1
-                    + totalReachFieldCount * 1 + totalReachFieldPoints * 1
-                    + restrictedReachFieldCount * 1 + restrictedReachFieldPoints * 1;
-        
+//        int result =  points * 4                                                //6
+//                    + moveFieldCount * 1 + moveFieldPoints * 1                  //4 1
+//                    + ringFieldCount * 0 + ringFieldPoints * 0                  //4 1
+//                    + totalReachFieldCount * 1 + totalReachFieldPoints * 1
+//                    + restrictedReachFieldCount * 1 + restrictedReachFieldPoints * 1;
+        int result = points * Globals::Config::points
+                    + Globals::Config::moveFields * (moveFieldCount + moveFieldPoints)                 //4 1
+                    + Globals::Config::ringFields * (ringFieldCount + ringFieldPoints)                  //4 1
+                    + Globals::Config::aReachFields * (totalReachFieldCount + totalReachFieldPoints)
+                    + Globals::Config::rReachFields * (restrictedReachFieldCount + restrictedReachFieldPoints);
         
         if(playerId != ID_WE){
             return -result;
@@ -246,146 +250,146 @@ namespace Evaluation
         
     }
     
-    int evaluateNormal(int playerId, Board board, bool qsearch)
-    {
-        int points = board.pointsdiff;
-
-        if(board.movecount >= 60){
-            if(playerId != ID_WE){
-                return -points;
-            }
-            return points;
-        }
-        
-        int b = 0;
-        int *penguinPosWe = Tools::fastBitScan(board.mypos, &b);
-        b = 0;
-        int *penguinPosOp = Tools::fastBitScan(board.oppos, &b);
-        
-        //wenn sich zwei linien kruezen wird das kreuz-feld nur einmal gerechnet
-        u_int64_t moveFieldsWe = Tools::genMoveField(penguinPosWe[0], board.used) 
-                | Tools::genMoveField(penguinPosWe[1], board.used) 
-                | Tools::genMoveField(penguinPosWe[2], board.used)
-                | Tools::genMoveField(penguinPosWe[3], board.used);
-        
-        u_int64_t moveFieldsOp = Tools::genMoveField(penguinPosOp[0], board.used) 
-                | Tools::genMoveField(penguinPosOp[1], board.used) 
-                | Tools::genMoveField(penguinPosOp[2], board.used)
-                | Tools::genMoveField(penguinPosOp[3], board.used);
-        
-        int allLinePointsWe = 0;
-        int allLinePointsOp = 0;
-        allLinePointsWe += Tools::popCount(moveFieldsWe & Globals::threes) * Globals::Config::allLinePoints3;
-        allLinePointsWe += Tools::popCount(moveFieldsWe & Globals::twos) * Globals::Config::allLinePoints2;
-        allLinePointsWe += Tools::popCount(moveFieldsWe & Globals::ones) * Globals::Config::allLinePoints1;
-        allLinePointsOp += Tools::popCount(moveFieldsOp & Globals::threes) * Globals::Config::allLinePoints3;
-        allLinePointsOp += Tools::popCount(moveFieldsOp & Globals::twos) * Globals::Config::allLinePoints2;
-        allLinePointsOp += Tools::popCount(moveFieldsOp & Globals::ones) * Globals::Config::allLinePoints1;
-        
-//        int singleLinePointsWe = 0;
-//        int singleLinePointsOp = 0;
-//        singleLinePointsWe += ((moveFieldsWe & Globals::threes) != 0) * Globals::Config::singleLinePoint3;
-//        singleLinePointsWe += ((moveFieldsWe & Globals::twos) != 0) * Globals::Config::singleLinePoint2;
-//        singleLinePointsWe += ((moveFieldsWe & Globals::ones) != 0) * Globals::Config::singleLinePoint1;
-//        singleLinePointsOp += ((moveFieldsOp & Globals::threes) != 0) * Globals::Config::singleLinePoint3;
-//        singleLinePointsOp += ((moveFieldsOp & Globals::twos) != 0) * Globals::Config::singleLinePoint2;
-//        singleLinePointsOp += ((moveFieldsOp & Globals::ones) != 0) * Globals::Config::singleLinePoint1;
-        
-        
-        u_int64_t reachFieldWe = 0;
-        u_int64_t reachFieldOp = 0;     
-        //a field resitricted through move lines of op
-        u_int64_t restrictedReachFieldWe = 0;
-        u_int64_t restrictedReachFieldOp = 0;
-//        u_int64_t allRestrictedReachFieldWe = 0;
-//        u_int64_t allRestrictedReachFieldOp = 0;
-        if(board.movecount >= 8){
-            Tools::getReachableFields(board.used, 
-                    penguinPosWe[0], penguinPosWe[1], penguinPosWe[2], penguinPosWe[3], 
-                    penguinPosOp[0], penguinPosOp[1], penguinPosOp[2], penguinPosOp[3], 
-                    &reachFieldWe, &reachFieldOp);
-            
-            u_int64_t unused = 0;
-            u_int64_t used_with_linesOp = board.used & ~moveFieldsOp;
-            
-            Tools::getReachableFields(used_with_linesOp, 
-                    penguinPosWe[0], penguinPosWe[1], penguinPosWe[2], penguinPosWe[3], 
-                    penguinPosOp[0], penguinPosOp[1], penguinPosOp[2], penguinPosOp[3], 
-                    &restrictedReachFieldWe, &unused);
-            
-            unused = 0;
-            u_int64_t used_with_linesWe = board.used & ~moveFieldsWe;
-            
-            Tools::getReachableFields(used_with_linesWe, 
-                    penguinPosWe[0], penguinPosWe[1], penguinPosWe[2], penguinPosWe[3], 
-                    penguinPosOp[0], penguinPosOp[1], penguinPosOp[2], penguinPosOp[3], 
-                    &unused, &restrictedReachFieldOp);
-            
-//            u_int64_t used_with_lines = used_with_linesOp & ~moveFieldsWe;
-//            
-//            Tools::getReachableFields(used_with_lines, 
+//    int evaluateNormal(int playerId, Board board, bool qsearch)
+//    {
+//        int points = board.pointsdiff;
+//
+//        if(board.movecount >= 60){
+//            if(playerId != ID_WE){
+//                return -points;
+//            }
+//            return points;
+//        }
+//        
+//        int b = 0;
+//        int *penguinPosWe = Tools::fastBitScan(board.mypos, &b);
+//        b = 0;
+//        int *penguinPosOp = Tools::fastBitScan(board.oppos, &b);
+//        
+//        //wenn sich zwei linien kruezen wird das kreuz-feld nur einmal gerechnet
+//        u_int64_t moveFieldsWe = Tools::genMoveField(penguinPosWe[0], board.used) 
+//                | Tools::genMoveField(penguinPosWe[1], board.used) 
+//                | Tools::genMoveField(penguinPosWe[2], board.used)
+//                | Tools::genMoveField(penguinPosWe[3], board.used);
+//        
+//        u_int64_t moveFieldsOp = Tools::genMoveField(penguinPosOp[0], board.used) 
+//                | Tools::genMoveField(penguinPosOp[1], board.used) 
+//                | Tools::genMoveField(penguinPosOp[2], board.used)
+//                | Tools::genMoveField(penguinPosOp[3], board.used);
+//        
+//        int allLinePointsWe = 0;
+//        int allLinePointsOp = 0;
+//        allLinePointsWe += Tools::popCount(moveFieldsWe & Globals::threes) * Globals::Config::allLinePoints3;
+//        allLinePointsWe += Tools::popCount(moveFieldsWe & Globals::twos) * Globals::Config::allLinePoints2;
+//        allLinePointsWe += Tools::popCount(moveFieldsWe & Globals::ones) * Globals::Config::allLinePoints1;
+//        allLinePointsOp += Tools::popCount(moveFieldsOp & Globals::threes) * Globals::Config::allLinePoints3;
+//        allLinePointsOp += Tools::popCount(moveFieldsOp & Globals::twos) * Globals::Config::allLinePoints2;
+//        allLinePointsOp += Tools::popCount(moveFieldsOp & Globals::ones) * Globals::Config::allLinePoints1;
+//        
+////        int singleLinePointsWe = 0;
+////        int singleLinePointsOp = 0;
+////        singleLinePointsWe += ((moveFieldsWe & Globals::threes) != 0) * Globals::Config::singleLinePoint3;
+////        singleLinePointsWe += ((moveFieldsWe & Globals::twos) != 0) * Globals::Config::singleLinePoint2;
+////        singleLinePointsWe += ((moveFieldsWe & Globals::ones) != 0) * Globals::Config::singleLinePoint1;
+////        singleLinePointsOp += ((moveFieldsOp & Globals::threes) != 0) * Globals::Config::singleLinePoint3;
+////        singleLinePointsOp += ((moveFieldsOp & Globals::twos) != 0) * Globals::Config::singleLinePoint2;
+////        singleLinePointsOp += ((moveFieldsOp & Globals::ones) != 0) * Globals::Config::singleLinePoint1;
+//        
+//        
+//        u_int64_t reachFieldWe = 0;
+//        u_int64_t reachFieldOp = 0;     
+//        //a field resitricted through move lines of op
+//        u_int64_t restrictedReachFieldWe = 0;
+//        u_int64_t restrictedReachFieldOp = 0;
+////        u_int64_t allRestrictedReachFieldWe = 0;
+////        u_int64_t allRestrictedReachFieldOp = 0;
+//        if(board.movecount >= 8){
+//            Tools::getReachableFields(board.used, 
 //                    penguinPosWe[0], penguinPosWe[1], penguinPosWe[2], penguinPosWe[3], 
 //                    penguinPosOp[0], penguinPosOp[1], penguinPosOp[2], penguinPosOp[3], 
-//                    &allRestrictedReachFieldWe, &allRestrictedReachFieldOp);
-                                    
-        }
-        
-        int reachPointsWe = 0;
-        int reachPointsOp = 0;
-        reachPointsWe += Tools::popCount(reachFieldWe & Globals::threes) * Globals::Config::reachPoints3;
-        reachPointsWe += Tools::popCount(reachFieldWe & Globals::twos) * Globals::Config::reachPoints2;
-        reachPointsWe += Tools::popCount(reachFieldWe & Globals::ones) * Globals::Config::reachPoints1;
-        reachPointsOp += Tools::popCount(reachFieldOp & Globals::threes) * Globals::Config::reachPoints3;
-        reachPointsOp += Tools::popCount(reachFieldOp & Globals::twos) * Globals::Config::reachPoints2;
-        reachPointsOp += Tools::popCount(reachFieldOp & Globals::ones) * Globals::Config::reachPoints1;
-        
-        int restrictedReachPointsWe = 0;
-        int restrictedReachPointsOp = 0;
-        restrictedReachPointsWe += Tools::popCount(restrictedReachFieldWe & Globals::threes) * Globals::Config::restrictedReachField3;
-        restrictedReachPointsWe += Tools::popCount(restrictedReachFieldWe & Globals::twos) * Globals::Config::restrictedReachField2;
-        restrictedReachPointsWe += Tools::popCount(restrictedReachFieldWe & Globals::ones) * Globals::Config::restrictedReachField1;
-        restrictedReachPointsOp += Tools::popCount(restrictedReachFieldOp & Globals::threes) * Globals::Config::restrictedReachField3;
-        restrictedReachPointsOp += Tools::popCount(restrictedReachFieldOp & Globals::twos) * Globals::Config::restrictedReachField2;
-        restrictedReachPointsOp += Tools::popCount(restrictedReachFieldOp & Globals::ones) * Globals::Config::restrictedReachField1;
-        
-//        int allRestricedPoints = 0;
-//        allRestricedPoints += Tools::popCount(allRestrictedReachFieldWe & Globals::threes) * Globals::Config::allRestrictedReachField3;
-//        allRestricedPoints += Tools::popCount(allRestrictedReachFieldWe & Globals::twos) * Globals::Config::allRestrictedReachField2;
-//        allRestricedPoints += Tools::popCount(allRestrictedReachFieldWe & Globals::ones) * Globals::Config::allRestrictedReachField1;
-//        allRestricedPoints -= Tools::popCount(allRestrictedReachFieldOp & Globals::threes) * Globals::Config::allRestrictedReachField3;
-//        allRestricedPoints -= Tools::popCount(allRestrictedReachFieldOp & Globals::twos) * Globals::Config::allRestrictedReachField2;
-//        allRestricedPoints -= Tools::popCount(allRestrictedReachFieldOp & Globals::ones) * Globals::Config::allRestrictedReachField1;
-                
-        
-        delete[] penguinPosWe;
-        delete[] penguinPosOp;
-        
-        int reachPoints = 0;
-        int allLinePoints = 0;
-//        int singleLinePoints = 0;
-        int restrictedReachPoints = 0;
-        if(playerId != ID_WE){
-            reachPoints -= reachPointsWe;
-            reachPoints += reachPointsOp * 2;
-            allLinePoints -= allLinePointsWe;
-            allLinePoints += allLinePointsOp;
-//            singleLinePoints -= singleLinePointsWe;
-//            singleLinePoints += singleLinePointsOp;
-            restrictedReachPoints -= restrictedReachPointsWe;
-            restrictedReachPoints += restrictedReachPointsOp;
-            
-            return -points*Globals::Config::points+reachPoints+allLinePoints+restrictedReachPoints;
-        }
-        reachPoints += reachPointsWe;
-        reachPoints -= reachPointsOp * 2;
-        allLinePoints += allLinePointsWe;
-        allLinePoints -= allLinePointsOp;
-//        singleLinePoints += singleLinePointsWe;
-//        singleLinePoints -= singleLinePointsOp;
-        restrictedReachPoints += restrictedReachPointsWe;
-        restrictedReachPoints -= restrictedReachPointsOp;
-        
-        return points*Globals::Config::points+reachPoints+allLinePoints+restrictedReachPoints;
+//                    &reachFieldWe, &reachFieldOp);
+//            
+//            u_int64_t unused = 0;
+//            u_int64_t used_with_linesOp = board.used & ~moveFieldsOp;
+//            
+//            Tools::getReachableFields(used_with_linesOp, 
+//                    penguinPosWe[0], penguinPosWe[1], penguinPosWe[2], penguinPosWe[3], 
+//                    penguinPosOp[0], penguinPosOp[1], penguinPosOp[2], penguinPosOp[3], 
+//                    &restrictedReachFieldWe, &unused);
+//            
+//            unused = 0;
+//            u_int64_t used_with_linesWe = board.used & ~moveFieldsWe;
+//            
+//            Tools::getReachableFields(used_with_linesWe, 
+//                    penguinPosWe[0], penguinPosWe[1], penguinPosWe[2], penguinPosWe[3], 
+//                    penguinPosOp[0], penguinPosOp[1], penguinPosOp[2], penguinPosOp[3], 
+//                    &unused, &restrictedReachFieldOp);
+//            
+////            u_int64_t used_with_lines = used_with_linesOp & ~moveFieldsWe;
+////            
+////            Tools::getReachableFields(used_with_lines, 
+////                    penguinPosWe[0], penguinPosWe[1], penguinPosWe[2], penguinPosWe[3], 
+////                    penguinPosOp[0], penguinPosOp[1], penguinPosOp[2], penguinPosOp[3], 
+////                    &allRestrictedReachFieldWe, &allRestrictedReachFieldOp);
+//                                    
+//        }
+//        
+//        int reachPointsWe = 0;
+//        int reachPointsOp = 0;
+//        reachPointsWe += Tools::popCount(reachFieldWe & Globals::threes) * Globals::Config::reachPoints3;
+//        reachPointsWe += Tools::popCount(reachFieldWe & Globals::twos) * Globals::Config::reachPoints2;
+//        reachPointsWe += Tools::popCount(reachFieldWe & Globals::ones) * Globals::Config::reachPoints1;
+//        reachPointsOp += Tools::popCount(reachFieldOp & Globals::threes) * Globals::Config::reachPoints3;
+//        reachPointsOp += Tools::popCount(reachFieldOp & Globals::twos) * Globals::Config::reachPoints2;
+//        reachPointsOp += Tools::popCount(reachFieldOp & Globals::ones) * Globals::Config::reachPoints1;
+//        
+//        int restrictedReachPointsWe = 0;
+//        int restrictedReachPointsOp = 0;
+//        restrictedReachPointsWe += Tools::popCount(restrictedReachFieldWe & Globals::threes) * Globals::Config::restrictedReachField3;
+//        restrictedReachPointsWe += Tools::popCount(restrictedReachFieldWe & Globals::twos) * Globals::Config::restrictedReachField2;
+//        restrictedReachPointsWe += Tools::popCount(restrictedReachFieldWe & Globals::ones) * Globals::Config::restrictedReachField1;
+//        restrictedReachPointsOp += Tools::popCount(restrictedReachFieldOp & Globals::threes) * Globals::Config::restrictedReachField3;
+//        restrictedReachPointsOp += Tools::popCount(restrictedReachFieldOp & Globals::twos) * Globals::Config::restrictedReachField2;
+//        restrictedReachPointsOp += Tools::popCount(restrictedReachFieldOp & Globals::ones) * Globals::Config::restrictedReachField1;
+//        
+////        int allRestricedPoints = 0;
+////        allRestricedPoints += Tools::popCount(allRestrictedReachFieldWe & Globals::threes) * Globals::Config::allRestrictedReachField3;
+////        allRestricedPoints += Tools::popCount(allRestrictedReachFieldWe & Globals::twos) * Globals::Config::allRestrictedReachField2;
+////        allRestricedPoints += Tools::popCount(allRestrictedReachFieldWe & Globals::ones) * Globals::Config::allRestrictedReachField1;
+////        allRestricedPoints -= Tools::popCount(allRestrictedReachFieldOp & Globals::threes) * Globals::Config::allRestrictedReachField3;
+////        allRestricedPoints -= Tools::popCount(allRestrictedReachFieldOp & Globals::twos) * Globals::Config::allRestrictedReachField2;
+////        allRestricedPoints -= Tools::popCount(allRestrictedReachFieldOp & Globals::ones) * Globals::Config::allRestrictedReachField1;
+//                
+//        
+//        delete[] penguinPosWe;
+//        delete[] penguinPosOp;
+//        
+//        int reachPoints = 0;
+//        int allLinePoints = 0;
+////        int singleLinePoints = 0;
+//        int restrictedReachPoints = 0;
+//        if(playerId != ID_WE){
+//            reachPoints -= reachPointsWe;
+//            reachPoints += reachPointsOp * 2;
+//            allLinePoints -= allLinePointsWe;
+//            allLinePoints += allLinePointsOp;
+////            singleLinePoints -= singleLinePointsWe;
+////            singleLinePoints += singleLinePointsOp;
+//            restrictedReachPoints -= restrictedReachPointsWe;
+//            restrictedReachPoints += restrictedReachPointsOp;
+//            
+//            return -points*Globals::Config::points+reachPoints+allLinePoints+restrictedReachPoints;
+//        }
+//        reachPoints += reachPointsWe;
+//        reachPoints -= reachPointsOp * 2;
+//        allLinePoints += allLinePointsWe;
+//        allLinePoints -= allLinePointsOp;
+////        singleLinePoints += singleLinePointsWe;
+////        singleLinePoints -= singleLinePointsOp;
+//        restrictedReachPoints += restrictedReachPointsWe;
+//        restrictedReachPoints -= restrictedReachPointsOp;
+//        
+//        return points*Globals::Config::points+reachPoints+allLinePoints+restrictedReachPoints;
         
         
 //------------------------------------------------------------------------------
@@ -803,105 +807,105 @@ namespace Evaluation
 ////            return -result;
 ////        }
 ////        return result;
-    }
-    
-    int evaluateSetMoves(int playerId, Board board, bool qsearch)
-    {
-        int points = board.pointsdiff;
-
-        if(board.movecount >= 60){
-            if(playerId != ID_WE){
-                return -points;
-            }
-            return points;
-        }
-
-        int l = 0;
-        int *penguinPos = Tools::fastBitScan(board.mypos, &l);
-
-        //wenn sich zwei linien kruezen wird das kreuz-feld nur einmal gerechnet
-        u_int64_t moveFields = Tools::genMoveField(penguinPos[0], board.used) 
-                | Tools::genMoveField(penguinPos[1], board.used) 
-                | Tools::genMoveField(penguinPos[2], board.used)
-                | Tools::genMoveField(penguinPos[3], board.used);
-                
-        int movePoints = 0;
-//        movePoints += Tools::popCount((_fieldsAround[penguinPos[0]] & _fieldsAround[penguinPos[1]] & _fieldsAround[penguinPos[2]], _fieldsAround[penguinPos[3]]) & Globals::threes);
-        movePoints += Tools::popCount(moveFields & Globals::threes) * 2;
-        //movePoints += Tools::popCount(moveFields & Globals::twos) * 1;
-        //movePoints += Tools::popCount(moveFields & Globals::ones);
-
-        delete[] penguinPos;
-
-
-        penguinPos = Tools::fastBitScan(board.oppos, &l);
-
-        //wenn sich zwei linien kreuzen wird das kreuz-feld nur einmal gerechnet
-        moveFields = Tools::genMoveField(penguinPos[0], board.used) 
-                | Tools::genMoveField(penguinPos[1], board.used) 
-                | Tools::genMoveField(penguinPos[2], board.used)
-                | Tools::genMoveField(penguinPos[3], board.used);
-
-//        movePoints -= Tools::popCount((_fieldsAround[penguinPos[0]] & _fieldsAround[penguinPos[1]] & _fieldsAround[penguinPos[2]], _fieldsAround[penguinPos[3]]) & Globals::threes);
-        movePoints -= Tools::popCount(moveFields & Globals::threes) * 2;
-        //movePoints -= Tools::popCount(moveFields & Globals::twos) * 1;
-        //movePoints -= Tools::popCount(moveFields & Globals::ones);
-
-        delete[] penguinPos;
-        
-        int pluspoints = 0;
-        
-        if(board.movecount < 8)
-        {
-            if((Tools::popCount((board.mypos & Q1_all))) > 1)
-                pluspoints -= 50;
-            else
-                pluspoints += 50;
-
-            if((Tools::popCount((board.mypos & Q2_all))) > 1)
-                pluspoints -= 50;
-            else
-                pluspoints += 50;
-
-            if((Tools::popCount((board.mypos & Q3_all))) > 1)
-                pluspoints -= 50;
-            else
-                pluspoints += 50;
-
-            if((Tools::popCount((board.mypos & Q4_all))) > 1)
-                pluspoints -= 50;
-            else
-                pluspoints += 50;
-            
-            /////////////////////////////
-            
-            if((Tools::popCount((board.oppos & Q1_best))) == 1)
-                pluspoints += 25;
-            else
-                pluspoints -= 25;
-
-            if((Tools::popCount((board.oppos & Q2_best))) == 1)
-                pluspoints += 25;
-            else
-                pluspoints -= 25;
-
-            if((Tools::popCount((board.oppos & Q3_best))) == 1)
-                pluspoints += 25;
-            else
-                pluspoints -= 25;
-
-            if((Tools::popCount((board.oppos & Q4_best))) == 1)
-                pluspoints += 25;
-            else
-                pluspoints -= 25;
-        }
-
-        int result = points*multpPoints + movePoints*multpMovepo + pluspoints;
-
-        if(playerId != ID_WE){
-            return -result;
-        }
-        return result;
-    }
+//    }
+//    
+//    int evaluateSetMoves(int playerId, Board board, bool qsearch)
+//    {
+//        int points = board.pointsdiff;
+//
+//        if(board.movecount >= 60){
+//            if(playerId != ID_WE){
+//                return -points;
+//            }
+//            return points;
+//        }
+//
+//        int l = 0;
+//        int *penguinPos = Tools::fastBitScan(board.mypos, &l);
+//
+//        //wenn sich zwei linien kruezen wird das kreuz-feld nur einmal gerechnet
+//        u_int64_t moveFields = Tools::genMoveField(penguinPos[0], board.used) 
+//                | Tools::genMoveField(penguinPos[1], board.used) 
+//                | Tools::genMoveField(penguinPos[2], board.used)
+//                | Tools::genMoveField(penguinPos[3], board.used);
+//                
+//        int movePoints = 0;
+////        movePoints += Tools::popCount((_fieldsAround[penguinPos[0]] & _fieldsAround[penguinPos[1]] & _fieldsAround[penguinPos[2]], _fieldsAround[penguinPos[3]]) & Globals::threes);
+//        movePoints += Tools::popCount(moveFields & Globals::threes) * 2;
+//        //movePoints += Tools::popCount(moveFields & Globals::twos) * 1;
+//        //movePoints += Tools::popCount(moveFields & Globals::ones);
+//
+//        delete[] penguinPos;
+//
+//
+//        penguinPos = Tools::fastBitScan(board.oppos, &l);
+//
+//        //wenn sich zwei linien kreuzen wird das kreuz-feld nur einmal gerechnet
+//        moveFields = Tools::genMoveField(penguinPos[0], board.used) 
+//                | Tools::genMoveField(penguinPos[1], board.used) 
+//                | Tools::genMoveField(penguinPos[2], board.used)
+//                | Tools::genMoveField(penguinPos[3], board.used);
+//
+////        movePoints -= Tools::popCount((_fieldsAround[penguinPos[0]] & _fieldsAround[penguinPos[1]] & _fieldsAround[penguinPos[2]], _fieldsAround[penguinPos[3]]) & Globals::threes);
+//        movePoints -= Tools::popCount(moveFields & Globals::threes) * 2;
+//        //movePoints -= Tools::popCount(moveFields & Globals::twos) * 1;
+//        //movePoints -= Tools::popCount(moveFields & Globals::ones);
+//
+//        delete[] penguinPos;
+//        
+//        int pluspoints = 0;
+//        
+//        if(board.movecount < 8)
+//        {
+//            if((Tools::popCount((board.mypos & Q1_all))) > 1)
+//                pluspoints -= 50;
+//            else
+//                pluspoints += 50;
+//
+//            if((Tools::popCount((board.mypos & Q2_all))) > 1)
+//                pluspoints -= 50;
+//            else
+//                pluspoints += 50;
+//
+//            if((Tools::popCount((board.mypos & Q3_all))) > 1)
+//                pluspoints -= 50;
+//            else
+//                pluspoints += 50;
+//
+//            if((Tools::popCount((board.mypos & Q4_all))) > 1)
+//                pluspoints -= 50;
+//            else
+//                pluspoints += 50;
+//            
+//            /////////////////////////////
+//            
+//            if((Tools::popCount((board.oppos & Q1_best))) == 1)
+//                pluspoints += 25;
+//            else
+//                pluspoints -= 25;
+//
+//            if((Tools::popCount((board.oppos & Q2_best))) == 1)
+//                pluspoints += 25;
+//            else
+//                pluspoints -= 25;
+//
+//            if((Tools::popCount((board.oppos & Q3_best))) == 1)
+//                pluspoints += 25;
+//            else
+//                pluspoints -= 25;
+//
+//            if((Tools::popCount((board.oppos & Q4_best))) == 1)
+//                pluspoints += 25;
+//            else
+//                pluspoints -= 25;
+//        }
+//
+//        int result = points*multpPoints + movePoints*multpMovepo + pluspoints;
+//
+//        if(playerId != ID_WE){
+//            return -result;
+//        }
+//        return result;
+//    }
 
 }
