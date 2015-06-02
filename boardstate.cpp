@@ -74,6 +74,13 @@ namespace BoardTools{
         m.value = value;
         //valuedMoves[i] = vm;
         int b = length-1;
+        
+        //untested
+#ifdef limit_move_gen
+        if(b > MOVE_GEN_LIMIT){
+            b = MOVE_GEN_LIMIT;
+        }
+#endif
         for(; b > 0; --b){
             if(valuedMoves[b-1].value < value){
                 valuedMoves[b] = valuedMoves[b-1];
