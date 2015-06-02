@@ -23,7 +23,7 @@ int alphaBetaTT(Board board, int depth, int alpha, int beta, int player, Move *r
     if(depth == 0 || board.movecount >= 60)
     {
         ++evalCount;
-        value = Evaluation::evaluate(player, board, true);
+        value = Evaluation::evaluate(player, board);
         
     
         struct timespec nowTime;

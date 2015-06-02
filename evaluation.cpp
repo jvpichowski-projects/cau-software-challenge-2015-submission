@@ -20,7 +20,11 @@ namespace Evaluation
     u_int8_t multpFiAr = 2;
     
     
-    int newEval(int playerId, Board board, bool qsearch){
+    int fastEval(int playerId, Board board){
+        
+    }
+    
+    int newEval(int playerId, Board board){
         
         int points = board.pointsdiff;
 

@@ -36,10 +36,10 @@
 
 namespace Evaluation
 {
-    typedef int (*ToEvaluate)(int playerId, Board board, bool qsearch);
+    typedef int (*ToEvaluate)(int playerId, Board board);
     extern ToEvaluate evaluate;
     extern bool ring1good;
-    
+    int fastEval(int playerId, Board board);
     int preEvaluate();
 }
 
