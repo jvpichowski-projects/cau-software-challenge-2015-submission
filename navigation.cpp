@@ -29,9 +29,9 @@ int alphaBetaTT(Board board, int depth, int alpha, int beta, int player, Move *r
         struct timespec nowTime;
         clock_gettime(Globals::clockTime, &nowTime);
 
-        if((((nowTime.tv_sec * 1000000000 + nowTime.tv_nsec) - (Globals::moveReqTime.tv_sec * 1000000000 + Globals::moveReqTime.tv_nsec)) / 1000000) > (TIME_FOR_CALC)){
-            *timeIsUp = true;
-        }
+        *timeIsUp = (((
+                (nowTime.tv_sec * 1000000000 + nowTime.tv_nsec) - 
+                (Globals::moveReqTime.tv_sec * 1000000000 + Globals::moveReqTime.tv_nsec)) / 1000000) > (TIME_FOR_CALC));
         
         return value;
     }
