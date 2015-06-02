@@ -15,7 +15,6 @@
 #include "evaluation.h"
 
 int iterativeDeepening(Board board, int player, int depth, int firstguess, Move *resultMove);
-Move startPSearch(int maxDeep, int player, Board board);
 
 #endif	/* NAVIGATION_H */
 

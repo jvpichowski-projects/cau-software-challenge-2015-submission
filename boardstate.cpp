@@ -88,55 +88,6 @@ namespace BoardTools{
         return value;
     }
     
-    Move* generateBest3Moves(Board state, int playerId, int *length){
-        //std::cout << "PlayerId " << playerId << std::endl;
-        u_int64_t penguinPositions = ((playerId == ID_WE) ? state.mypos : state.oppos);
-        //BitBoard::printField(penguinPositions);
-        int l = 0;
-        int* penguinPos = Tools::fastBitScan(penguinPositions, &l);
-
-        u_int64_t *moveFields = new u_int64_t[4];
-
-        moveFields[0] = Tools::genMoveField(penguinPos[0], state.used);
-        moveFields[1] = Tools::genMoveField(penguinPos[1], state.used);
-        moveFields[2] = Tools::genMoveField(penguinPos[2], state.used);
-        moveFields[3] = Tools::genMoveField(penguinPos[3], state.used);
-
-        *length = Tools::popCount(moveFields[0] & Globals::threes)
-            + Tools::popCount(moveFields[1] & Globals::threes)
-            + Tools::popCount(moveFields[2] & Globals::threes)
-            + Tools::popCount(moveFields[3] & Globals::threes);
-        Move* moves = new Move[*length];
-
-        int c = -1;
-        for(int i = 0; i < 4; i++){
-            u_int64_t threes = Globals::threes & moveFields[i];
-
-            //std::cout << "penguin" << i << " - " << penguinPos[i] << std::endl;
-
-            int threesSize = 0;
-            int* threesPos = Tools::bitScan(threes, &threesSize);
-            for(int k = 0; k < threesSize; k++){
-                Move m = Move();
-                m.from = penguinPos[i];
-                m.to = threesPos[k];
-                insertMove(moves, m, state, playerId, *length);
-            }
-            
-            delete[] threesPos;
-        }
-        delete[] moveFields;
-
-#ifdef DEBUG_MOVE_ORDERING
-    for(int i = 0; i < *length; i++){
-        std::cout << "VM: " << moves[i].value << std::endl;
-    }
-#endif
-        delete[] penguinPos;
-        
-        return moves;
-    }
-    
     /**
     //This method returns all valid moves for the player. 
     //The moves should be sorted best to bad. Consequently the NullMove is the lastMove

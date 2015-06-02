@@ -9,9 +9,6 @@ bool sentMove = false;
 
 
 void onPacket(char* msg){
-    #ifdef DEBUG_OCEAN
-        std::cout << msg << std::endl;
-    #endif
     Fisher::Catch(msg);
 }
 
@@ -20,15 +17,8 @@ void onTick(){
 
 
 void onFieldRec(u_int64_t ones, u_int64_t twos, u_int64_t threes)
-{
-    #ifdef DEBUG_CALLS
-        cout << "DEBUG_CALLS: onFieldRec called" << endl;
-    #endif
-    
+{    
     if(isInitialized){
-        #ifdef DEBUG_CALLS
-            cout << "DEBUG_CALLS: onFieldRec canceled" << endl;
-        #endif
         return;
     }
         
@@ -40,10 +30,6 @@ void onFieldRec(u_int64_t ones, u_int64_t twos, u_int64_t threes)
     
     isInitialized = true;
     
-    //create Board
-    #ifdef DEBUG_MAIN_SETFIELD
-        Tools::printField(ones ^ twos ^ threes);
-    #endif
 }
 
 
@@ -65,49 +51,11 @@ void onMoveReq()
     Move move;
     //there is a bug when the game ends no move is sen
     
-//    u_int64_t activePlayer;
-//    int rlng;
-//    Move preResult;
-//    
-//    int preEvalRes = Tactic::preliminaries(&preResult, &rlng, &activePlayer);
-//    
-//    if(preEvalRes == 0)
-//    {
-        Evaluation::preEvaluate();
-        
-        
-        std::cout << "IT: " << iterativeDeepening(Globals::_board, ID_WE, 60, 0, &move) << std::endl;//change first guess to 100?
-        std::cout << "MT: " << (int64_t)move.from << "->" << (int64_t)move.to << std::endl;
-        std::cout << "Used before: " << Globals::_board.used << std::endl;
-//    }
-//    else
-//    {
-//        move = preResult;
-//        printf("\n\npppppppppppppppppppppppppppppppprevalUsed\n\n");
-//    }
-        
-        
-//    if(move.from == move.to && move.from != INVALID_POS){
-//        std::cout << "======================================================" << std::endl;
-//        std::cout << "Error!!! Move.from = Move.to = " << (u_int64_t)move.from << std::endl;
-//        std::cout << "======================================================" << std::endl;
-//        move.from = INVALID_POS;
-//        move.to = INVALID_POS;
-//        std::cout << "Recearching without tt..." << std::endl;
-//        Globals::tt_enabled = false;
-//        std::cout << "IT: " << Navi::iterativeDeepening(Globals::_board, ID_WE, 60, 0, &move) << std::endl;
-//        std::cout << "MT: " << (u_int64_t)move.from << "->" << (u_int64_t)move.to << std::endl;
-//        Globals::tt_enabled = true;
-//    }
-    
-//    std::cout << "Board post calc: " << std::endl;
-//    std::cout << "Used:" << std::endl;
-//    Tools::printField(_board->used);
-//    std::cout << "Mypos:" << std::endl;
-//    Tools::printField(_board->mypos);
-//    std::cout << "Oppos:" << std::endl;
-//    Tools::printField(_board->oppos);
-//    std::cout << "movecount: " << _board->movecount << " pointsdiff: " << _board->pointsdiff << std::endl;
+    Evaluation::preEvaluate();
+
+    std::cout << "IT: " << iterativeDeepening(Globals::_board, ID_WE, 60, 0, &move) << std::endl;//change first guess to 100?
+    std::cout << "MT: " << (int64_t)move.from << "->" << (int64_t)move.to << std::endl;
+    std::cout << "Used before: " << Globals::_board.used << std::endl;
     
     if(!BoardTools::isValidMove(Globals::_board, move, ID_WE)){
         std::cout << "Found invalid move: " << ((u_int64_t)move.from) << " -> " << ((u_int64_t)move.to) << " value: " << move.value << std::endl; 
@@ -131,14 +79,8 @@ void onMoveReq()
  */
 void onLastMove(Move move)
 {
-    #ifdef DEBUG_CALLS
-        cout << "DEBUG_CALLS: onLastMove called: " << move.from << " -> " << move.to <<endl;
-    #endif
     if(sentMove){
         //we sent the last move. It is already apllied to the board in onMoveReq
-        #ifdef DEBUG_CALLS
-            cout << "DEBUG_CALLS: onLastMove canceled" <<endl;
-        #endif
         sentMove = false;
         return;
     }
@@ -154,10 +96,7 @@ void onLastMove(Move move)
 }
 
 int main(int argc, char** argv)
-{    
-    
-    Globals::tt_enabled = true;
-    
+{        
     std::cout << "Build: " << build << std::endl << std::endl;
     
     theBreadfish();
@@ -221,79 +160,10 @@ int main(int argc, char** argv)
         Ocean::GetFood();
     }
     
-    
-    
-    
-    int pointsoutside = Tools::popCount(RING1 & Globals::ones);
-    pointsoutside += Tools::popCount(RING1 & Globals::twos) * 2;
-    pointsoutside += Tools::popCount(RING1 & Globals::threes) * 3;
-    std::string stringRingGameData(std::to_string(pointsoutside));
-    stringRingGameData.append(",");
-    
-    pointsoutside = Tools::popCount(RING1 & Globals::threes);
-    stringRingGameData.append(std::to_string(pointsoutside));
-    stringRingGameData.append(",");
-    
-    pointsoutside = Tools::popCount(RING2 & Globals::ones);
-    pointsoutside += Tools::popCount(RING2 & Globals::twos) * 2;
-    pointsoutside += Tools::popCount(RING2 & Globals::threes) * 3;
-    stringRingGameData.append(std::to_string(pointsoutside));
-    stringRingGameData.append(",");
-    
-    pointsoutside = Tools::popCount(RING2 & Globals::threes);
-    stringRingGameData.append(std::to_string(pointsoutside));
-    stringRingGameData.append(",");
-    
-    pointsoutside = Tools::popCount(RING3 & Globals::ones);
-    pointsoutside += Tools::popCount(RING3 & Globals::twos) * 2;
-    pointsoutside += Tools::popCount(RING3 & Globals::threes) * 3;
-    stringRingGameData.append(std::to_string(pointsoutside));
-    stringRingGameData.append(",");
-    
-    pointsoutside = Tools::popCount(RING3 & Globals::threes);
-    stringRingGameData.append(std::to_string(pointsoutside));
-    stringRingGameData.append(",");
-    
-    pointsoutside = Tools::popCount(RING4 & Globals::ones);
-    pointsoutside += Tools::popCount(RING4 & Globals::twos) * 2;
-    pointsoutside += Tools::popCount(RING4 & Globals::threes) * 3;
-    stringRingGameData.append(std::to_string(pointsoutside));
-    stringRingGameData.append(",");
-    
-    pointsoutside = Tools::popCount(RING4 & Globals::threes);
-    stringRingGameData.append(std::to_string(pointsoutside));
-    stringRingGameData.append(",");
-    
-    if(Globals::_board.pointsdiff > 0)
-        stringRingGameData.append(",W,");
-    else if(Globals::_board.pointsdiff < 0)
-        stringRingGameData.append(",L,");
-    else if(Globals::_board.pointsdiff == 0)
-        stringRingGameData.append(",N,");
-    
-    stringRingGameData.append(std::to_string(Globals::_board.pointsdiff));
-    
-    std::cout << "\n\n\nStatistikzeile_Rings: " << stringRingGameData << "\n\n\n";
-    
-    
-    
-    std::string cmdToSave("echo \"");
-    cmdToSave.append(stringRingGameData);
-    cmdToSave.append("\" >> /home/jonas/NetBeansProjectsSC-15-04-24/sc/dist/Release/GNU-Linux-x86/ringtestlog.csv");
-    
-    const char* cmdToSaveCs = cmdToSave.c_str();
-    
-    system(cmdToSaveCs);
-    
-    
     std::cout << std::endl << "Bilance: " << std::endl;
     std::cout << "CutOff: " << Globals::Log::globalCutOff << std::endl;
     std::cout << "Evals:  " << Globals::Log::globalEvalCount << std::endl;
     std::cout << "Nodes:  " << Globals::Log::globalNodesTravled << std::endl << std::endl;
-    
-    printf("\n\n\n========================================\nRAM-Auslastung:\n========================================\n\n\n");
-    
-    system("free -m");
     
     sleep(3);
     

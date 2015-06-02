@@ -10,17 +10,8 @@
 
 //#define DEBUG_MOVE_ORDERING
 
-//#define quiscens_search
 #define ordered_setmoves
 #define ordered_runmoves
-//#define collision_stats
-//#define null_window
-
-//#define bigfield_eval
-//#define eval_reachPoints
-
-//#define Q_SEARCH
-#define Q_SEARCH_DEEP 10
 
 #define limit_move_gen
 #define MOVE_GEN_LIMIT 10

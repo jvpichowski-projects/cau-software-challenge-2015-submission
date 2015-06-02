@@ -19,13 +19,10 @@
 namespace BoardTools{
     int apply(Board* state, int playerId, Move move);
     int unapply(Board* state, int playerId, Move move);
-    //u_int64_t hash(BoardState state);
     bool isValidMove(Board state, Move move, int player);
 
-    Move* generateBest3Moves(Board state, int playerId, int *length);
     Move* generatePossibleMoves(Board state, int playerId, int *length);
     Move generateGoodMove(Board state, int playerId);
-    void sortMoves(Board state, int playerId, Move *moves, int length);
 };
 
 #endif	/* STATE_H */

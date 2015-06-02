@@ -184,7 +184,7 @@ namespace Evaluation
         
         if(Globals::_board.movecount < 8)
         {
-            evaluate = &Evaluation::evaluateSetMoves;
+            //evaluate = &Evaluation::evaluateSetMoves;
             
             u_int8_t multpPoints = 3;
             u_int8_t multpMovepo = 1;
@@ -234,7 +234,7 @@ namespace Evaluation
         }
         else if(Globals::_board.movecount >= 8)
         {
-            evaluate = &Evaluation::evaluateNormal;
+            //evaluate = &Evaluation::evaluateNormal;
             
             multpPoints = 4;
             multpMovepo = 1;

@@ -40,8 +40,6 @@ namespace Evaluation
     extern ToEvaluate evaluate;
     extern bool ring1good;
     
-    int evaluateNormal(int playerId, Board board, bool qsearch);
-    int evaluateSetMoves(int playerId, Board board, bool qsearch);
     int preEvaluate();
 }
 

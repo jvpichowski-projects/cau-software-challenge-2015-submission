@@ -26,8 +26,6 @@ namespace Globals{
     
     Board _board;
     
-    bool tt_enabled = true;
-    
     namespace Log{
         
         int globalEvalCount;
