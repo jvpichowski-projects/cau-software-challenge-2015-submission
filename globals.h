@@ -20,26 +20,6 @@ namespace Globals{
         extern int ringFields;
         extern int rReachFields;
         extern int aReachFields;
-        
-//        extern int reachPoints1;
-//        extern int reachPoints2;
-//        extern int reachPoints3;
-        
-//        extern int singleLinePoint1;
-//        extern int singleLinePoint2;
-//        extern int singleLinePoint3;
-        
-//        extern int allLinePoints1;
-//        extern int allLinePoints2;
-//        extern int allLinePoints3;
-//        
-//        extern int restrictedReachField1;
-//        extern int restrictedReachField2;
-//        extern int restrictedReachField3;
-        
-//        extern int allRestrictedReachField1;
-//        extern int allRestrictedReachField2;
-//        extern int allRestrictedReachField3;
     }
     
     extern int pointsRing1;

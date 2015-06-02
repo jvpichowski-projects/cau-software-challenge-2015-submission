@@ -45,9 +45,6 @@ namespace Tools
             int posb1, int posb2, int posb3, int posb4, 
             u_int64_t *resulta, u_int64_t *resultb);
     
-//    int calcBitsSet(u_int64_t value);
-//    int* getBitsSet(u_int64_t value);
-//    int countBitsSet(u_int64_t value);
     
 }
 

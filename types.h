@@ -65,23 +65,5 @@ struct Board {
     }
 };
 
-#ifdef tt
-namespace TT{
-    struct Entry{
-#ifdef secure_tt
-        Board board;
-#else
-        u_int64_t hash;
-#endif
-        Move best;
-        int score;
-        byte type;
-        byte depth;
-        Entry() : depth(0) {} //66 not reachable
-    };
-}
-#endif
-
-
 #endif	/* TYPES_H */
 

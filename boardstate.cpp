@@ -56,29 +56,7 @@ namespace BoardTools{
                 || (!(state.used >> move.to & 1ULL) && (((player == ID_WE) && (state.mypos >> move.from & 1ULL))
                 //           or if opponents turn and its field
                         || ((player != ID_WE) && (state.oppos >> move.from & 1ULL)))))));
-        
-//        if(state.movecount >= 8){
-//            if(move.from == INVALID_POS && move.to == INVALID_POS){
-//                return true;
-//            }
-//            if(move.from == INVALID_POS){
-//                return false;
-//            }
-//            if(player == ID_WE){
-//                return (state.mypos >> move.from & 1ULL) && !(state.used >> move.to & 1ULL);
-//            }
-//            return (state.oppos >> move.from & 1ULL) && !(state.used >> move.to & 1ULL);
-//        }
-//        if(move.from != INVALID_POS){
-//            return false;
-//        }
-//        return (state.used >> move.to) & 1ULL;
     }
-    
-    
-//    u_int64_t hash(BoardState state){
-//        return state.movecount ^ state.mypos ^ state.oppos ^ state.pointsdiff ^ state.used;
-//    }
     
     /**
      * 
