@@ -21,11 +21,20 @@ namespace Evaluation
     
     
     int fastEval(int playerId, Board board){
+        //you could improve the sort eval here
+        
         int points = board.pointsdiff;
-            if(playerId != ID_WE){
-                return -points;
-            }
-            return points;
+        if(playerId != ID_WE){
+            return -points;
+        }
+        return points;
+        
+    }
+    
+    
+    int setEval(int playerId, Board board){
+        //implement setEval here, don't forget to swap sign at end
+        
         
     }
     
@@ -174,84 +183,99 @@ namespace Evaluation
         
     }
     
+    
+    
     int preEvaluate()
     {
         
+        //add your pre eval code here!
+        //use either setEval or newEval 
         evaluate = &Evaluation::newEval;
+        
+        //you could change this params in Globals::Config
+//        points;
+//        moveFields;
+//        ringFields;
+//        rReachFields;
+//        aReachFields;
+        
+        
         return 0; 
+        //old preEval:
         
-        //Globals::pointsRing1 = Tools::popCount(RING1 & Globals::threes);
         
-//        if(Tools::popCount(RING1 & Globals::threes) < 5)
+//        //Globals::pointsRing1 = Tools::popCount(RING1 & Globals::threes);
+//        
+////        if(Tools::popCount(RING1 & Globals::threes) < 5)
+////        {
+////            ring1good = false;
+////            std::cout << "\n\n====================================== no = ! !RING1\n\n";
+////        }
+////        else
+////        {
+////            std::cout << "\n\n============================================== RING1\n\n";
+////        }
+//        
+//        if(Globals::_board.movecount < 8)
 //        {
-//            ring1good = false;
-//            std::cout << "\n\n====================================== no = ! !RING1\n\n";
+//            //evaluate = &Evaluation::evaluateSetMoves;
+//            
+//            u_int8_t multpPoints = 3;
+//            u_int8_t multpMovepo = 1;
 //        }
-//        else
+//        /*else if(Globals::_board.movecount >= 52)
 //        {
-//            std::cout << "\n\n============================================== RING1\n\n";
+//            multpFiAr = 0; 
 //        }
-        
-        if(Globals::_board.movecount < 8)
-        {
-            //evaluate = &Evaluation::evaluateSetMoves;
-            
-            u_int8_t multpPoints = 3;
-            u_int8_t multpMovepo = 1;
-        }
-        /*else if(Globals::_board.movecount >= 52)
-        {
-            multpFiAr = 0; 
-        }
-        else if(Globals::_board.movecount >= 40)
-        {
-            multpFiAr = 1;
-        }
-        else if(Globals::_board.movecount >= 34)
-        {
-            multpPoints = 3;
-            multpMovepo = 1;
-            
-            multpFiAr = 1;
-        }
-        else if(Globals::_board.movecount >= 20)
-        {
-            multpPoints = 2;
-            multpMovepo = 1;
-            
-            multpFiAr = 2;
-        }*/
-        else if(Globals::_board.movecount >= 50)
-        {
-            multpPoints = 3;
-            multpMovepo = 1;
-            multpFiAr = 0;
-        }
-        else if(Globals::_board.movecount >= 38)
-        {
-            multpPoints = 3;
-            multpMovepo = 1;
-            multpFiAr = 1;
-        }
-        else if(Globals::_board.movecount >= 12)
-        {
-            multpPoints = 2;
-            multpMovepo = 1;
-            
-            multpMovep1 = 1;
-            multpMovep2 = 2;
-            multpMovep3 = 4;
-        }
-        else if(Globals::_board.movecount >= 8)
-        {
-            //evaluate = &Evaluation::evaluateNormal;
-            
-            multpPoints = 4;
-            multpMovepo = 1;
-            
-            multpMovep1 = 0;
-            multpMovep2 = 0;
-            multpMovep3 = 2;
-        }
+//        else if(Globals::_board.movecount >= 40)
+//        {
+//            multpFiAr = 1;
+//        }
+//        else if(Globals::_board.movecount >= 34)
+//        {
+//            multpPoints = 3;
+//            multpMovepo = 1;
+//            
+//            multpFiAr = 1;
+//        }
+//        else if(Globals::_board.movecount >= 20)
+//        {
+//            multpPoints = 2;
+//            multpMovepo = 1;
+//            
+//            multpFiAr = 2;
+//        }*/
+//        else if(Globals::_board.movecount >= 50)
+//        {
+//            multpPoints = 3;
+//            multpMovepo = 1;
+//            multpFiAr = 0;
+//        }
+//        else if(Globals::_board.movecount >= 38)
+//        {
+//            multpPoints = 3;
+//            multpMovepo = 1;
+//            multpFiAr = 1;
+//        }
+//        else if(Globals::_board.movecount >= 12)
+//        {
+//            multpPoints = 2;
+//            multpMovepo = 1;
+//            
+//            multpMovep1 = 1;
+//            multpMovep2 = 2;
+//            multpMovep3 = 4;
+//        }
+//        else if(Globals::_board.movecount >= 8)
+//        {
+//            //evaluate = &Evaluation::evaluateNormal;
+//            
+//            multpPoints = 4;
+//            multpMovepo = 1;
+//            
+//            multpMovep1 = 0;
+//            multpMovep2 = 0;
+//            multpMovep3 = 2;
+//        }
     }
 }
