@@ -35,7 +35,7 @@ int alphaBetaTT(Board board, int depth, int alpha, int beta, int player, Move *r
         
         return value;
     }
-    int moveCount;
+    int moveCount = 0;
     Move *moves = BoardTools::generatePossibleMoves(board, player, &moveCount);
 //    if(board.movecount == 8){
 //        BoardTools::genMoveField(&board);
