@@ -21,6 +21,8 @@ namespace BoardTools{
     int unapply(Board* state, int playerId, Move move);
     bool isValidMove(Board state, Move move, int player);
 
+//    void genMoveField(Board* board);
+//    Board* generatePossibleBoards(Board state, int playerId, int* length);
     Move* generatePossibleMoves(Board state, int playerId, int *length);
     Move generateGoodMove(Board state, int playerId);
 };

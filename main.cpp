@@ -52,6 +52,9 @@ void onMoveReq()
     //there is a bug when the game ends no move is sen
     
     Evaluation::preEvaluate();
+//    if(Globals::_board.movecount >= 8){
+//        BoardTools::genMoveField(&Globals::_board);
+//    }
 
     std::cout << "IT: " << iterativeDeepening(Globals::_board, ID_WE, 60, 0, &move) << std::endl;//change first guess to 100?
     std::cout << "MT: " << (int64_t)move.from << "->" << (int64_t)move.to << std::endl;

@@ -21,6 +21,11 @@ namespace Evaluation
     
     
     int fastEval(int playerId, Board board){
+        int points = board.pointsdiff;
+            if(playerId != ID_WE){
+                return -points;
+            }
+            return points;
         
     }
     
@@ -73,6 +78,7 @@ namespace Evaluation
         int ringFieldCount = 0;
         int ringFieldPoints = 0;
         
+        //why not >=????
         if(board.movecount >= 8){
             
         //-------------------------------ring points----------------------------

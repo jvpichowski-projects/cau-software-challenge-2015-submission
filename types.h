@@ -32,8 +32,11 @@ struct Move {
 
 struct Board {
     
-    Board() : used(0), turn(0), pointsdiff(0), movecount(0),
-                    mypos(0), oppos(0){}
+    Board() : used(0), turn(0), pointsdiff(0), movecount(0), mypos(0), oppos(0)
+//    , 
+//    fastValue(0), lastMove(Move()),
+//    pos({{0,0,0,0},{0,0,0,0}}), moveFieldAll({0ULL,0ULL}), moveField({{0ULL, 0ULL, 0ULL, 0ULL},{0ULL, 0ULL, 0ULL, 0ULL}})
+    {}
     
     //60
     unsigned long long used:60;
@@ -50,11 +53,17 @@ struct Board {
     unsigned movecount:6;
     //4bits unused
     
+//    int fastValue;
+//    
+//    int pos[2][4];
+//    u_int64_t moveFieldAll[2];
+//    u_int64_t moveField[2][4];
+//    int allMoveFieldCount[2];
+//    Move lastMove;
+    
     bool operator==(const Board& rhs) const
     {
        return (used == rhs.used)
-               && (mypos == rhs.mypos)
-               && (oppos == rhs.oppos)
                && (movecount == rhs.movecount)
                && (pointsdiff == rhs.pointsdiff)
                && (turn == rhs.turn);

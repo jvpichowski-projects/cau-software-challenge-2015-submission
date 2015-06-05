@@ -37,6 +37,10 @@ int alphaBetaTT(Board board, int depth, int alpha, int beta, int player, Move *r
     }
     int moveCount;
     Move *moves = BoardTools::generatePossibleMoves(board, player, &moveCount);
+//    if(board.movecount == 8){
+//        BoardTools::genMoveField(&board);
+//    }
+//    Board *boards = BoardTools::generatePossibleBoards(board, player, &moveCount);
     int best = MIN_AB_VALUE-1;
     int i;
     Board nextBoard;
@@ -44,11 +48,13 @@ int alphaBetaTT(Board board, int depth, int alpha, int beta, int player, Move *r
     int bestMoveNum = 0;
 #endif
     for(i = 0; i < moveCount; ++i)
-    {
+    {        
         nextBoard = board;
         BoardTools::apply(&nextBoard, player, moves[i]);
         
         value = -alphaBetaTT(nextBoard, depth-1,-beta,-alpha, !player, 0, timeIsUp);
+
+        //value = -alphaBetaTT(boards[i], depth-1,-beta,-alpha, !player, 0, timeIsUp);
 
         if(value > best){
             best = value;
@@ -56,6 +62,7 @@ int alphaBetaTT(Board board, int depth, int alpha, int beta, int player, Move *r
             bestMoveNum = i;
 #endif
             if(resultMove){
+                //*resultMove = boards[i].lastMove;
                 *resultMove = moves[i];
             }
         }
@@ -64,6 +71,7 @@ int alphaBetaTT(Board board, int depth, int alpha, int beta, int player, Move *r
         }
         if(best >= beta){
             if(resultMove){
+                //*resultMove = boards[i].lastMove;
                 *resultMove = moves[i];
             }
             ++cutOff;
@@ -81,6 +89,7 @@ int alphaBetaTT(Board board, int depth, int alpha, int beta, int player, Move *r
 #endif
     
     delete[] moves;
+    //delete[] boards;
     return best;
 }
 
