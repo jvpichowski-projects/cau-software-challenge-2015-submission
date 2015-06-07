@@ -6,7 +6,17 @@ typedef int PVOID;
 
 namespace Evaluation
 {
+#define p3 3 //4 //7
+#define p2 2 //2 //3
+#define p1 1 //1 //1
+
+#define p 1 //2 //1 //3 //1
+#define c 1 //1 //2 //1 //3
+    
+    
     Evaluation::ToEvaluate evaluate;    
+    Evaluation::ToEvaluate fastEvaluate;    
+    
     
     int fastEval(int playerId, Board board){
         //you could improve the sort eval here
@@ -35,12 +45,12 @@ namespace Evaluation
         //count number of move fields
         int moveFieldCount = Tools::popCount(moveFieldsWe) - Tools::popCount(moveFieldsOp);
         int moveFieldPoints = 0;
-        moveFieldPoints += Tools::popCount(moveFieldsWe & Globals::threes)  * 3;
-        moveFieldPoints += Tools::popCount(moveFieldsWe & Globals::twos)    * 2;
-        moveFieldPoints += Tools::popCount(moveFieldsWe & Globals::ones)    * 1;
-        moveFieldPoints -= Tools::popCount(moveFieldsOp & Globals::threes)  * 3;
-        moveFieldPoints -= Tools::popCount(moveFieldsOp & Globals::twos)    * 2;
-        moveFieldPoints -= Tools::popCount(moveFieldsOp & Globals::ones)    * 1;
+        moveFieldPoints += Tools::popCount(moveFieldsWe & Globals::threes)  * p3;
+        moveFieldPoints += Tools::popCount(moveFieldsWe & Globals::twos)    * p2;
+        moveFieldPoints += Tools::popCount(moveFieldsWe & Globals::ones)    * p1;
+        moveFieldPoints -= Tools::popCount(moveFieldsOp & Globals::threes)  * p3;
+        moveFieldPoints -= Tools::popCount(moveFieldsOp & Globals::twos)    * p2;
+        moveFieldPoints -= Tools::popCount(moveFieldsOp & Globals::ones)    * p1;
         
         
         int ringFieldCount = 0;
@@ -65,28 +75,21 @@ namespace Evaluation
             
             ringFieldCount = Tools::popCount(ringsWe) - Tools::popCount(ringsOp);
             
-            ringFieldPoints += Tools::popCount(ringsWe & Globals::threes)  * 3;
-            ringFieldPoints += Tools::popCount(ringsWe & Globals::twos)    * 2;
-            ringFieldPoints += Tools::popCount(ringsWe & Globals::ones)    * 1;
-            ringFieldPoints -= Tools::popCount(ringsOp & Globals::threes)  * 3;
-            ringFieldPoints -= Tools::popCount(ringsOp & Globals::twos)    * 2;
-            ringFieldPoints -= Tools::popCount(ringsOp & Globals::ones)    * 1;
+            ringFieldPoints += Tools::popCount(ringsWe & Globals::threes)  * p3;
+            ringFieldPoints += Tools::popCount(ringsWe & Globals::twos)    * p2;
+            ringFieldPoints += Tools::popCount(ringsWe & Globals::ones)    * p1;
+            ringFieldPoints -= Tools::popCount(ringsOp & Globals::threes)  * p3;
+            ringFieldPoints -= Tools::popCount(ringsOp & Globals::twos)    * p2;
+            ringFieldPoints -= Tools::popCount(ringsOp & Globals::ones)    * p1;
             
         }
         
         delete[] penguinPosWe;
         delete[] penguinPosOp;
         
-        //641410000
-        
-//        int result =  points * 4                                                //6
-//                    + moveFieldCount * 1 + moveFieldPoints * 1                  //4 1
-//                    + ringFieldCount * 0 + ringFieldPoints * 0                  //4 1
-//                    + totalReachFieldCount * 1 + totalReachFieldPoints * 1
-//                    + restrictedReachFieldCount * 1 + restrictedReachFieldPoints * 1;
         int result = points * Globals::Config::points
-                    + Globals::Config::moveFields * (moveFieldCount + moveFieldPoints)                 //4 1
-                    + Globals::Config::ringFields * (ringFieldCount + ringFieldPoints);                 //4 1
+                    + Globals::Config::moveFields * (moveFieldCount * c + moveFieldPoints * p)
+                    + Globals::Config::ringFields * (ringFieldCount * c + ringFieldPoints * p);
         
         if(playerId != ID_WE){
             return -result;
@@ -136,12 +139,12 @@ namespace Evaluation
         //count number of move fields
         int moveFieldCount = Tools::popCount(moveFieldsWe) - Tools::popCount(moveFieldsOp);
         int moveFieldPoints = 0;
-        moveFieldPoints += Tools::popCount(moveFieldsWe & Globals::threes)  * 3;
-        moveFieldPoints += Tools::popCount(moveFieldsWe & Globals::twos)    * 2;
-        moveFieldPoints += Tools::popCount(moveFieldsWe & Globals::ones)    * 1;
-        moveFieldPoints -= Tools::popCount(moveFieldsOp & Globals::threes)  * 3;
-        moveFieldPoints -= Tools::popCount(moveFieldsOp & Globals::twos)    * 2;
-        moveFieldPoints -= Tools::popCount(moveFieldsOp & Globals::ones)    * 1;
+        moveFieldPoints += Tools::popCount(moveFieldsWe & Globals::threes)  * p3;
+        moveFieldPoints += Tools::popCount(moveFieldsWe & Globals::twos)    * p2;
+        moveFieldPoints += Tools::popCount(moveFieldsWe & Globals::ones)    * p1;
+        moveFieldPoints -= Tools::popCount(moveFieldsOp & Globals::threes)  * p3;
+        moveFieldPoints -= Tools::popCount(moveFieldsOp & Globals::twos)    * p2;
+        moveFieldPoints -= Tools::popCount(moveFieldsOp & Globals::ones)    * p1;
         
         
         int totalReachFieldCount = 0;
@@ -170,12 +173,12 @@ namespace Evaluation
             
             ringFieldCount = Tools::popCount(ringsWe) - Tools::popCount(ringsOp);
             
-            ringFieldPoints += Tools::popCount(ringsWe & Globals::threes)  * 3;
-            ringFieldPoints += Tools::popCount(ringsWe & Globals::twos)    * 2;
-            ringFieldPoints += Tools::popCount(ringsWe & Globals::ones)    * 1;
-            ringFieldPoints -= Tools::popCount(ringsOp & Globals::threes)  * 3;
-            ringFieldPoints -= Tools::popCount(ringsOp & Globals::twos)    * 2;
-            ringFieldPoints -= Tools::popCount(ringsOp & Globals::ones)    * 1;
+            ringFieldPoints += Tools::popCount(ringsWe & Globals::threes)  * p3;
+            ringFieldPoints += Tools::popCount(ringsWe & Globals::twos)    * p2;
+            ringFieldPoints += Tools::popCount(ringsWe & Globals::ones)    * p1;
+            ringFieldPoints -= Tools::popCount(ringsOp & Globals::threes)  * p3;
+            ringFieldPoints -= Tools::popCount(ringsOp & Globals::twos)    * p2;
+            ringFieldPoints -= Tools::popCount(ringsOp & Globals::ones)    * p1;
             
         //-------------------------------total reach field points---------------
             
@@ -188,12 +191,12 @@ namespace Evaluation
             
             totalReachFieldCount = Tools::popCount(totalReachFieldWe) - Tools::popCount(totalReachFieldOp);
             
-            totalReachFieldPoints += Tools::popCount(totalReachFieldWe & Globals::threes)  * 3;
-            totalReachFieldPoints += Tools::popCount(totalReachFieldWe & Globals::twos)    * 2;
-            totalReachFieldPoints += Tools::popCount(totalReachFieldWe & Globals::ones)    * 1;
-            totalReachFieldPoints -= Tools::popCount(totalReachFieldOp & Globals::threes)  * 3;
-            totalReachFieldPoints -= Tools::popCount(totalReachFieldOp & Globals::twos)    * 2;
-            totalReachFieldPoints -= Tools::popCount(totalReachFieldOp & Globals::ones)    * 1;
+            totalReachFieldPoints += Tools::popCount(totalReachFieldWe & Globals::threes)  * p3;
+            totalReachFieldPoints += Tools::popCount(totalReachFieldWe & Globals::twos)    * p2;
+            totalReachFieldPoints += Tools::popCount(totalReachFieldWe & Globals::ones)    * p1;
+            totalReachFieldPoints -= Tools::popCount(totalReachFieldOp & Globals::threes)  * p3;
+            totalReachFieldPoints -= Tools::popCount(totalReachFieldOp & Globals::twos)    * p2;
+            totalReachFieldPoints -= Tools::popCount(totalReachFieldOp & Globals::ones)    * p1;
             
         //-------------------------------restricted reach field points----------
             
@@ -215,12 +218,12 @@ namespace Evaluation
             
             restrictedReachFieldCount = Tools::popCount(restrictedReachFieldWe) - Tools::popCount(restrictedReachFieldOp);
             
-            restrictedReachFieldPoints += Tools::popCount(restrictedReachFieldWe & Globals::threes)  * 3;
-            restrictedReachFieldPoints += Tools::popCount(restrictedReachFieldWe & Globals::twos)    * 2;
-            restrictedReachFieldPoints += Tools::popCount(restrictedReachFieldWe & Globals::ones)    * 1;
-            restrictedReachFieldPoints -= Tools::popCount(restrictedReachFieldOp & Globals::threes)  * 3;
-            restrictedReachFieldPoints -= Tools::popCount(restrictedReachFieldOp & Globals::twos)    * 2;
-            restrictedReachFieldPoints -= Tools::popCount(restrictedReachFieldOp & Globals::ones)    * 1;
+            restrictedReachFieldPoints += Tools::popCount(restrictedReachFieldWe & Globals::threes)  * p3;
+            restrictedReachFieldPoints += Tools::popCount(restrictedReachFieldWe & Globals::twos)    * p2;
+            restrictedReachFieldPoints += Tools::popCount(restrictedReachFieldWe & Globals::ones)    * p1;
+            restrictedReachFieldPoints -= Tools::popCount(restrictedReachFieldOp & Globals::threes)  * p3;
+            restrictedReachFieldPoints -= Tools::popCount(restrictedReachFieldOp & Globals::twos)    * p2;
+            restrictedReachFieldPoints -= Tools::popCount(restrictedReachFieldOp & Globals::ones)    * p1;
             
         }
         
@@ -235,10 +238,10 @@ namespace Evaluation
 //                    + totalReachFieldCount * 1 + totalReachFieldPoints * 1
 //                    + restrictedReachFieldCount * 1 + restrictedReachFieldPoints * 1;
         int result = points * Globals::Config::points
-                    + Globals::Config::moveFields * (moveFieldCount + moveFieldPoints)                 //4 1
-                    + Globals::Config::ringFields * (ringFieldCount + ringFieldPoints)                  //4 1
-                    + Globals::Config::aReachFields * (totalReachFieldCount + totalReachFieldPoints)
-                    + Globals::Config::rReachFields * (restrictedReachFieldCount + restrictedReachFieldPoints);
+                    + Globals::Config::moveFields * (moveFieldCount * c + moveFieldPoints * p)                 //4 1
+                    + Globals::Config::ringFields * (ringFieldCount * c + ringFieldPoints * p)                  //4 1
+                    + Globals::Config::aReachFields * (totalReachFieldCount * c + totalReachFieldPoints * p)
+                    + Globals::Config::rReachFields * (restrictedReachFieldCount * c + restrictedReachFieldPoints * p);
         
         if(playerId != ID_WE){
             return -result;
@@ -255,6 +258,7 @@ namespace Evaluation
         //add your pre eval code here!
         //use either setEval or newEval 
         evaluate = &Evaluation::newEval;
+        fastEvaluate = &Evaluation::fastEval;
         
         //you could change this params in Globals::Config
 //        points;

@@ -14,7 +14,7 @@
 #define ordered_runmoves
 
 #define limit_move_gen
-#define MOVE_GEN_LIMIT 10
+#define MOVE_GEN_LIMIT 10 //15
 
 #define move_order_stats
 
