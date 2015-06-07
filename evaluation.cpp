@@ -11,13 +11,6 @@ namespace Evaluation
     int fastEval(int playerId, Board board){
         //you could improve the sort eval here
         int points = board.pointsdiff;
-
-        if(board.movecount >= 60){
-            if(playerId != ID_WE){
-                return -points;
-            }
-            return points;
-        }
         
         //-------------------------------get positions--------------------------
 
@@ -93,7 +86,7 @@ namespace Evaluation
 //                    + restrictedReachFieldCount * 1 + restrictedReachFieldPoints * 1;
         int result = points * Globals::Config::points
                     + Globals::Config::moveFields * (moveFieldCount + moveFieldPoints)                 //4 1
-                    + Globals::Config::ringFields * (ringFieldCount + ringFieldPoints)                  //4 1
+                    + Globals::Config::ringFields * (ringFieldCount + ringFieldPoints);                 //4 1
         
         if(playerId != ID_WE){
             return -result;
