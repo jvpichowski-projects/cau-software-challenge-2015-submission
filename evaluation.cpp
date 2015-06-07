@@ -6,28 +6,99 @@ typedef int PVOID;
 
 namespace Evaluation
 {
-    Evaluation::ToEvaluate evaluate;
-    
-    u_int8_t multpPoints = 3;
-    u_int8_t multpMovepo = 1;
-    
-    u_int8_t multpMovep1 = 1;
-    u_int8_t multpMovep2 = 2;
-    u_int8_t multpMovep3 = 4;
-    
-    bool ring1good = true;
-    
-    u_int8_t multpFiAr = 2;
-    
+    Evaluation::ToEvaluate evaluate;    
     
     int fastEval(int playerId, Board board){
         //you could improve the sort eval here
-        
         int points = board.pointsdiff;
-        if(playerId != ID_WE){
-            return -points;
+
+        if(board.movecount >= 60){
+            if(playerId != ID_WE){
+                return -points;
+            }
+            return points;
         }
-        return points;
+        
+        //-------------------------------get positions--------------------------
+
+        int b = 0;
+        int *penguinPosWe = Tools::fastBitScan(board.mypos, &b);
+        b = 0;
+        int *penguinPosOp = Tools::fastBitScan(board.oppos, &b);
+        
+        //-------------------------------generate move fields-------------------
+        
+        //wenn sich zwei linien kruezen wird das kreuz-feld nur einmal gerechnet
+        u_int64_t moveFieldsWe = Tools::genMoveField(penguinPosWe[0], board.used) 
+                | Tools::genMoveField(penguinPosWe[1], board.used) 
+                | Tools::genMoveField(penguinPosWe[2], board.used)
+                | Tools::genMoveField(penguinPosWe[3], board.used);
+        
+        u_int64_t moveFieldsOp = Tools::genMoveField(penguinPosOp[0], board.used) 
+                | Tools::genMoveField(penguinPosOp[1], board.used) 
+                | Tools::genMoveField(penguinPosOp[2], board.used)
+                | Tools::genMoveField(penguinPosOp[3], board.used);
+        
+        //count number of move fields
+        int moveFieldCount = Tools::popCount(moveFieldsWe) - Tools::popCount(moveFieldsOp);
+        int moveFieldPoints = 0;
+        moveFieldPoints += Tools::popCount(moveFieldsWe & Globals::threes)  * 3;
+        moveFieldPoints += Tools::popCount(moveFieldsWe & Globals::twos)    * 2;
+        moveFieldPoints += Tools::popCount(moveFieldsWe & Globals::ones)    * 1;
+        moveFieldPoints -= Tools::popCount(moveFieldsOp & Globals::threes)  * 3;
+        moveFieldPoints -= Tools::popCount(moveFieldsOp & Globals::twos)    * 2;
+        moveFieldPoints -= Tools::popCount(moveFieldsOp & Globals::ones)    * 1;
+        
+        
+        int ringFieldCount = 0;
+        int ringFieldPoints = 0;
+        
+        //why not >=????
+        if(board.movecount >= 8){
+            
+        //-------------------------------ring points----------------------------
+            
+            u_int64_t ringsWe = _fieldsAround[penguinPosWe[0]] | 
+                    _fieldsAround[penguinPosWe[1]] | 
+                    _fieldsAround[penguinPosWe[2]] | 
+                    _fieldsAround[penguinPosWe[3]];
+            ringsWe &= ~board.used;
+            
+            u_int64_t ringsOp = _fieldsAround[penguinPosOp[0]] | 
+                    _fieldsAround[penguinPosOp[1]] | 
+                    _fieldsAround[penguinPosOp[2]] | 
+                    _fieldsAround[penguinPosOp[3]];
+            ringsOp &= ~board.used;
+            
+            ringFieldCount = Tools::popCount(ringsWe) - Tools::popCount(ringsOp);
+            
+            ringFieldPoints += Tools::popCount(ringsWe & Globals::threes)  * 3;
+            ringFieldPoints += Tools::popCount(ringsWe & Globals::twos)    * 2;
+            ringFieldPoints += Tools::popCount(ringsWe & Globals::ones)    * 1;
+            ringFieldPoints -= Tools::popCount(ringsOp & Globals::threes)  * 3;
+            ringFieldPoints -= Tools::popCount(ringsOp & Globals::twos)    * 2;
+            ringFieldPoints -= Tools::popCount(ringsOp & Globals::ones)    * 1;
+            
+        }
+        
+        delete[] penguinPosWe;
+        delete[] penguinPosOp;
+        
+        //641410000
+        
+//        int result =  points * 4                                                //6
+//                    + moveFieldCount * 1 + moveFieldPoints * 1                  //4 1
+//                    + ringFieldCount * 0 + ringFieldPoints * 0                  //4 1
+//                    + totalReachFieldCount * 1 + totalReachFieldPoints * 1
+//                    + restrictedReachFieldCount * 1 + restrictedReachFieldPoints * 1;
+        int result = points * Globals::Config::points
+                    + Globals::Config::moveFields * (moveFieldCount + moveFieldPoints)                 //4 1
+                    + Globals::Config::ringFields * (ringFieldCount + ringFieldPoints)                  //4 1
+        
+        if(playerId != ID_WE){
+            return -result;
+        }
+        return result;
         
     }
     
