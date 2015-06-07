@@ -57,7 +57,10 @@ void Ocean::GetFood()
         
         packetBuffer += incoming_data_buffer;
                 
-        if(packetBuffer.substr(packetBuffer.length() - 6, 6) == "/room>" || packetBuffer.substr(packetBuffer.length() - 10, 10) == "/protocol>"){
+        if((packetBuffer.length() > 5 && packetBuffer.substr(packetBuffer.length() - 6, 6) == "/room>")
+                || (packetBuffer.length() > 9 && packetBuffer.substr(packetBuffer.length() - 10, 10) == "/protocol>")
+                || (packetBuffer.length() > 6 && packetBuffer.substr(packetBuffer.length() - 7, 7) == "/room>\n")
+                || (packetBuffer.length() > 10 && packetBuffer.substr(packetBuffer.length() - 11, 11) == "/protocol>\n")){
             char* packeBufferAr = (char*)packetBuffer.c_str();
             _onr(packeBufferAr);
             packetBuffer = "";
