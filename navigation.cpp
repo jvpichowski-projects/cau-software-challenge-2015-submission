@@ -48,7 +48,7 @@ int alphaBetaTT(Board board, int depth, int alpha, int beta, int player, Move *r
     int bestMoveNum = 0;
 #endif
     for(i = 0; i < moveCount; ++i)
-    {        
+    {
         nextBoard = board;
         BoardTools::apply(&nextBoard, player, moves[i]);
         
