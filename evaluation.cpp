@@ -7,7 +7,7 @@ typedef int PVOID;
 namespace Evaluation
 {
 #define jonas
-#define fjonas
+//#define fjonas
     
 #define cpoints 4
 #define cmoveFields 1
@@ -140,7 +140,7 @@ namespace Evaluation
         int ringFieldPoints = 0;
         
 #ifdef fjonas
-        int setMoveQuad = 0;
+        int setMoveQuad = 200;
 #endif
         //why not >=????
         if(board.movecount >= 8){
@@ -171,7 +171,6 @@ namespace Evaluation
         }
 #ifdef fjonas
         else{
-            setMoveQuad = 200;
             
             if((Tools::fastPopCount((board.mypos & Q1_all))) > 1)
                 setMoveQuad -= 100;
@@ -260,7 +259,7 @@ namespace Evaluation
         int ringFieldCount = 0;
         int ringFieldPoints = 0;
 #ifdef jonas
-        int setMoveQuad = 0;
+        int setMoveQuad = 200;
 #endif
         //why not >=????
         if(board.movecount >= 8){
@@ -335,9 +334,7 @@ namespace Evaluation
             
         }
 #ifdef jonas
-        else{
-            setMoveQuad = 200;
-            
+        else{            
             if((Tools::fastPopCount((board.mypos & Q1_all))) > 1)
                 setMoveQuad -= 100;
             if((Tools::fastPopCount((board.mypos & Q2_all))) > 1)
