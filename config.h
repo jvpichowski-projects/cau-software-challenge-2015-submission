@@ -16,7 +16,7 @@
 #define limit_move_gen
 #define MOVE_GEN_LIMIT 10 //15
 
-#define move_order_stats
+//#define move_order_stats
 
 #ifdef move_order_stats
     #define move_cutoff_state

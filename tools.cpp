@@ -11,20 +11,20 @@ using namespace std;
 namespace Tools
 {
 
-    void printField(u_int64_t field){
-         cout << "Field:" << endl;
-         cout << " ";
-        for(int i = 0; i <= 63; i++){
-            if(i == 7 || i == 22 || i == 37 ||  i == 52 ){
-                cout << endl;
-            }else if(i == 15 || i == 30 ||  i == 45 ||  i == 60){
-                cout << endl << " ";
-            }
-            cout << " ";
-            cout << ((field >> i) & 1ULL);
-        }
-         cout << endl;
-    }
+//    void printField(u_int64_t field){
+//         cout << "Field:" << endl;
+//         cout << " ";
+//        for(int i = 0; i <= 63; i++){
+//            if(i == 7 || i == 22 || i == 37 ||  i == 52 ){
+//                cout << endl;
+//            }else if(i == 15 || i == 30 ||  i == 45 ||  i == 60){
+//                cout << endl << " ";
+//            }
+//            cout << " ";
+//            cout << ((field >> i) & 1ULL);
+//        }
+//         cout << endl;
+//    }
 
 //--------------------------------------------------------------------------move
 

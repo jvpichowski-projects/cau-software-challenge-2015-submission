@@ -42,14 +42,14 @@ void printMoveOrderStats(){
 }
 #endif
 
-void printSortedMoveList(Move* move, int length)
-{
-    printf("\n\n\n=========SortedMoveList:=========\n");
-    for(int i = 0; i < length; i++){
-        std::cout << i << "  " << move[i].from << "        ||      " << move[i].to << "             val:      " << move[i].value << "  ||\n";
-    }
-    printf("==============End================\n\n\n");
-}
+//void printSortedMoveList(Move* move, int length)
+//{
+//    printf("\n\n\n=========SortedMoveList:=========\n");
+//    for(int i = 0; i < length; i++){
+//        std::cout << i << "  " << move[i].from << "        ||      " << move[i].to << "             val:      " << move[i].value << "  ||\n";
+//    }
+//    printf("==============End================\n\n\n");
+//}
 
 void theBreadfish()
 {

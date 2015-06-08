@@ -56,14 +56,15 @@ void onMoveReq()
 //        BoardTools::genMoveField(&Globals::_board);
 //    }
 
-    std::cout << "IT: " << iterativeDeepening(Globals::_board, ID_WE, 60, 0, &move) << std::endl;//change first guess to 100?
-    std::cout << "MT: " << (int64_t)move.from << "->" << (int64_t)move.to << std::endl;
-    std::cout << "Used before: " << Globals::_board.used << std::endl;
+    iterativeDeepening(Globals::_board, ID_WE, 60, 0, &move);
+//    std::cout << "IT: " << iterativeDeepening(Globals::_board, ID_WE, 60, 0, &move) << std::endl;//change first guess to 100?
+//    std::cout << "MT: " << (int64_t)move.from << "->" << (int64_t)move.to << std::endl;
+//    std::cout << "Used before: " << Globals::_board.used << std::endl;
     
     if(!BoardTools::isValidMove(Globals::_board, move, ID_WE)){
-        std::cout << "Found invalid move: " << ((u_int64_t)move.from) << " -> " << ((u_int64_t)move.to) << " value: " << move.value << std::endl; 
+//        std::cout << "Found invalid move: " << ((u_int64_t)move.from) << " -> " << ((u_int64_t)move.to) << " value: " << move.value << std::endl; 
         move = BoardTools::generateGoodMove(Globals::_board, ID_WE);
-        std::cout << "New move: " << ((u_int64_t)move.from) << " -> " << ((u_int64_t)move.to) << " value: " << move.value << std::endl; 
+//        std::cout << "New move: " << ((u_int64_t)move.from) << " -> " << ((u_int64_t)move.to) << " value: " << move.value << std::endl; 
     }
     
     Ocean::Send(move);
@@ -72,7 +73,7 @@ void onMoveReq()
     
     clock_gettime(Globals::clockTime, &Globals::beginningOther); 
 
-    std::cout << "\n\n\n%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% (W) zug nr:  " << Globals::_board.movecount << "\n";
+//    std::cout << "\n\n\n%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% (W) zug nr:  " << Globals::_board.movecount << "\n";
 }
 
 
@@ -93,20 +94,20 @@ void onLastMove(Move move)
     struct timespec nowTime;
     clock_gettime(Globals::clockTime, &nowTime);
     
-    std::cout << "\n\n======================Time of the others (ms): " << (((nowTime.tv_sec * 1000000000 + nowTime.tv_nsec) - (Globals::beginningOther.tv_sec * 1000000000 + Globals::beginningOther.tv_nsec)) / 1000000) << "\n\n\n";
+//    std::cout << "\n\n======================Time of the others (ms): " << (((nowTime.tv_sec * 1000000000 + nowTime.tv_nsec) - (Globals::beginningOther.tv_sec * 1000000000 + Globals::beginningOther.tv_nsec)) / 1000000) << "\n\n\n";
 
-    std::cout << "\n\n\n%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% (O) zug nr:  " << Globals::_board.movecount << "\n";
+//    std::cout << "\n\n\n%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% (O) zug nr:  " << Globals::_board.movecount << "\n";
 }
 
 int main(int argc, char** argv)
 {        
-    std::cout << "Build: " << build << std::endl << std::endl;
+//    std::cout << "Build: " << build << std::endl << std::endl;
     
     theBreadfish();
     
     usleep(100);
     
-    std::cout << "Pointer Limit: " << std::numeric_limits<std::ptrdiff_t>::max() << std::endl;
+//    std::cout << "Pointer Limit: " << std::numeric_limits<std::ptrdiff_t>::max() << std::endl;
     
     Fisher::SetDigestion(&onFieldRec, &onLastMove, &onMoveReq);      //set up our fisher
     
@@ -127,11 +128,11 @@ int main(int argc, char** argv)
             send.append(argv[++i]);
             reservated = true;
         }
-        if(strcmp(argv[i], "--points") == 0)Globals::Config::points = atoi(argv[++i]);
-        if(strcmp(argv[i], "--mf") == 0)Globals::Config::moveFields = atoi(argv[++i]);
-        if(strcmp(argv[i], "--rf") == 0)Globals::Config::ringFields = atoi(argv[++i]);
-        if(strcmp(argv[i], "--arf") == 0)Globals::Config::aReachFields = atoi(argv[++i]);
-        if(strcmp(argv[i], "--rrf") == 0)Globals::Config::rReachFields = atoi(argv[++i]);
+//        if(strcmp(argv[i], "--points") == 0)Globals::Config::points = atoi(argv[++i]);
+//        if(strcmp(argv[i], "--mf") == 0)Globals::Config::moveFields = atoi(argv[++i]);
+//        if(strcmp(argv[i], "--rf") == 0)Globals::Config::ringFields = atoi(argv[++i]);
+//        if(strcmp(argv[i], "--arf") == 0)Globals::Config::aReachFields = atoi(argv[++i]);
+//        if(strcmp(argv[i], "--rrf") == 0)Globals::Config::rReachFields = atoi(argv[++i]);
         
         if(strcmp(argv[i], "-h") == 0)host = argv[++i];
         if(strcmp(argv[i], "-p") == 0)port = argv[++i];
@@ -163,10 +164,10 @@ int main(int argc, char** argv)
         Ocean::GetFood();
     }
     
-    std::cout << std::endl << "Bilance: " << std::endl;
-    std::cout << "CutOff: " << Globals::Log::globalCutOff << std::endl;
-    std::cout << "Evals:  " << Globals::Log::globalEvalCount << std::endl;
-    std::cout << "Nodes:  " << Globals::Log::globalNodesTravled << std::endl << std::endl;
+//    std::cout << std::endl << "Bilance: " << std::endl;
+//    std::cout << "CutOff: " << Globals::Log::globalCutOff << std::endl;
+//    std::cout << "Evals:  " << Globals::Log::globalEvalCount << std::endl;
+//    std::cout << "Nodes:  " << Globals::Log::globalNodesTravled << std::endl << std::endl;
     
     sleep(3);
     
