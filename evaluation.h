@@ -40,7 +40,7 @@ namespace Evaluation
     extern ToEvaluate evaluate;
     extern ToEvaluate fastEvaluate;
     int fastEval(int playerId, Board board);
-    int preEvaluate();
+    int preEvaluate(int moveCount);
 }
 
 #endif	/* EVALUATION_H */

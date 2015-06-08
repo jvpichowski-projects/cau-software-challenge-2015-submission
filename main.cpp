@@ -51,7 +51,7 @@ void onMoveReq()
     Move move;
     //there is a bug when the game ends no move is sen
     
-    Evaluation::preEvaluate();
+    Evaluation::preEvaluate(Globals::_board.movecount);
 //    if(Globals::_board.movecount >= 8){
 //        BoardTools::genMoveField(&Globals::_board);
 //    }
