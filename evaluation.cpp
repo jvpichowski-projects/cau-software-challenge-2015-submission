@@ -296,6 +296,8 @@ namespace Evaluation
             restrictedReachFieldPoints -= Tools::popCount(restrictedReachFieldOp & Globals::ones)    * p1;
             
         }else{
+            setMoveQuad = 200;
+            
             if((Tools::popCount((board.mypos & Q1_all))) > 1)
                 setMoveQuad -= 100;
             if((Tools::popCount((board.mypos & Q2_all))) > 1)
@@ -306,32 +308,13 @@ namespace Evaluation
                 setMoveQuad -= 100;
 
             if((Tools::popCount((board.mypos & Q1_best))) == 1)
-                setMoveQuad += 20;
+                setMoveQuad += 50;
             if((Tools::popCount((board.mypos & Q2_best))) == 1)
-                setMoveQuad += 20;
+                setMoveQuad += 50;
             if((Tools::popCount((board.mypos & Q3_best))) == 1)
-                setMoveQuad += 20;
+                setMoveQuad += 50;
             if((Tools::popCount((board.mypos & Q4_best))) == 1)
-                setMoveQuad += 20;
-
-            
-            if((Tools::popCount((board.oppos & Q1_all))) > 1)
-                setMoveQuad += 100;
-            if((Tools::popCount((board.oppos & Q2_all))) > 1)
-                setMoveQuad += 100;
-            if((Tools::popCount((board.oppos & Q3_all))) > 1)
-                setMoveQuad += 100;
-            if((Tools::popCount((board.oppos & Q4_all))) > 1)
-                setMoveQuad += 100;
-
-            if((Tools::popCount((board.oppos & Q1_best))) == 1)
-                setMoveQuad -= 20;
-            if((Tools::popCount((board.oppos & Q2_best))) == 1)
-                setMoveQuad -= 20;
-            if((Tools::popCount((board.oppos & Q3_best))) == 1)
-                setMoveQuad -= 20;
-            if((Tools::popCount((board.oppos & Q4_best))) == 1)
-                setMoveQuad -= 20;
+                setMoveQuad += 50;
         }
         
         delete[] penguinPosWe;
