@@ -22,7 +22,7 @@
     #define move_cutoff_state
 #endif
 
-#define TIME_FOR_CALC 1850
+#define TIME_FOR_CALC 1900
 
 #define DYN_START_DEEP
 #define START_DEEP_PERCENT 80
