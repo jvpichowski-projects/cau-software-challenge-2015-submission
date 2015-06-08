@@ -37,11 +37,11 @@ namespace Globals{
     
     extern Board _board;
     
-    namespace Log{
+//    namespace Log{
         
-        extern int globalEvalCount;
-        extern int globalCutOff;
-        extern int globalNodesTravled;
+//        extern int globalEvalCount;
+//        extern int globalCutOff;
+//        extern int globalNodesTravled;
         
 #ifdef move_order_stats
 #define MAX_NUMBER_OF_MOVES 64
@@ -54,7 +54,7 @@ namespace Globals{
 #endif
 #endif
         
-    }
+//    }
 }
 
 

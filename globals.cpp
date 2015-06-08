@@ -26,9 +26,9 @@ namespace Globals{
     
     namespace Log{
         
-        int globalEvalCount;
-        int globalCutOff;
-        int globalNodesTravled;
+//        int globalEvalCount;
+//        int globalCutOff;
+//        int globalNodesTravled;
         
 #ifdef move_order_stats
         int move_order[64][64];
