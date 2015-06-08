@@ -10,8 +10,8 @@ namespace Evaluation
 #define p2 2 //2 //3
 #define p1 1 //1 //1
 
-#define p 1 //1 //2 //1 //3 //1 //1
-#define c 1 //1 //1 //2 //1 //3 //0
+//#define p 1 //1 //2 //1 //3 //1 //1
+//#define c 1 //1 //1 //2 //1 //3 //0
     
     
     Evaluation::ToEvaluate evaluate;    
@@ -82,8 +82,8 @@ namespace Evaluation
         delete[] penguinPosOp;
         
         int result = points * Globals::Config::points
-                    + Globals::Config::moveFields * (moveFieldCount * c + moveFieldPoints * p)
-                    + Globals::Config::ringFields * (ringFieldCount * c + ringFieldPoints * p);
+                    + Globals::Config::moveFields * (moveFieldCount + moveFieldPoints)
+                    + Globals::Config::ringFields * (ringFieldCount + ringFieldPoints);
         
         if(playerId != ID_WE){
             return -result;
@@ -163,8 +163,8 @@ namespace Evaluation
         delete[] penguinPosOp;
         
         int result = points * Globals::Config::points
-                    + Globals::Config::moveFields * (moveFieldCount * c + moveFieldPoints * p)
-                    + Globals::Config::ringFields * (ringFieldCount * c + ringFieldPoints * p)
+                    + Globals::Config::moveFields * (moveFieldCount + moveFieldPoints )
+                    + Globals::Config::ringFields * (ringFieldCount + ringFieldPoints )
                     + setMoveQuad;
         
         if(playerId != ID_WE){
@@ -297,41 +297,41 @@ namespace Evaluation
             
         }else{
             if((Tools::popCount((board.mypos & Q1_all))) > 1)
-                setMoveQuad -= 100;
+                setMoveQuad -= 2;
             if((Tools::popCount((board.mypos & Q2_all))) > 1)
-                setMoveQuad -= 100;
+                setMoveQuad -= 2;
             if((Tools::popCount((board.mypos & Q3_all))) > 1)
-                setMoveQuad -= 100;
+                setMoveQuad -= 2;
             if((Tools::popCount((board.mypos & Q4_all))) > 1)
-                setMoveQuad -= 100;
+                setMoveQuad -= 2;
 
             if((Tools::popCount((board.mypos & Q1_best))) == 1)
-                setMoveQuad += 20;
+                setMoveQuad += 1;
             if((Tools::popCount((board.mypos & Q2_best))) == 1)
-                setMoveQuad += 20;
+                setMoveQuad += 1;
             if((Tools::popCount((board.mypos & Q3_best))) == 1)
-                setMoveQuad += 20;
+                setMoveQuad += 1;
             if((Tools::popCount((board.mypos & Q4_best))) == 1)
-                setMoveQuad += 20;
+                setMoveQuad += 1;
 
             
             if((Tools::popCount((board.oppos & Q1_all))) > 1)
-                setMoveQuad += 100;
+                setMoveQuad += 2;
             if((Tools::popCount((board.oppos & Q2_all))) > 1)
-                setMoveQuad += 100;
+                setMoveQuad += 2;
             if((Tools::popCount((board.oppos & Q3_all))) > 1)
-                setMoveQuad += 100;
+                setMoveQuad += 2;
             if((Tools::popCount((board.oppos & Q4_all))) > 1)
-                setMoveQuad += 100;
+                setMoveQuad += 2;
 
             if((Tools::popCount((board.oppos & Q1_best))) == 1)
-                setMoveQuad -= 20;
+                setMoveQuad -= 1;
             if((Tools::popCount((board.oppos & Q2_best))) == 1)
-                setMoveQuad -= 20;
+                setMoveQuad -= 1;
             if((Tools::popCount((board.oppos & Q3_best))) == 1)
-                setMoveQuad -= 20;
+                setMoveQuad -= 1;
             if((Tools::popCount((board.oppos & Q4_best))) == 1)
-                setMoveQuad -= 20;
+                setMoveQuad -= 1;
         }
         
         delete[] penguinPosWe;
@@ -345,11 +345,11 @@ namespace Evaluation
 //                    + totalReachFieldCount * 1 + totalReachFieldPoints * 1
 //                    + restrictedReachFieldCount * 1 + restrictedReachFieldPoints * 1;
         int result = points * Globals::Config::points
-                    + Globals::Config::moveFields * (moveFieldCount * c + moveFieldPoints * p)                 //4 1
-                    + Globals::Config::ringFields * (ringFieldCount * c + ringFieldPoints * p)                  //4 1
-                    + Globals::Config::aReachFields * (totalReachFieldCount * c + totalReachFieldPoints * p)
-                    + Globals::Config::rReachFields * (restrictedReachFieldCount * c + restrictedReachFieldPoints * p)
-                    + setMoveQuad;
+                    + Globals::Config::moveFields * (moveFieldCount + moveFieldPoints)                 //4 1
+                    + Globals::Config::ringFields * (ringFieldCount + ringFieldPoints)                  //4 1
+                    + Globals::Config::aReachFields * (totalReachFieldCount + totalReachFieldPoints)
+                    + Globals::Config::rReachFields * (restrictedReachFieldCount + restrictedReachFieldPoints)
+                    /*+ setMoveQuad*/;
         
         if(playerId != ID_WE){
             return -result;
@@ -490,10 +490,10 @@ namespace Evaluation
 //                    + totalReachFieldCount * 1 + totalReachFieldPoints * 1
 //                    + restrictedReachFieldCount * 1 + restrictedReachFieldPoints * 1;
         int result = points * Globals::Config::points
-                    + Globals::Config::moveFields * (moveFieldCount * c + moveFieldPoints * p)                 //4 1
-                    + Globals::Config::ringFields * (ringFieldCount * c + ringFieldPoints * p)                  //4 1
-                    + Globals::Config::aReachFields * (totalReachFieldCount * c + totalReachFieldPoints * p)
-                    + Globals::Config::rReachFields * (restrictedReachFieldCount * c + restrictedReachFieldPoints * p);
+                    + Globals::Config::moveFields * (moveFieldCount + moveFieldPoints)                 //4 1
+                    + Globals::Config::ringFields * (ringFieldCount + ringFieldPoints)                  //4 1
+                    + Globals::Config::aReachFields * (totalReachFieldCount + totalReachFieldPoints)
+                    + Globals::Config::rReachFields * (restrictedReachFieldCount + restrictedReachFieldPoints);
         
         if(playerId != ID_WE){
             return -result;
