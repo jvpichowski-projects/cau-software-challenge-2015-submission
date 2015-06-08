@@ -103,7 +103,7 @@ void Ocean::Send(Move move)
         send.append(Fisher::cpRid);
         send.append("\">\n\t<data class=\"NullMove\"/>\n</room>\n");
         
-        std::cout << send <<std::endl;
+        //std::cout << send <<std::endl;
         Send(send);
     }
     else if(Tools::isInvalid(move.from))
@@ -129,7 +129,7 @@ void Ocean::Send(Move move)
         
         delete[] zahl;
         
-        std::cout << send <<std::endl;
+        //std::cout << send <<std::endl;
         
         Ocean::Send(send);
     }
@@ -166,7 +166,7 @@ void Ocean::Send(Move move)
         
         delete[] zahl;
         
-        std::cout << send <<std::endl;
+        //std::cout << send <<std::endl;
         
         Ocean::Send(send);
     }
