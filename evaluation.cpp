@@ -6,7 +6,7 @@ typedef int PVOID;
 
 namespace Evaluation
 {
-//#define jonas
+#define jonas
     
 #define p3 3 //4 //7
 #define p2 2 //2 //3
@@ -303,22 +303,22 @@ namespace Evaluation
         else{
             setMoveQuad = 200;
             
-            if((Tools::popCount((board.mypos & Q1_all))) > 1)
+            if((Tools::fastPopCount((board.mypos & Q1_all))) > 1)
                 setMoveQuad -= 100;
-            if((Tools::popCount((board.mypos & Q2_all))) > 1)
+            if((Tools::fastPopCount((board.mypos & Q2_all))) > 1)
                 setMoveQuad -= 100;
-            if((Tools::popCount((board.mypos & Q3_all))) > 1)
+            if((Tools::fastPopCount((board.mypos & Q3_all))) > 1)
                 setMoveQuad -= 100;
-            if((Tools::popCount((board.mypos & Q4_all))) > 1)
+            if((Tools::fastPopCount((board.mypos & Q4_all))) > 1)
                 setMoveQuad -= 100;
 
-            if((Tools::popCount((board.mypos & Q1_best))) == 1)
+            if((Tools::fastPopCount((board.mypos & Q1_best))) == 1)
                 setMoveQuad += 50;
-            if((Tools::popCount((board.mypos & Q2_best))) == 1)
+            if((Tools::fastPopCount((board.mypos & Q2_best))) == 1)
                 setMoveQuad += 50;
-            if((Tools::popCount((board.mypos & Q3_best))) == 1)
+            if((Tools::fastPopCount((board.mypos & Q3_best))) == 1)
                 setMoveQuad += 50;
-            if((Tools::popCount((board.mypos & Q4_best))) == 1)
+            if((Tools::fastPopCount((board.mypos & Q4_best))) == 1)
                 setMoveQuad += 50;
         }
 #endif
