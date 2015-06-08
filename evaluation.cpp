@@ -6,6 +6,8 @@ typedef int PVOID;
 
 namespace Evaluation
 {
+//#define jonas
+    
 #define p3 3 //4 //7
 #define p2 2 //2 //3
 #define p1 1 //1 //1
@@ -222,8 +224,9 @@ namespace Evaluation
         int restrictedReachFieldPoints = 0;
         int ringFieldCount = 0;
         int ringFieldPoints = 0;
+#ifdef jonas
         int setMoveQuad = 0;
-        
+#endif
         //why not >=????
         if(board.movecount >= 8){
             
@@ -295,17 +298,19 @@ namespace Evaluation
             restrictedReachFieldPoints -= Tools::popCount(restrictedReachFieldOp & Globals::twos)    * p2;
             restrictedReachFieldPoints -= Tools::popCount(restrictedReachFieldOp & Globals::ones)    * p1;
             
-        }else{
+        }
+#ifdef jonas
+        else{
             setMoveQuad = 200;
             
             if((Tools::popCount((board.mypos & Q1_all))) > 1)
-                setMoveQuad -= 2;
+                setMoveQuad -= 100;
             if((Tools::popCount((board.mypos & Q2_all))) > 1)
-                setMoveQuad -= 2;
+                setMoveQuad -= 100;
             if((Tools::popCount((board.mypos & Q3_all))) > 1)
-                setMoveQuad -= 2;
+                setMoveQuad -= 100;
             if((Tools::popCount((board.mypos & Q4_all))) > 1)
-                setMoveQuad -= 2;
+                setMoveQuad -= 100;
 
             if((Tools::popCount((board.mypos & Q1_best))) == 1)
                 setMoveQuad += 50;
@@ -316,6 +321,7 @@ namespace Evaluation
             if((Tools::popCount((board.mypos & Q4_best))) == 1)
                 setMoveQuad += 50;
         }
+#endif
         
         delete[] penguinPosWe;
         delete[] penguinPosOp;
@@ -332,7 +338,10 @@ namespace Evaluation
                     + Globals::Config::ringFields * (ringFieldCount + ringFieldPoints)                  //4 1
                     + Globals::Config::aReachFields * (totalReachFieldCount + totalReachFieldPoints)
                     + Globals::Config::rReachFields * (restrictedReachFieldCount + restrictedReachFieldPoints)
-                    /*+ setMoveQuad*/;
+#ifdef jonas
+        + setMoveQuad
+#endif 
+        ;
         
         if(playerId != ID_WE){
             return -result;
