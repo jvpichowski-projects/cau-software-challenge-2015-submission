@@ -2,6 +2,8 @@
 #include <iostream>
 #include <sys/stat.h>
 
+//#define changesystem
+
 //int evalCount;
 //int cutOff;
 //int nodesTraveled;
@@ -52,8 +54,16 @@ int alphaBetaTT(Board board, int depth, int alpha, int beta, int player, Move *r
         nextBoard = board;
         BoardTools::apply(&nextBoard, player, moves[i]);
         
-        value = -alphaBetaTT(nextBoard, depth-1,-beta,-alpha, !player, 0, timeIsUp);
-
+#ifdef changesystem
+        if(nextBoard.movecount != 9){
+#endif
+            value = -alphaBetaTT(nextBoard, depth-1,-beta,-alpha, !player, 0, timeIsUp);
+#ifdef changesystem
+        }else{
+            value = alphaBetaTT(nextBoard, depth-1,-beta,-alpha, player, 0, timeIsUp);
+        }
+#endif
+        
         //value = -alphaBetaTT(boards[i], depth-1,-beta,-alpha, !player, 0, timeIsUp);
 
         if(value > best){
