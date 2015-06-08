@@ -404,7 +404,6 @@ namespace Evaluation
         int restrictedReachFieldPoints = 0;
         int ringFieldCount = 0;
         int ringFieldPoints = 0;
-        int setMoveQuad = 0;
         
             
         //-------------------------------ring points----------------------------
