@@ -14,13 +14,6 @@
 #include "config.h"
 
 namespace Globals{
-    namespace Config{
-        extern int points;
-        extern int moveFields;
-        extern int ringFields;
-        extern int rReachFields;
-        extern int aReachFields;
-    }
     
     extern int pointsRing1;
     

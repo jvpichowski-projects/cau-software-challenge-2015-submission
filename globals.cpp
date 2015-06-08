@@ -2,15 +2,6 @@
 
 namespace Globals{
     
-    namespace Config{
-        int points = 4;
-        int moveFields = 1;
-        int ringFields = 1;
-        int rReachFields = 1;
-        int aReachFields = 1;
-        
-    }
-    
     u_int64_t ones;
     u_int64_t twos;
     u_int64_t threes;

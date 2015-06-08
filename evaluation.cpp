@@ -8,6 +8,12 @@ namespace Evaluation
 {
 #define jonas
     
+#define cpoints 4
+#define cmoveFields 1
+#define cringFields 1
+#define crReachFields 1
+#define caReachFields 1
+        
 #define p3 3 //4 //7
 #define p2 2 //2 //3
 #define p1 1 //1 //1
@@ -83,9 +89,9 @@ namespace Evaluation
         delete[] penguinPosWe;
         delete[] penguinPosOp;
         
-        int result = points * Globals::Config::points
-                    + Globals::Config::moveFields * (moveFieldCount + moveFieldPoints)
-                    + Globals::Config::ringFields * (ringFieldCount + ringFieldPoints);
+        int result = points * cpoints
+                    + cmoveFields * (moveFieldCount + moveFieldPoints)
+                    + cringFields * (ringFieldCount + ringFieldPoints);
         
         if(playerId != ID_WE){
             return -result;
@@ -164,9 +170,9 @@ namespace Evaluation
         delete[] penguinPosWe;
         delete[] penguinPosOp;
         
-        int result = points * Globals::Config::points
-                    + Globals::Config::moveFields * (moveFieldCount + moveFieldPoints )
-                    + Globals::Config::ringFields * (ringFieldCount + ringFieldPoints )
+        int result = points * cpoints
+                    + cmoveFields * (moveFieldCount + moveFieldPoints )
+                    + cringFields * (ringFieldCount + ringFieldPoints )
                     + setMoveQuad;
         
         if(playerId != ID_WE){
@@ -333,11 +339,11 @@ namespace Evaluation
 //                    + ringFieldCount * 0 + ringFieldPoints * 0                  //4 1
 //                    + totalReachFieldCount * 1 + totalReachFieldPoints * 1
 //                    + restrictedReachFieldCount * 1 + restrictedReachFieldPoints * 1;
-        int result = points * Globals::Config::points
-                    + Globals::Config::moveFields * (moveFieldCount + moveFieldPoints)                 //4 1
-                    + Globals::Config::ringFields * (ringFieldCount + ringFieldPoints)                  //4 1
-                    + Globals::Config::aReachFields * (totalReachFieldCount + totalReachFieldPoints)
-                    + Globals::Config::rReachFields * (restrictedReachFieldCount + restrictedReachFieldPoints)
+        int result = points * cpoints
+                    + cmoveFields * (moveFieldCount + moveFieldPoints)                 //4 1
+                    + cringFields * (ringFieldCount + ringFieldPoints)                  //4 1
+                    + caReachFields * (totalReachFieldCount + totalReachFieldPoints)
+                    + crReachFields * (restrictedReachFieldCount + restrictedReachFieldPoints)
 #ifdef jonas
         + setMoveQuad
 #endif 
@@ -481,11 +487,11 @@ namespace Evaluation
 //                    + ringFieldCount * 0 + ringFieldPoints * 0                  //4 1
 //                    + totalReachFieldCount * 1 + totalReachFieldPoints * 1
 //                    + restrictedReachFieldCount * 1 + restrictedReachFieldPoints * 1;
-        int result = points * Globals::Config::points
-                    + Globals::Config::moveFields * (moveFieldCount + moveFieldPoints)                 //4 1
-                    + Globals::Config::ringFields * (ringFieldCount + ringFieldPoints)                  //4 1
-                    + Globals::Config::aReachFields * (totalReachFieldCount + totalReachFieldPoints)
-                    + Globals::Config::rReachFields * (restrictedReachFieldCount + restrictedReachFieldPoints);
+        int result = points * cpoints
+                    + cmoveFields * (moveFieldCount + moveFieldPoints)                 //4 1
+                    + cringFields * (ringFieldCount + ringFieldPoints)                  //4 1
+                    + caReachFields * (totalReachFieldCount + totalReachFieldPoints)
+                    + crReachFields * (restrictedReachFieldCount + restrictedReachFieldPoints);
         
         if(playerId != ID_WE){
             return -result;
