@@ -1,6 +1,5 @@
 /* 
  * File:   tools.h
- * Author: jan
  *
  * Created on 15. Februar 2015, 20:41
  */

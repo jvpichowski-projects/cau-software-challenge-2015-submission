@@ -1,6 +1,5 @@
 /* 
  * File:   globals.h
- * Author: jan
  *
  * Created on 15. Februar 2015, 20:44
  */
@@ -29,25 +28,6 @@ namespace Globals{
     extern timespec beginningOther;
     
     extern Board _board;
-    
-//    namespace Log{
-        
-//        extern int globalEvalCount;
-//        extern int globalCutOff;
-//        extern int globalNodesTravled;
-        
-#ifdef move_order_stats
-#define MAX_NUMBER_OF_MOVES 64
-        
-        //move_order[number of possible moves][move number] = how often this was the best move
-        extern int move_order[MAX_NUMBER_OF_MOVES][MAX_NUMBER_OF_MOVES];
-#ifdef move_cutoff_state
-        //move_cutoff[number of possible moves][move number] = how often this move was the cause for a cutoff
-        extern int move_cutoff[MAX_NUMBER_OF_MOVES][MAX_NUMBER_OF_MOVES];
-#endif
-#endif
-        
-//    }
 }
 
 

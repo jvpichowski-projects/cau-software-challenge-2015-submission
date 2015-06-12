@@ -1,6 +1,5 @@
 /* 
  * File:   main.h
- * Author: jan
  *
  * Created on 15. Februar 2015, 20:50
  */
@@ -8,7 +7,7 @@
 #ifndef MAIN_H
 #define	MAIN_H
 
-#define build "Build 15.03.13"
+#define build "Build 15-06-08 THE FINAL RELEASE 23:59"
 
 #include <unistd.h>
 #include <limits>

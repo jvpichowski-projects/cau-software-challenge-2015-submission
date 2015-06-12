@@ -168,9 +168,7 @@ namespace Evaluation
                     + cmoveFields * (moveFieldCount + moveFieldPoints )
                     + cringFields * (ringFieldCount + ringFieldPoints );
         
-        if(playerId != ID_WE){
-            return -result;
-        }
+        if(playerId != ID_WE) return -result;
         return result;
         
     }
@@ -180,9 +178,7 @@ namespace Evaluation
         int points = board.pointsdiff;
 
         if(board.movecount >= 60){
-            if(playerId != ID_WE){
-                return -points;
-            }
+            if(playerId != ID_WE) return -points;
             return points;
         }
         
@@ -328,9 +324,7 @@ namespace Evaluation
                     + crReachFields * (restrictedReachFieldCount + restrictedReachFieldPoints)
                     + setMoveQuad;
         
-        if(playerId != ID_WE){
-            return -result;
-        }
+        if(playerId != ID_WE) return -result;
         return result;
         
     }
@@ -340,9 +334,7 @@ namespace Evaluation
         int points = board.pointsdiff;
 
         if(board.movecount >= 60){
-            if(playerId != ID_WE){
-                return -points;
-            }
+            if(playerId != ID_WE) return -points;
             return points;
         }
         
@@ -464,9 +456,8 @@ namespace Evaluation
                     + caReachFields * (totalReachFieldCount + totalReachFieldPoints)
                     + crReachFields * (restrictedReachFieldCount + restrictedReachFieldPoints);
         
-        if(playerId != ID_WE){
-            return -result;
-        }
+        if(playerId != ID_WE) return -result;
+        
         return result;
         
     }

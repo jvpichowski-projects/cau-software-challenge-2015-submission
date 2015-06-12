@@ -1,6 +1,5 @@
 /* 
  * File:   state.h
- * Author: jan
  *
  * Created on 17. Februar 2015, 17:32
  */

@@ -1,6 +1,5 @@
 /* 
  * File:   navigation.h
- * Author: jan
  *
  * Created on 26. Februar 2015, 13:51
  */

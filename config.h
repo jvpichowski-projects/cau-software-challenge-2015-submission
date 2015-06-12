@@ -1,6 +1,5 @@
 /* 
  * File:   configuration.h
- * Author: jan
  *
  * Created on 19. Februar 2015, 16:46
  */
@@ -14,13 +13,7 @@
 #define ordered_runmoves
 
 #define limit_move_gen
-#define MOVE_GEN_LIMIT 10 //15
-
-//#define move_order_stats
-
-#ifdef move_order_stats
-    #define move_cutoff_state
-#endif
+#define MOVE_GEN_LIMIT 10
 
 #define TIME_FOR_CALC 1900
 

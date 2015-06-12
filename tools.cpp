@@ -1,7 +1,6 @@
 #include "tools.h"
 /* 
  * File:   main.cpp
- * Author: jan
  *
  * Created on 12. Januar 2015, 17:07
  */
@@ -190,12 +189,9 @@ namespace Tools
         delete prev;
         
         while(founds != 0){
-            if(arroundPosA & founds->field){
-                *resulta |= founds->field;
-            }
-            if(arroundPosB & founds->field){
-                *resultb |= founds->field;
-            }
+            if(arroundPosA & founds->field) *resulta |= founds->field;
+            if(arroundPosB & founds->field) *resultb |= founds->field;
+            
             foundNode *prev = founds;
             founds = founds->nextNode;
             delete prev;
@@ -286,12 +282,9 @@ namespace Tools
     //-----------------------------------------------------------------------pos
 
     int getPos(int x, int y){
-        if(x >= 8){
-            x = 7;
-        }
-        if(y >= 8){
-            y = 7;
-        }
+        if(x >= 8) x = 7;
+        if(y >= 8) y = 7;
+        
         int pos = 0;
         switch (y) {
             case 0 : pos = 0;  x = (x >= 7 ? 6 : x); break;
@@ -314,33 +307,27 @@ namespace Tools
      * @return [x,y]
      */
     int* getPos(int pos){
-        if(pos < 7){
-            int *result = new int[2]{pos, 0};
-            return result;
-        }else if(pos < 15){
-            int *result = new int[2]{pos-7, 1};
-            return result;
-        }else if(pos < 22){
-            int *result = new int[2]{pos-15, 2};
-            return result;
-        }else if(pos < 30){
-            int *result = new int[2]{pos-22, 3};
-            return result;
-        }else if(pos < 37){
-            int *result = new int[2]{pos-30, 4};
-            return result;
-        }else if(pos < 45){
-            int *result = new int[2]{pos-37, 5};
-            return result;
-        }else if(pos < 52){
-            int *result = new int[2]{pos-45, 6};
-            return result;
-        }else if(pos < 60){
-            int *result = new int[2]{pos-52, 7};
-            return result;
-        }else{
-            return 0;
-        }
+        int *result;
+        if(pos < 7)
+            result = new int[2]{pos, 0};
+        else if(pos < 15)
+            result = new int[2]{pos-7, 1};
+        else if(pos < 22)
+            result = new int[2]{pos-15, 2};
+        else if(pos < 30)
+            result = new int[2]{pos-22, 3};
+        else if(pos < 37)
+            result = new int[2]{pos-30, 4};
+        else if(pos < 45)
+            result = new int[2]{pos-37, 5};
+        else if(pos < 52)
+            result = new int[2]{pos-45, 6};
+        else if(pos < 60)
+            result = new int[2]{pos-52, 7};            
+        else
+            return 0;        
+        
+        return result;
     }
 
 

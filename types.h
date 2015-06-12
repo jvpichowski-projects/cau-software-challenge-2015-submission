@@ -1,6 +1,5 @@
 /* 
  * File:   types.h
- * Author: jan
  *
  * Created on 15. Februar 2015, 20:38
  */
@@ -14,15 +13,6 @@
 
 typedef u_int8_t byte;
 
-
-//Move is a number from 0 to 59
-//if(move.to >= 60){
-//  Nullmove         
-//}else if(move.from >= 60){
-//  Setmove
-//}else{
-//  Normalmove
-//}
 struct Move {
     u_int8_t from;
     u_int8_t to;
@@ -51,15 +41,6 @@ struct Board {
     signed short pointsdiff:7;
     //6
     unsigned movecount:6;
-    //4bits unused
-    
-//    int fastValue;
-//    
-//    int pos[2][4];
-//    u_int64_t moveFieldAll[2];
-//    u_int64_t moveField[2][4];
-//    int allMoveFieldCount[2];
-//    Move lastMove;
     
     bool operator==(const Board& rhs) const
     {
