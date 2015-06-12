@@ -1,5 +1,3 @@
-//Ver2
-
 #include "evaluation.h"
 #include "boardstate.h"
 typedef int PVOID;
@@ -7,7 +5,6 @@ typedef int PVOID;
 namespace Evaluation
 {
 #define jonas
-//#define fjonas
     
 #define cpoints 4
 #define cmoveFields 1
@@ -15,12 +12,9 @@ namespace Evaluation
 #define crReachFields 1
 #define caReachFields 1
         
-#define p3 3 //4 //7
-#define p2 2 //2 //3
-#define p1 1 //1 //1
-
-//#define p 1 //1 //2 //1 //3 //1 //1
-//#define c 1 //1 //1 //2 //1 //3 //0
+#define p3 3
+#define p2 2
+#define p1 1
     
     
     Evaluation::ToEvaluate evaluate;    
@@ -139,9 +133,6 @@ namespace Evaluation
         int ringFieldCount = 0;
         int ringFieldPoints = 0;
         
-#ifdef fjonas
-        int setMoveQuad = 200;
-#endif
         //why not >=????
         if(board.movecount >= 8){
             
@@ -169,39 +160,13 @@ namespace Evaluation
             ringFieldPoints -= Tools::popCount(ringsOp & Globals::ones)    * p1;
             
         }
-#ifdef fjonas
-        else{
-            
-            if((Tools::fastPopCount((board.mypos & Q1_all))) > 1)
-                setMoveQuad -= 100;
-            if((Tools::fastPopCount((board.mypos & Q2_all))) > 1)
-                setMoveQuad -= 100;
-            if((Tools::fastPopCount((board.mypos & Q3_all))) > 1)
-                setMoveQuad -= 100;
-            if((Tools::fastPopCount((board.mypos & Q4_all))) > 1)
-                setMoveQuad -= 100;
-
-            if((Tools::fastPopCount((board.mypos & Q1_best))) == 1)
-                setMoveQuad += 50;
-            if((Tools::fastPopCount((board.mypos & Q2_best))) == 1)
-                setMoveQuad += 50;
-            if((Tools::fastPopCount((board.mypos & Q3_best))) == 1)
-                setMoveQuad += 50;
-            if((Tools::fastPopCount((board.mypos & Q4_best))) == 1)
-                setMoveQuad += 50;
-        }
-#endif
         
         delete[] penguinPosWe;
         delete[] penguinPosOp;
         
         int result = points * cpoints
                     + cmoveFields * (moveFieldCount + moveFieldPoints )
-                    + cringFields * (ringFieldCount + ringFieldPoints )
-#ifdef fjonas
-                    + setMoveQuad
-#endif
-        ;
+                    + cringFields * (ringFieldCount + ringFieldPoints );
         
         if(playerId != ID_WE){
             return -result;
@@ -258,10 +223,8 @@ namespace Evaluation
         int restrictedReachFieldPoints = 0;
         int ringFieldCount = 0;
         int ringFieldPoints = 0;
-#ifdef jonas
-        int setMoveQuad = 200;
-#endif
-        //why not >=????
+        int setMoveQuad = 0;
+        
         if(board.movecount >= 8){
             
         //-------------------------------ring points----------------------------
@@ -333,8 +296,9 @@ namespace Evaluation
             restrictedReachFieldPoints -= Tools::popCount(restrictedReachFieldOp & Globals::ones)    * p1;
             
         }
-#ifdef jonas
         else{            
+            setMoveQuad = 200;
+            
             if((Tools::fastPopCount((board.mypos & Q1_all))) > 1)
                 setMoveQuad -= 100;
             if((Tools::fastPopCount((board.mypos & Q2_all))) > 1)
@@ -353,27 +317,16 @@ namespace Evaluation
             if((Tools::fastPopCount((board.mypos & Q4_best))) == 1)
                 setMoveQuad += 50;
         }
-#endif
         
         delete[] penguinPosWe;
         delete[] penguinPosOp;
         
-        //641410000
-        
-//        int result =  points * 4                                                //6
-//                    + moveFieldCount * 1 + moveFieldPoints * 1                  //4 1
-//                    + ringFieldCount * 0 + ringFieldPoints * 0                  //4 1
-//                    + totalReachFieldCount * 1 + totalReachFieldPoints * 1
-//                    + restrictedReachFieldCount * 1 + restrictedReachFieldPoints * 1;
         int result = points * cpoints
                     + cmoveFields * (moveFieldCount + moveFieldPoints)                 //4 1
                     + cringFields * (ringFieldCount + ringFieldPoints)                  //4 1
                     + caReachFields * (totalReachFieldCount + totalReachFieldPoints)
                     + crReachFields * (restrictedReachFieldCount + restrictedReachFieldPoints)
-#ifdef jonas
-        + setMoveQuad
-#endif 
-        ;
+                    + setMoveQuad;
         
         if(playerId != ID_WE){
             return -result;
@@ -505,13 +458,6 @@ namespace Evaluation
         delete[] penguinPosWe;
         delete[] penguinPosOp;
         
-        //641410000
-        
-//        int result =  points * 4                                                //6
-//                    + moveFieldCount * 1 + moveFieldPoints * 1                  //4 1
-//                    + ringFieldCount * 0 + ringFieldPoints * 0                  //4 1
-//                    + totalReachFieldCount * 1 + totalReachFieldPoints * 1
-//                    + restrictedReachFieldCount * 1 + restrictedReachFieldPoints * 1;
         int result = points * cpoints
                     + cmoveFields * (moveFieldCount + moveFieldPoints)                 //4 1
                     + cringFields * (ringFieldCount + ringFieldPoints)                  //4 1
@@ -527,23 +473,12 @@ namespace Evaluation
     
     int preEvaluate(int moveCount)
     {
-        
-        //add your pre eval code here!
-        //use either setEval or newEval 
         evaluate = &Evaluation::newEvalIf;
         fastEvaluate = &Evaluation::fastEvalIf;
         if(moveCount >= 8){
             fastEvaluate = &Evaluation::fastEval;
             evaluate == &Evaluation::newEval;
         }
-        
-        //you could change this params in Globals::Config
-//        points;
-//        moveFields;
-//        ringFields;
-//        rReachFields;
-//        aReachFields;
-        
         
         return 0; 
     }

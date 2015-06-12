@@ -21,7 +21,6 @@
 #include "navigation.h"
 #include "boardstate.h"
 #include "navigation.h"
-#include "tactic.h"
 
 #endif	/* MAIN_H */
 

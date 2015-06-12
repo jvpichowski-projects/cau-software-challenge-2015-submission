@@ -14,19 +14,4 @@ namespace Globals{
     timespec beginningOther;
     
     Board _board;
-    
-    namespace Log{
-        
-//        int globalEvalCount;
-//        int globalCutOff;
-//        int globalNodesTravled;
-        
-#ifdef move_order_stats
-        int move_order[64][64];
-#ifdef move_cutoff_state
-        int move_cutoff[64][64];
-#endif
-#endif
-        
-    }
 }

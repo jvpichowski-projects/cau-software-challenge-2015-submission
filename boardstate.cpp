@@ -76,11 +76,9 @@ namespace BoardTools{
         int b = length-1;
         
         //untested
-#ifdef limit_move_gen
         if(b > MOVE_GEN_LIMIT){
             b = MOVE_GEN_LIMIT;
         }
-#endif
         for(; b > 0; --b){
             if(valuedMoves[b-1].value < value){
                 valuedMoves[b] = valuedMoves[b-1];
@@ -146,11 +144,7 @@ namespace BoardTools{
                     Move m = Move();
                     m.from = penguinPos[i];
                     m.to = threesPos[k];
-#ifdef ordered_runmoves
                     insertMove(moves, m, state, playerId, *length);
-#else
-                    moves[++c] = m;
-#endif
                 }
                 delete[] threesPos;
 
@@ -160,11 +154,7 @@ namespace BoardTools{
                     Move m = Move();
                     m.from = penguinPos[i];
                     m.to = twosPos[k];
-#ifdef ordered_runmoves
                     insertMove(moves, m, state, playerId, *length);
-#else
-                    moves[++c] = m;
-#endif
                 }
                 delete[] twosPos;
 
@@ -174,11 +164,7 @@ namespace BoardTools{
                     Move m = Move();
                     m.from = penguinPos[i];
                     m.to = onesPos[k];
-#ifdef ordered_runmoves
                     insertMove(moves, m, state, playerId, *length);
-#else
-                    moves[++c] = m;
-#endif
                 }
                 delete[] onesPos;
                 
@@ -187,25 +173,13 @@ namespace BoardTools{
                 Move m = Move();
                 m.from = INVALID_POS;
                 m.to = INVALID_POS;
-#ifdef ordered_runmoves
                 insertMove(moves, m, state, playerId, *length);
-#else
-                    moves[++c] = m;
-#endif
             }
             
             delete[] moveFields, penguinPos;
-            
-#ifdef DEBUG_MOVE_ORDERING
-        for(int i = 0; i < *length; i++){
-            std::cout << "VM: " << moves[i].value << std::endl;
-        }
-#endif
-#ifdef limit_move_gen
             if(*length > MOVE_GEN_LIMIT){
                 *length = MOVE_GEN_LIMIT;
             }
-#endif
             return moves;
         }
         //else return setMove
@@ -223,23 +197,12 @@ namespace BoardTools{
             Move m = Move();
             m.from = INVALID_POS;
             m.to = freePos[i];
-#ifdef ordered_setmoves
             insertMove(moves, m, state, playerId, freePosSize);
-#else
-            moves[i] = m;
-#endif
         }
         
-#ifdef DEBUG_MOVE_ORDERING
-        for(int i = 0; i < freePosSize; i++){
-            std::cout << "VM: " << moves[i].value << std::endl;
-        }
-#endif
-#ifdef limit_move_gen
-            if(*length > MOVE_GEN_LIMIT){
+        if(*length > MOVE_GEN_LIMIT){
                 *length = MOVE_GEN_LIMIT;
             }
-#endif
         delete[] freePos;
         return moves; 
     }

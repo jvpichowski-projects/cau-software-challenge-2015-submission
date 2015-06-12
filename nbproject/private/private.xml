@@ -7,13 +7,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/jan/NetBeansProjects/SC/sc/evaluation.cpp</file>
-            <file>file:/home/jan/NetBeansProjects/SC/sc/tools.cpp</file>
-            <file>file:/home/jan/NetBeansProjects/SC/sc/navigation.h</file>
-            <file>file:/home/jan/NetBeansProjects/SC/sc/boardstate.cpp</file>
-            <file>file:/home/jan/NetBeansProjects/SC/sc/main.cpp</file>
-            <file>file:/home/jan/NetBeansProjects/SC/sc/config.h</file>
-            <file>file:/home/jan/NetBeansProjects/SC/sc/globals.cpp</file>
+            <file>file:/home/jonas/NetBeansProjectsSC_Comments__15-06-12__2/sc/evaluation.cpp</file>
+            <file>file:/home/jonas/NetBeansProjectsSC_Comments__15-06-12__2/sc/globals.cpp</file>
+            <file>file:/home/jonas/NetBeansProjectsSC_Comments__15-06-12__2/sc/main.cpp</file>
+            <file>file:/home/jonas/NetBeansProjectsSC_Comments__15-06-12__2/sc/navigation.cpp</file>
         </group>
     </open-files>
 </project-private>
