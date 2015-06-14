@@ -193,55 +193,42 @@ void Fisher::Catch(char* text){
         
         if(text[pos] == 'b'){
             pos++;
-            if(text[pos] == 'l'){
-                //blue
+// <blue displayName="N" color="C" points="P" fields="F"/> (XML-Doc 6.3)
+            if(text[pos] == 'l'){                               
                 pos = playerData(text, pos, false);
+                
+// <board> ... </board> (XML-Doc 6.4)
             }else{
-                //board
                 pos = fieldRel(text, pos);
             }
+            
+// for all importaint data-classes (XML-Doc 5, 6.1, 7)
         }else if(text[pos] == 'd'){
-            //data
-
             pos += 12;
 
+// +---- <data class="welcomeMessage" color="C"/>
             if(text[pos] == 'w'){
-                //data Welcome Message
                 pos = welcomeMsg(text, pos);
+                
+// +---- <data class="sc.framework.plugins.protocol.MoveRequest"/> (XML-Doc 7)
             }else if(text[pos] == 's' && text[pos + 1] == 'c'){
-                //data Move Request
                 pos = moveReq(text, pos);
-            }else{
-                //data other
             }
-        }else if(text[pos] == 'j'){
-            pos += 4;
-
-            if(text[pos] == 'e'){
-                //joined
-                pos = joined(text, pos);
-            }else{
-                //join
-            }
-        }else if(text[pos] == 'l'){
-            //lastMove
             
+// <joined roomId="RID"/> (XML-Doc 4)
+        }else if(text[pos] == 'j' && text[(pos += 4)] == 'e'){
+            pos = joined(text, pos);
+            
+// <lastMove class="T" ZUG/> (XML-Doc 6.7)
+        }else if(text[pos] == 'l'){                             
             pos = lastMove(text, pos);
-        }else if(text[pos] == 'p'){
-            //protocol
-        }else if(text[pos] == 'r'){
-            pos++;
-
-            if(text[pos] == 'o'){
-                //room
-            }else{
-                //red
-                pos = playerData(text, pos, true);
-            }
-        }else if(text[pos] == 's'){
-            //state
+            
+// <red displayName="N" color="C" points="P" fields="F"/> (XML-Doc 6.3)
+        }else if(text[pos] == 'r' && text[++pos] != 'o'){
+            pos = playerData(text, pos, true);
+            
+// </protocol> (XML-Doc Teil III - 13)
         }else if(text[pos+1] == 'p' && text[pos] == '/'){
-            //end protocol
             endProtocol();
         }
 
@@ -252,22 +239,6 @@ void Fisher::Catch(char* text){
         _moveReq();
         _moveReqB = false;
     }
-}
-
-int Fisher::state(char* text, int pos){
-    searchCrumb('"');
-    searchCrumb(' ');
-    
-    searchCrumb('"');
-    searchCrumb(' ');
-    
-    searchCrumb('"');
-    searchCrumb(' ');
-    
-    searchCrumb('"')
-    ++pos;
-    
-    return pos;
 }
 
 int Fisher::welcomeMsg(char* text, int pos){
@@ -398,8 +369,7 @@ int Fisher::playerData(char* text, int pos, bool player){
             fields = true;
             for(;text[pos] != '"'; pos++){}
             pos++;
-            for(;text[pos] != '"'; pos++)
-            {
+            for(;text[pos] != '"'; pos++)            {
                 fieS += text[pos];
             }
 
@@ -422,12 +392,12 @@ int Fisher::playerData(char* text, int pos, bool player){
                     _othersName = disS;
                     _othersNameIsSet = true;
                     
-                    std::cout << "\n\n\n\n-----> Der aktuelle Gegner heißt: \"" << _othersName << "\"\n\n\n\n\n\n";
+                    std::cout << "\n-----> Der aktuelle Gegner heißt: \"" << _othersName << "\"\n\n";
                 }else if(!player && _color[0] == 'r'){
                     _othersName = disS;
                     _othersNameIsSet = true;
                     
-                    std::cout << "\n\n\n\n-----> Der aktuelle Gegner heißt: \"" << _othersName << "\"\n\n\n\n\n\n";
+                    std::cout << "\n-----> Der aktuelle Gegner heißt: \"" << _othersName << "\"\n\n";
                 }
             }
         }else{

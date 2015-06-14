@@ -19,8 +19,7 @@
 #include "globals.h"
 #include "tools.h"
 
-namespace Fisher
-{
+namespace Fisher{
     typedef void (*OnField)(u_int64_t ones, u_int64_t twos, u_int64_t threes); 
     typedef void (*OnMove)(Move move);
     typedef void (*OnMoveReq)();
@@ -38,7 +37,6 @@ namespace Fisher
     int fieldRel(char* text, int pos);
     int lastMove(char* text, int pos);
     int playerData(char* text, int pos, bool player);
-    int state(char* text, int pos);
     char* appendCharToCharArray(char* array, char a);
     int endProtocol();
 }
