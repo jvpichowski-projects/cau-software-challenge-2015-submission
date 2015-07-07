@@ -12,9 +12,7 @@
 #include "types.h"
 #include "config.h"
 
-namespace Globals{
-    
-    extern int pointsRing1;
+namespace Globals{    
     
     extern u_int64_t ones;
     extern u_int64_t twos;

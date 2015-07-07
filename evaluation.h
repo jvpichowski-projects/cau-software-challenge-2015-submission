@@ -35,9 +35,27 @@
 
 namespace Evaluation
 {
+    //type of evaluation method
     typedef int (*ToEvaluate)(int playerId, Board board);
+    
+    /**
+     * This method evaluates the current game state and returns a number how 
+     * likely the give player will win the game.
+     */
     extern ToEvaluate evaluate;
+    
+    /**
+     * Like evaluate only faster and leaves out some evaluation criteria.
+     */
     extern ToEvaluate fastEvaluate;
+    
+    /**
+     * This method should be called before alpha-beta is started.
+     * It activates the right evaluation methods for the given moveCount.
+     * 
+     * @param moveCount
+     * @return 
+     */
     int preEvaluate(int moveCount);
 }
 

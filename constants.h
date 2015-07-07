@@ -29,6 +29,17 @@
 #define LOWERBOUND 1
 #define UPPERBOUND 2
 
+
+/*
+ * surrounding fields are marked
+ * e.g.
+ * 
+ *  0 0 0 0 0 0 0
+ *   0 0 1 1 0 0
+ *  0 0 1 x 1 0 0
+ *   0 0 1 1 0 0
+ *  0 0 0 0 0 0 0
+ */
 const int64_t _fieldsAround[60] = {
             /* |  00 */0x182ULL,             /* |  01 */0x305ULL,             /* |  02 */0x60AULL,             /* |  03 */0xC14ULL,
             /* |  04 */0x1828ULL,            /* |  05 */0x3050ULL,            /* |  06 */0x6020ULL,            /* |  07 */0x8101ULL,
