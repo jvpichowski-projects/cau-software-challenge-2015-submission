@@ -16,6 +16,7 @@
 #include "config.h"
 
 namespace BoardTools{
+    
     /**
      * Apply a move to the board. The board will be changed.
      * 

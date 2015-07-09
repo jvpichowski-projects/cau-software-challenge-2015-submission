@@ -4,15 +4,20 @@
 namespace BoardTools{
     
     int apply(Board* state, int playerId, Move move){
+        //raise movecount
         ++state->movecount;
 //        if(move.to >= 60){
 //            return state->movecount;
 //        }
+        //mark used fieldas used
         state->used |= 1ULL << move.to;
 //        state->used &= ~FIT;
         if(playerId == ID_WE){
+            //mark new pos 
             state->mypos |= 1ULL << move.to;
+            //unmark old pos
             state->mypos &= ~(1ULL << move.from);
+            //add points of new field
             state->pointsdiff += ((Globals::threes >> move.to) & 1ULL) * 3 + ((Globals::twos >> move.to) & 1ULL) * 2 + ((Globals::ones >> move.to) & 1ULL);
         }else{
             state->oppos |= 1ULL << move.to;
@@ -68,8 +73,11 @@ namespace BoardTools{
      * @return value of move
      */
     int insertMove(Move* valuedMoves, Move m, Board state, int playerId, int length){
+        //copy state
         Board tmpBoard = state;
+        //apply board
         BoardTools::apply(&tmpBoard, playerId, m);
+        //evaluate result inaccurate
         int value = Evaluation::fastEvaluate(playerId, tmpBoard);  
         m.value = value;
         //valuedMoves[i] = vm;
@@ -79,6 +87,7 @@ namespace BoardTools{
         if(b > MOVE_GEN_LIMIT){
             b = MOVE_GEN_LIMIT;
         }
+        //insert move based on value to sorted movelist
         for(; b > 0; --b){
             if(valuedMoves[b-1].value < value){
                 valuedMoves[b] = valuedMoves[b-1];

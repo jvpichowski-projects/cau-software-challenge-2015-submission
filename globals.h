@@ -14,9 +14,11 @@
 
 namespace Globals{    
     
+    //distribution of the different fields
     extern u_int64_t ones;
     extern u_int64_t twos;
     extern u_int64_t threes;
+    
     extern timespec moveReqTime;
     
     extern bool _runningGame;
@@ -25,6 +27,7 @@ namespace Globals{
     
     extern timespec beginningOther;
     
+    //the current board
     extern Board _board;
 }
 

@@ -99,7 +99,7 @@ void onLastMove(Move move){
     clock_gettime(Globals::clockTime, &nowTime);
 }
 
-int main(int argc, char** argv){   
+int main(int argc, char** argv){    
     //print some very important information
     theBreadfish();
     

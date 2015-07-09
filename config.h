@@ -7,19 +7,12 @@
 #ifndef CONFIGURATION_H
 #define	CONFIGURATION_H
 
-//#define DEBUG_MOVE_ORDERING
-
-#define ordered_setmoves
-#define ordered_runmoves
-
-#define limit_move_gen
+//how many good moves do we test
 #define MOVE_GEN_LIMIT 10
 
+//how much time do we have for our calculations
 #define TIME_FOR_CALC 1900
 
-#define DYN_START_DEEP
-#define START_DEEP_PERCENT 80
-#define FIXED_START_DEEP
 //for fixed start deep
 #define START_DEEP 3
 

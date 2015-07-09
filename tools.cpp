@@ -19,11 +19,16 @@ namespace Tools
         
         int right_shift = 59-pos;
         
+        //create the row in the direction down right
         u_int64_t dr = 0ULL;
         //dr = (ROW_TL_DR << pos);// | */(ROW_TL_DR_LAST >> right_shift);
         //dr &= ~(1LL << pos);          //No moves to own position anymore.
+        
+        //move the row with length 1 to the position
         u_int64_t dr_1 = (ROW_DR_1 << pos);
+        //save it if it doesn't go through an emty field or out of the whole board
         dr |= (-(!((dr_1 & LEFT_OUTER_BORDER) || (dr_1 & used)))) & dr_1;
+        //move the row with length 2 to the position
         u_int64_t dr_2 = (ROW_DR_2 << pos);
         dr |= (-(!((dr_2 & LEFT_OUTER_BORDER) || (dr_2 & used)))) & dr_2;
         u_int64_t dr_3 = (ROW_DR_3 << pos);
@@ -120,6 +125,7 @@ namespace Tools
         u_int64_t l_7 = (ROW_L_7 >> right_shift);
         l |= (-(!((l_7 & RIGHT_BORDER) || (l_7 & used)))) & l_7;
         
+        //add all rows together
         u_int64_t result = dr | tl | dl | tr | r | l;
         result &= ~FIT;
         return result;
@@ -137,47 +143,64 @@ namespace Tools
             u_int64_t *resulta, u_int64_t *resultb){
         
         
-        
+        //create fields around all positions 
         u_int64_t arroundPosA = _fieldsAround[posa1] | _fieldsAround[posa2] | _fieldsAround[posa3] | _fieldsAround[posa4];
         u_int64_t arroundPosB = _fieldsAround[posb1] | _fieldsAround[posb2] | _fieldsAround[posb3] | _fieldsAround[posb4];
         
+        //a list of seperated floes
         foundNode *founds = new foundNode();
         founds->field = 0;
         founds->nextNode = 0;
+        //iterate through all fields
         for(int i = 0; i < 60; ++i){
             if(field & (1ULL << i)){
+                //if field not emty
+                
                 //std::cout << "Found set position" << std::endl;
+                //get fields around for each field
                 u_int64_t around = _fieldsAround[i];
                 foundNode *nextFound = founds;
                 u_int64_t *firstfoundfield = 0;
                 while(nextFound != 0){
+                    //iterate through whole list of already found floes
                     foundNode *prev = nextFound;
                     nextFound = nextFound->nextNode;
                     if(nextFound == 0){
+                        //break when last node is reached
                         //std::cout << "Reached end of foundlist" << std::endl;
                         nextFound = prev;
                         break;
                     }
+                    //check if floe is connected to field
                     if(nextFound->field & around){
                         //std::cout << "Found fitting field" << std::endl;
+                        //add field to floe
                         nextFound->field |= (1ULL << i);
                         if(firstfoundfield != 0){
+                            //if not the first connection to floe connect both floes
                             //std::cout << "Connecting fields" << std::endl;
+                            //add second found connected floe to first connected floe
                             *firstfoundfield |= nextFound->field;
+                            //remove second floe from floe list
                             prev->nextNode = nextFound->nextNode;
+                            //delte second floe node
                             foundNode *toDelete = nextFound;
                             nextFound = nextFound->nextNode;
                             delete toDelete;
                         }else{
+                            //if connected to first floe mark floe
                             firstfoundfield = &nextFound->field;
                         }
                     }
                 }            
                 if(firstfoundfield == 0){
+                    //create new floe if not connected to any floe
                     //std::cout << "created new node" << std::endl;
                     foundNode *newFound = new foundNode();
+                    //mark first field
                     newFound->field = (1ULL << i);
                     newFound->nextNode = 0;
+                    //add floe to floe list
                     nextFound->nextNode = newFound;
                 }
             }
@@ -189,9 +212,11 @@ namespace Tools
         delete prev;
         
         while(founds != 0){
+            //for each floe add it to the penguin fields
             if(arroundPosA & founds->field) *resulta |= founds->field;
             if(arroundPosB & founds->field) *resultb |= founds->field;
             
+            //remove floe node from list
             foundNode *prev = founds;
             founds = founds->nextNode;
             delete prev;
