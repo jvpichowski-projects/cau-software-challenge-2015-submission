@@ -16,6 +16,12 @@
 
 namespace Tools
 {
+    /**
+     * Find last set bit
+     * 
+     * @param bb
+     * @return 
+     */
     int bitScanReverse(u_int64_t bb);
     
     /**
@@ -59,6 +65,7 @@ namespace Tools
     u_int64_t genMoveField(int pos, u_int64_t used);
 
     /**
+     * Find first set bit
      * 
      * @param bb
      * @return 

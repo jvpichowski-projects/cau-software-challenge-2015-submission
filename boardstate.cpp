@@ -113,13 +113,19 @@ namespace BoardTools{
     Move* generatePossibleMoves(Board state, int playerId, int *length){
         //if not in set mode return null move
         //std::cout << "Gmc " << getMoveCount() << std::endl;
+        
         if(state.movecount >= 8){
+            //if in move-phase
+            
             //std::cout << "PlayerId " << playerId << std::endl;
             u_int64_t penguinPositions = ((playerId == ID_WE) ? state.mypos : state.oppos);
             //BitBoard::printField(penguinPositions);
+            
+            //fetch penguin positions in an int-list
             int l = 0;
             int* penguinPos = Tools::fastBitScan(penguinPositions, &l);
 
+            //generate move fields for every penguin
             u_int64_t *moveFields = new u_int64_t[4];
 
             moveFields[0] = Tools::genMoveField(penguinPos[0], state.used);
@@ -127,32 +133,42 @@ namespace BoardTools{
             moveFields[2] = Tools::genMoveField(penguinPos[2], state.used);
             moveFields[3] = Tools::genMoveField(penguinPos[3], state.used);
 
+            //count the number of possible moves
             *length = Tools::popCount(moveFields[0])
                 + Tools::popCount(moveFields[1])
                 + Tools::popCount(moveFields[2])
                 + Tools::popCount(moveFields[3]);
+            
+            //add null move if no other move is possible
             bool nullMove = false;
             if(*length <= 0){
                 *length = 1;
                 nullMove = true;
             }
+            
+            //create aaray of moves
             Move* moves = new Move[*length];
             //std::cout << "Length: " << *length << std::endl;
 
             int c = -1;
             for(int i = 0; i < 4; i++){
+                //sort moves by field type
                 u_int64_t threes = Globals::threes & moveFields[i];
                 u_int64_t twos = Globals::twos & moveFields[i];
                 u_int64_t ones = Globals::ones & moveFields[i];
 
                 //std::cout << "penguin" << i << " - " << penguinPos[i] << std::endl;
 
+                //add moves which are targeting fields with 3 fishes first
                 int threesSize = 0;
+                //get the number of moves
                 int* threesPos = Tools::bitScan(threes, &threesSize);
+                //create each move
                 for(int k = 0; k < threesSize; k++){
                     Move m = Move();
                     m.from = penguinPos[i];
                     m.to = threesPos[k];
+                    //add each move to the move-list
                     insertMove(moves, m, state, playerId, *length);
                 }
                 delete[] threesPos;
@@ -178,7 +194,9 @@ namespace BoardTools{
                 delete[] onesPos;
                 
             }
+            
             if(nullMove){
+                //add null move to list
                 Move m = Move();
                 m.from = INVALID_POS;
                 m.to = INVALID_POS;
@@ -186,19 +204,24 @@ namespace BoardTools{
             }
             
             delete[] moveFields, penguinPos;
+            //cut list to limit
             if(*length > MOVE_GEN_LIMIT){
                 *length = MOVE_GEN_LIMIT;
             }
             return moves;
-        }
+        }        
         //else return setMove
+        //fetch free fields with one fish
         u_int64_t freeSetPositions = Globals::ones & ~state.used;
         int freePosSize = 0;
+        //get number of free positions
         int* freePos = Tools::bitScan(freeSetPositions,  &freePosSize);
         //std::cout << "FreePosSize " << freePosSize << std::endl;
         *length = freePosSize;
+        //create list for set-moves
         Move* moves = new Move[freePosSize];
 
+        //add every set-move to list
         for(int i = 0; i < freePosSize; i++){
             #ifdef DEBUG_MOVEGEN
                     std::cout << "moveGen: Adding move: From: " << " To: " << freePos[i] << std::endl; 
@@ -209,9 +232,10 @@ namespace BoardTools{
             insertMove(moves, m, state, playerId, freePosSize);
         }
         
+        //cut list to limit
         if(*length > MOVE_GEN_LIMIT){
-                *length = MOVE_GEN_LIMIT;
-            }
+            *length = MOVE_GEN_LIMIT;
+        }
         delete[] freePos;
         return moves; 
     }
@@ -223,10 +247,14 @@ namespace BoardTools{
             u_int64_t penguinPositions = ((playerId == ID_WE) ? state.mypos : state.oppos);
             //BitBoard::printField(penguinPositions);
 
+            //find position of one penguin
             int from = Tools::bitScanForward(penguinPositions);
+            //generate moveField for that penguin
             u_int64_t moveField = Tools::genMoveField(from, state.used);
+            //try to use the most valuable move
             int to;
             if(Globals::threes & moveField){
+                //find first move to a field with three fishes
                 to = Tools::bitScanForward(Globals::threes & moveField);
             }else if(Globals::twos & moveField){
                 to = Tools::bitScanForward(Globals::twos & moveField);
@@ -244,6 +272,7 @@ namespace BoardTools{
             result.to = to;
             return result;
         }
+        //return a set move
         Move result = Move();
         result.from = INVALID_POS;
         result.to = Tools::bitScanForward(Globals::ones & ~state.used);
